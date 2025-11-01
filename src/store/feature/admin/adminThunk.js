@@ -1,0 +1,415 @@
+
+import { createAsyncThunk } from "@reduxjs/toolkit";
+import {
+  addCourseCurriculum,
+  addCourseVideos,
+  addDomain,
+  addIntroVideo,
+  addNewCoach,
+  addNewCourse,
+  addNewFAQ,
+  addSubDomain,
+  deleteCoach,
+  deleteCourse,
+  deleteDomain,
+  deleteFAQ,
+  deleteSubDomain,
+  fetchAdminDashboardData,
+  fetchAllCoaches,
+  fetchAllCourses,
+  fetchAllDomains,
+
+  fetchCoachDetails,
+
+  fetchCoaches,
+
+  fetchCourseDetails,
+
+
+  fetchFAQs,
+
+
+  fetchSubDomains,
+
+  updateCoach,
+
+  updateCourse,
+
+  updateDomain,
+  updateFAQ,
+  updateSubDomain
+}
+  from "./adminApi";
+
+export const getAdminDashboardData = createAsyncThunk(
+  "admin/getDashboardData",
+  async (_, thunkAPI) => {
+    try {
+      const response = await fetchAdminDashboardData();
+      return response.data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(
+        error.response?.data?.message || "Failed to fetch dashboard data"
+      );
+    }
+  }
+);
+
+//get all Domains List
+export const getAllDomains = createAsyncThunk(
+  "admin/getAllDomains",
+  async ({ pageNo = 1, pageSize = 10 } = {}, thunkAPI) => {
+    try {
+      const response = await fetchAllDomains(pageNo, pageSize);
+      return response.data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(
+        error.response?.data?.message || "Failed to fetch domains"
+      );
+    }
+  }
+);
+
+// Add New Domain
+export const addNewDomain = createAsyncThunk(
+  "admin/addNewDomain",
+  async (domainData, thunkAPI) => {
+    try {
+      const response = await addDomain(domainData);
+      return response.data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(
+        error.response?.data?.message || "Failed to add new domain"
+      );
+    }
+  }
+);
+// Update Domain
+export const updateDomainAPI = createAsyncThunk(
+  "admin/updateDomain",
+  async ({ domainId, domainData }, thunkAPI) => {
+    try {
+      const response = await updateDomain(domainId, domainData);
+      return response.data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(
+        error.response?.data?.message || "Failed to update domain"
+      );
+    }
+  }
+);
+
+// Delete Domain
+export const deleteDomainAPI = createAsyncThunk(
+  "admin/deleteDomain",
+  async (domainId, thunkAPI) => {
+    try {
+      await deleteDomain(domainId);
+      return domainId;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(
+        error.response?.data?.message || "Failed to delete domain"
+      );
+    }
+  }
+);
+
+
+
+
+export const fetchAllSubDomainsAPI = createAsyncThunk(
+  "subdomains/fetchAll",
+  async ({ pageNo = 1, pageSize = 10, domainId }, { rejectWithValue }) => {
+    console.log("Fetching subdomains for domain ID ThunkS:", domainId);
+    try {
+      const response = await fetchSubDomains(pageNo, pageSize, domainId);
+      // return the whole response object
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data || error.message);
+    }
+  }
+);
+
+// Add New Subdomain
+export const addNewSubDomain = createAsyncThunk(
+  "subdomains/addNew",
+  async (subdomainData, { rejectWithValue }) => {
+    try {
+      const response = await addSubDomain(subdomainData);
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data || error.message);
+    }
+  }
+);
+
+//update Subdomain
+export const updateSubDomainAPI = createAsyncThunk(
+  "subdomains/update",
+  async ({ subdomainId, data }, { rejectWithValue }) => {
+    try {
+      const response = await updateSubDomain(subdomainId, data);
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data || error.message);
+    }
+  }
+);
+
+
+//Delete subdomain
+
+
+export const deleteSubDomainAPI = createAsyncThunk(
+  "admin/deleteSubDomain",
+  async (subdomainId, thunkAPI) => {
+    try {
+      const response = await deleteSubDomain(subdomainId);
+      return { subdomain_id: subdomainId };
+    } catch (error) {
+      return thunkAPI.rejectWithValue(
+        error.response?.data?.message || "Failed to delete subdomain"
+      );
+    }
+  }
+);
+
+
+//fetch all coaches with pagination
+export const fetchAllCoachesAPI = createAsyncThunk(
+  "coaches/fetchAll",
+  async ({ pageNo = 1, pageSize = 10 } = {}, { rejectWithValue }) => {
+    try {
+      const response = await fetchAllCoaches(pageNo, pageSize);
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data || error.message);
+    }
+  }
+);
+
+// Add New Coach
+export const addNewCoachAPI = createAsyncThunk(
+  "admin/coaches",
+  async (coachData, thunkAPI) => {
+    try {
+      const response = await addNewCoach(coachData);
+      return response.data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(
+        error.response?.data?.message || "Failed to add new coach"
+      );
+    }
+  }
+);
+//update coach
+export const updateCoachAPI = createAsyncThunk(
+  "admin/updateCoach",
+  async ({ coachId, coachData }, thunkAPI) => {
+    try {
+      const response = await updateCoach(coachId, coachData);
+      return response.data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(
+        error.response?.data?.message || "Failed to update coach"
+      );
+    }
+  }
+);
+//delete a coach
+export const deleteCoachAPI = createAsyncThunk(
+  "admin/deleteCoach",
+  async (coachId, thunkAPI) => {
+    try {
+      await deleteCoach(coachId);
+      return coachId;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(
+        error.response?.data?.message || "Failed to delete coach"
+      );
+    }
+  }
+);
+
+//fetch coach details
+export const fetchCoachDetailsAPI = createAsyncThunk(
+  "admin/fetchCoachDetails",
+  async (coachId, thunkAPI) => {
+    try {
+      const response = await fetchCoachDetails(coachId);
+      return response.data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(
+        error.response?.data?.message || "Failed to fetch coach details"
+      );
+    }
+  }
+);
+
+// Fetch all courses with pagination
+export const fetchAllCoursesAPI = createAsyncThunk(
+  "courses/fetchAll",
+  async ({ pageNo, pageSize } = {}, { rejectWithValue }) => {
+    try {
+      const response = await fetchAllCourses(pageNo, pageSize);
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data || error.message);
+    }
+  }
+);
+//course details
+export const fetchCourseDetailsAPI = createAsyncThunk(
+  "admin/fetchCourseDetails",
+  async (courseId, thunkAPI) => {
+    try {
+      const response = await fetchCourseDetails(courseId);
+      return response.data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(
+        error.response?.data?.message || "Failed to fetch course details"
+      );
+    }
+  }
+);
+
+//add new course
+
+// old code
+// export const addNewCourseAPI = createAsyncThunk(
+//   "admin/addNewCourse",
+//   async (courseData, thunkAPI) => {
+//     try {
+//       const response = await addNewCourse(courseData);
+//       return response.data;
+//     } catch (error) {
+//       return thunkAPI.rejectWithValue(
+//         error.response?.data?.message || "Failed to add new course"
+//       );
+//     }
+//   }
+// );
+
+// new Code
+export const addNewCourseAPI = createAsyncThunk(
+  "admin/addNewCourse",
+  async (courseData, thunkAPI) => {
+    try {
+      const response = await addNewCourse(courseData);
+      return response.data;
+    } catch (error) {
+      console.log("error",error);
+      return thunkAPI.rejectWithValue(
+
+        error.response?.data?.message
+        // error.response?.data?.message || "Failed to add new course"
+      );
+    }
+  }
+);
+
+//fetch coaches in dropdown
+export const fetchCoachesDropdownAPI = createAsyncThunk(
+  "admin/fetchCoachesDropdown",
+  async (_, thunkAPI) => {
+    try {
+      const response = await fetchCoaches();
+      return response.data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(
+        error.response?.data?.message || "Failed to fetch coaches dropdown"
+      );
+    }
+  }
+);
+
+//delete course
+export const deleteCourseAPI = createAsyncThunk(
+  "admin/deleteCourse",
+  async (courseId, thunkAPI) => {
+    try {
+      await deleteCourse(courseId);
+      return courseId;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(
+        error.response?.data?.message || "Failed to delete course"
+      );
+    }
+  }
+);
+//update course
+export const updateCourseAPI = createAsyncThunk(
+  "admin/updateCourse",
+  async ({ courseId, courseData }, thunkAPI) => {
+    try {
+      const response = await updateCourse(courseId, courseData);
+      return response.data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(
+        error.response?.data?.message || "Failed to update course"
+      );
+    }
+  }
+);
+
+//fetch frequently ask questions list
+// fetch FAQs thunk
+export const fetchFAQsAPI = createAsyncThunk(
+  "admin/fetchFAQs",
+  async ({ pageNo, pageSize }, thunkAPI) => {
+    try {
+      const response = await fetchFAQs(pageNo, pageSize);
+      return response.data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(
+        error.response?.data?.message || "Failed to fetch FAQs"
+      );
+    }
+  }
+);
+
+//add new FAQ
+export const addNewFAQAPI = createAsyncThunk(
+  "admin/addNewFAQ",
+  async (faqData, thunkAPI) => {
+    try {
+      const response = await addNewFAQ(faqData);
+      return response.data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(
+        error.response?.data?.message || "Failed to add new FAQ"
+      );
+    }
+  }
+);
+
+//update FAQ
+export const updateFAQAPI = createAsyncThunk(
+  "admin/updateFAQ",
+  async ({ faqId, faqData }, thunkAPI) => {
+    try {
+      const response = await updateFAQ(faqId, faqData);
+      return response.data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(
+        error.response?.data?.message || "Failed to update FAQ"
+      );
+    }
+  }
+);
+
+//delete FAQ
+export const deleteFAQAPI = createAsyncThunk(
+  "admin/deleteFAQ",
+  async (faqId, thunkAPI) => {
+    try {
+      await deleteFAQ(faqId);
+      return faqId;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(
+        error.response?.data?.message || "Failed to delete FAQ"
+      );
+    }
+  }
+);

@@ -4,14 +4,14 @@ import { Link } from "react-router-dom";
 function Footer() {
   return (
     <footer className="text-gray-400 bg-[url(/gradientBackground.png)] bg-cover bg-no-repeat max-w-full">
-      <div className="px-6 py-10 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4  sm:max-w-screen-sm md:max-w-screen-md lg:max-w-screen-lg xl:max-w-screen-xl mx-auto text-left">
+      <div className="px-6 py-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4  sm:max-w-screen-sm md:max-w-screen-md lg:max-w-screen-lg xl:max-w-screen-xl mx-auto text-left">
         {/* Logo & About */}
         <div className="flex flex-col justify-between min-h-full">
           <div>
             <h2 className="text-2xl font-bold bg-gradient-to-r from-pink-500 to-purple-500 text-transparent bg-clip-text">
               BramhLife
             </h2>
-            <p className="mt-2 text-sm sm:text-base text-gray-400">
+            <p className="mt-2 sm:text-base text-gray-400">
               Empowering people to grow, heal, and transform through world-class
               coaching and mindful programs.
             </p>
@@ -20,10 +20,10 @@ function Footer() {
 
         {/* Quick Links */}
         <div className="flex flex-col justify-between min-h-full">
-          <h3 className="bg-gradient-to-r from-pink-500 to-purple-500 text-transparent bg-clip-text font-bold mb-3">
+          <h3 className="bg-gradient-to-r from-pink-500 to-purple-500 text-transparent bg-clip-text font-bold">
             Quick Links
           </h3>
-          <ul className="space-y-2">
+          <ul className="">
             <li><Link to="/" className="hover:text-pink-400">Home</Link></li>
             <li><Link to="/courses" className="hover:text-pink-400">Courses</Link></li>
             <li><Link to="/about" className="hover:text-pink-400">About</Link></li>
@@ -68,7 +68,7 @@ function Footer() {
       </div>
 
       {/* Footer bottom */}
-      <div className="text-center text-sm text-gray-400  border-t border-gray-300 pt-2">
+      <div className="text-center text-sm text-gray-400  border-t border-gray-300 ">
         Copyright © {new Date().getFullYear()} BramhLife. All rights reserved.
       </div>
     </footer>

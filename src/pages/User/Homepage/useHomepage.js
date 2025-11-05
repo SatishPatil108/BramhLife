@@ -9,7 +9,6 @@ const useHomepage = () => {
     (state) => state.user 
   );
 
-
   useEffect(() => {
     dispatch(fetchUserDashboardDataAPI());
   }, [dispatch]);

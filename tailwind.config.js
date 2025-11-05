@@ -1,3 +1,5 @@
+import  {scrollbarHide} from 'tailwind-scrollbar-hide'
+
 export default {
   darkMode: 'class', // 👈 enables manual dark theme toggling via .dark class
   content: ["./index.html", "./src/**/*.{js,jsx,ts,tsx}"],
@@ -10,5 +12,5 @@ export default {
       desktop: '768px',
     },
   },
-  plugins: [],
+  plugins: [scrollbarHide()],
 };

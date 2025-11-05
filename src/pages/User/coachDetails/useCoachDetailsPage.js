@@ -6,16 +6,14 @@ import {
   fetchCourseDetailsById,
   fetchCourseFeedbackById,
 } from "@/store/feature/user";
-import { toast } from "react-toastify";
 
 const useCoachDetailsPage = (videoId) => {
   const dispatch = useDispatch();
-  const { coachDetails, courseDetails, isLoading, error,allCoursesFeedback} =
-    useSelector((state) => state.user);
-    console.log("allCoursesFeedback",allCoursesFeedback);
+  const { coachDetails, courseDetails, isLoading, error, allCoursesFeedback, user } =
+    useSelector((state) => state.user); // Added `user` from redux state
 
   const [enrolling, setEnrolling] = useState(false);
- 
+  const [message, setMessage] = useState(""); // Inline message for login / success / error
 
   // Fetch coach details
   useEffect(() => {
@@ -31,53 +29,58 @@ const useCoachDetailsPage = (videoId) => {
     }
   }, [coachDetails, dispatch]);
 
+  // Fetch all feedback for course
+  useEffect(() => {
+    if (courseDetails?.course_id) {
+      dispatch(
+        fetchCourseFeedbackById({
+          courseId: courseDetails.course_id,
+          pageNo: 1,
+          pageSize: 10,
+        })
+      );
+    }
+  }, [courseDetails, dispatch]);
 
-// fetch all feedback for courses
-useEffect(() => {
-  if (courseDetails?.course_id) {
-    dispatch(
-      fetchCourseFeedbackById({
-        courseId: courseDetails.course_id,
-        pageNo: 1,
-        pageSize: 10,
-      })
-    );
-    console.log("courseDetails", courseDetails);
-  }
-}, [courseDetails, dispatch]);
-
-
-
-
-  // Enroll in course
+  // Enroll in course API call
   const enrollInCourse = async () => {
     if (!courseDetails?.course_id) return;
     try {
       setEnrolling(true);
       const res = await dispatch(enrollInCourseAPI(courseDetails.course_id)).unwrap();
+
       if (res?.data) {
         const { user_name, course_name } = res.data;
-        toast.success(`🎉 Welcome ${user_name}! You have successfully enrolled in "${course_name}".`);
+        setMessage(`🎉 Welcome ${user_name}! You have successfully enrolled in "${course_name}".`);
       } else {
-        toast.success(res?.message || "Enrollment successful!");
+        setMessage(res?.message || "Enrollment successful!");
       }
     } catch (err) {
-      toast.error("Enrollment failed: " + (err?.message || "Unknown error"));
+      setMessage("Enrollment failed: " + (err?.message || "Unknown error"));
     } finally {
       setEnrolling(false);
     }
   };
 
+  // Handle enroll with login check
+  const handleEnroll = () => {
+    if (!user) {
+      setMessage("Please login first");
+      return;
+    }
+    setMessage(""); // Clear previous messages
+    enrollInCourse();
+  };
+
   return {
     coach: coachDetails,
     course: courseDetails,
-
     allCoursesFeedback,
-     
     loading: isLoading,
     error,
-    enrollInCourse,
+    handleEnroll, // Only expose handleEnroll
     enrolling,
+    message, // Inline message
   };
 };
 

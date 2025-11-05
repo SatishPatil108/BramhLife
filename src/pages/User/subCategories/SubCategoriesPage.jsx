@@ -3,14 +3,6 @@ import { useLocation, useParams, useNavigate } from "react-router-dom";
 import useSubCategoriesPage from "./useSubCategoriesPage";
 const BASE_URL = import.meta.env.VITE_BASE_URL_IMG;
 
-
-// import mind from "@/assets/mind.jpg";
-// import body from "@/assets/body.jpg";
-// import entrepreneurship from "@/assets/Entrepreneurship.jpg";
-// import relationships from "@/assets/relationship.jpg";
-// import career from "@/assets/carrier.jpg";
-// import soul from "@/assets/soul.jpg";
-
 const SubCategoriesPage = () => {
   const { domain_id } = useParams();
   const location = useLocation();
@@ -18,7 +10,6 @@ const SubCategoriesPage = () => {
 
   const domainName = location.state?.domain_name || "Subcategories";
   const { subcategories, loading, error } = useSubCategoriesPage(domain_id);
-  console.log(error);
 
   if (!domain_id) {
     return (
@@ -37,12 +28,6 @@ const SubCategoriesPage = () => {
   const advanced = subcategories.filter(
     (sub) => sub.progressive_difficulty === 3
   );
-
-  // // Map subdomain_id to an image
-  // const images = [mind, body, entrepreneurship, relationships, career, soul];
-  // const getImageForSub = (sub) => {
-  //   return images[sub.subdomain_id % images.length];
-  // };
 
   const handleSubcategoryClick = (sub) => {
     navigate(`/coaches/${sub.subdomain_id}`, {
@@ -114,11 +99,11 @@ const SubCategoriesPage = () => {
         {!loading && error && (
           <>
             {error === "No record found" ? (
-              <div className="text-center text-gray-600 mb-12">
-                <p className="mb-2">No subcategories available currently.</p>
+              <div className="text-center text-gray-600  mt-4 py-30">
+                <p className="mb-2 text-xl">No subcategories available currently.</p>
                 <button
                   onClick={() => navigate(-1)}
-                  className="text-blue-600 underline hover:text-blue-800 text-sm"
+                  className="text-blue-600 underline hover:text-blue-800 text-xl cursor-pointer"
                 >
                   ← Go Back
                 </button>
@@ -133,7 +118,7 @@ const SubCategoriesPage = () => {
 
         {/* Beginner Section */}
         {beginner.length > 0 && (
-          <section className="mb-12">
+          <section className="mb-20">
             <h2 className="text-2xl font-bold text-gray-700 mb-6 border-l-4 border-indigo-500 pl-3">
               Beginner
             </h2>

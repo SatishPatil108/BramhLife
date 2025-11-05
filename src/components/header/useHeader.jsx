@@ -1,3 +1,4 @@
+import { Home, BookOpen, Mail, Command, UserCircle2Icon, Menu, BookOpenText,  } from "lucide-react";
 import { useSelector } from "react-redux";
 
 export function useHeader() {
@@ -6,20 +7,19 @@ export function useHeader() {
   // console.log(user);
 
   const links = [
-    { to: "/home", label: "Home" },
-    { to: "/courses", label: "Courses" },
-    { to: "/about", label: "About" },
-    { to: "/contact", label: "Contact" },
+    { to: "/home", label: "Home" , icon:Home },
+    { to: "/courses", label: "Courses", icon:BookOpen },
+    { to: "/about", label: "About", icon: Command },
+    { to: "/contact", label: "Contact", icon: Mail },
   ];
 
   if (!user) {
     // links.push({ to: "/my-courses", label: "My Courses" }),
-    links.push({ to: "/login", label: "Login" });
-    links.push({ to: "/register", label: "Create an account" });
+    links.push({ to: "/login", label: "Login", icon: Menu });
   } else {
-    links.splice(2, 0, { to: "/my-courses", label: "My Courses" });
-    links.push({ to: "/logout", label: "Logout" });
+    links.splice(2, 0, { to: "/my-courses", label: "My Courses", icon: BookOpenText });
+    links.push({ to: "/logout", label: "Logout", icon: UserCircle2Icon });
   }
-
   return { links, user };
+
 }

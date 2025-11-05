@@ -210,7 +210,7 @@ const adminSlice = createSlice({
       })
       .addCase(addNewCoachAPI.fulfilled, (state, action) => {
         state.loading = false;
-        state.coaches.push(action.payload);
+        state.coaches.push({ coach_id: action.payload.id, ...action.payload });
       })
       .addCase(addNewCoachAPI.rejected, (state, action) => {
         state.loading = false;
@@ -224,10 +224,10 @@ const adminSlice = createSlice({
       .addCase(updateCoachAPI.fulfilled, (state, action) => {
         state.loading = false;
         const index = state.coaches.findIndex(
-          (coach) => coach.id === action.payload.id
+          (coach) => coach.coach_id === action.payload.id
         );
         if (index !== -1) {
-          state.coaches[index] = action.payload;
+          state.coaches[index] = { coach_id: action.payload.id, ...action.payload };
         }
       })
       .addCase(updateCoachAPI.rejected, (state, action) => {

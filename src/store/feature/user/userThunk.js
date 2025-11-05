@@ -11,7 +11,7 @@ export const fetchCoursesCategoriesAPI = createAsyncThunk(
       return response;
     } catch (error) {
       return thunkAPI.rejectWithValue(error.response?.data || error.message);
-    } 
+    }
   }
 );
 
@@ -31,9 +31,10 @@ export const fetchSubcategoriesAPI = createAsyncThunk(
 // Fetch coaches videos
 export const fetchCoachesVideosAPI = createAsyncThunk(
   "user/fetchCoachesVideos",
-  async ({ subdomainId, pageNo = 1, pageSize = 10 }, thunkAPI) => {
+  async ({ pageNo = 1, pageSize = 10, subdomainId, coachId }, thunkAPI) => {
+    // console.log(subdomainId,coachId)
     try {
-      const response = await userAPI.fetchCoachesVideos(pageNo, pageSize, subdomainId);
+      const response = await userAPI.fetchCoachesVideos(pageNo, pageSize, subdomainId, coachId);
       return response;
     } catch (error) {
       return thunkAPI.rejectWithValue(error.response?.data || error.message);
@@ -60,7 +61,7 @@ export const fetchCoachProfileAPI = createAsyncThunk(
   async (coachId, thunkAPI) => {
     try {
       const response = await userAPI.fetchCoachProfile(coachId);
-      return response; 
+      return response;
     } catch (error) {
       return thunkAPI.rejectWithValue(error.response?.data || error.message);
     }
@@ -73,7 +74,7 @@ export const fetchCourseDetailsById = createAsyncThunk(
   async (courseId, thunkAPI) => {
     try {
       const response = await userAPI.fetchCourseDetailsAPI(courseId);
-      return response; 
+      return response;
     } catch (error) {
       return thunkAPI.rejectWithValue(error.response?.data || error.message);
     }
@@ -85,7 +86,7 @@ export const fetchAllCoaches = createAsyncThunk(
   "user/fetchAllCoaches",
   async ({ pageNo = 1, pageSize = 10 }, thunkAPI) => {
     try {
-      const response = await userAPI.fetchAllCoachesAPI(pageNo, pageSize); 
+      const response = await userAPI.fetchAllCoachesAPI(pageNo, pageSize);
       return response;
     } catch (error) {
       return thunkAPI.rejectWithValue(error.response?.data || error.message);
@@ -112,7 +113,7 @@ export const fetchMyCoursesThunk = createAsyncThunk(
   async ({ pageNo = 1, pageSize = 10 }, thunkAPI) => {
     try {
       const response = await userAPI.fetchMyCoursesAPI(pageNo, pageSize);
-      return response; 
+      return response;
     } catch (error) {
       return thunkAPI.rejectWithValue(error.response?.data || error.message);
     }
@@ -150,7 +151,7 @@ export const fetchFAQsAPI = createAsyncThunk(
   async ({ pageNo = 1, pageSize = 10 }, thunkAPI) => {
     try {
       const response = await userAPI.fetchFAQList(pageNo, pageSize);
-      return response;   
+      return response;
     } catch (error) {
       return thunkAPI.rejectWithValue(error.response?.data || error.message);
     }

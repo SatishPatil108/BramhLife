@@ -22,9 +22,9 @@ export const fetchSubcategories = async (pageNo = 1, pageSize = 10, domainId) =>
 
 // Fetch coaches  for a specific subdomain
 
-export const fetchCoachesVideos = async (pageNo = 1, pageSize = 10, subdomainId) => {
+export const fetchCoachesVideos = async (pageNo = 1, pageSize = 10, subdomainId, coachId) => {
   return await makeRequest({
-    service: `user/coaches/videos/${pageNo}/${pageSize}/${subdomainId}`,
+    service: `user/coaches/videos/${pageNo}/${pageSize}/${subdomainId}/${coachId}`,
     method: API_METHODS.GET,
     authRequired: true,
   });

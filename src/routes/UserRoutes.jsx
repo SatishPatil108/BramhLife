@@ -17,43 +17,39 @@ import { CourseByNameOrCoachName } from "@/pages/User/courseByNameOrCoachName";
 import Footer from "@/components/footer/Footer";
 import UserLoggedOut from "@/pages/User/userLoggedOut";
 
-
-
 const UserRoutes = () => {
-  // 🔹 Hardcoded token for testing
-  const hardcodedToken =
-    "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoyLCJpYXQiOjE3NTUwNjc5MjZ9.MpBqOoRpsi7IFSroaBn_VFu_AEAbp6I64jNd6RNec9Y";
-
-  // ✅ conditionally check token (later replace with localStorage.getItem("token"))
-  const isLoggedIn = Boolean(hardcodedToken);
-
   return (
-    <>
-      {isLoggedIn && <Header />}
+    <div className="min-h-screen flex flex-col">
+      {/* Header */}
+      <Header />
 
-      <Routes>
-        <Route path="/" element={<Navigate to="/home" replace />} />
-        <Route path="/home" element={<Homepage />} />
-    
-        <Route path="/about" element={<About />} />
-        <Route path="/contact" element={<Contact />} />
-        <Route path="/courses" element={<CourseList />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/logout" element={<UserLoggedOut />} />
+      {/* Main content fills remaining space */}
+      <main className="flex-grow">
+        <Routes>
+          <Route path="/" element={<Navigate to="/home" replace />} />
+          <Route path="/home" element={<Homepage />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/contact" element={<Contact />} />
+          <Route path="/courses" element={<CourseList />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/logout" element={<UserLoggedOut />} />
+          <Route path="/subcategories/:domain_id" element={<SubCategoriesPage />} />
+          <Route path="/coaches/:subdomainId" element={<CoachesInfoPage />} />
+          <Route path="/coach-details/:videoId" element={<CoachDetailsPage />} />
+          <Route path="/coach-profile/:coachId" element={<CoachProfile />} />
+          <Route path="/coach-profile" element={<GetAllCoaches />} />
+          <Route path="/my-courses" element={<EnrolledCourses />} />
+          <Route path="/enrolled-course/:courseId" element={<EnrolledCourseDetails />} />
+          <Route path="/courses/course/search" element={<CourseByNameOrCoachName />} />
+        </Routes>
+      </main>
 
-        <Route path="/subcategories/:domain_id" element={<SubCategoriesPage />} />
-        <Route path="/coaches/:subdomainId" element={<CoachesInfoPage />} />
-        <Route path="/coach-details/:videoId" element={<CoachDetailsPage />} />
-        <Route path="/coach-profile/:coachId" element={<CoachProfile />} />
-        <Route path="/coach-profile" element={<GetAllCoaches />} />
-        <Route path="/my-courses" element={<EnrolledCourses />} />
-        <Route path="/enrolled-course/:courseId" element={<EnrolledCourseDetails />} />
-        <Route path="/courses/course/search" element={<CourseByNameOrCoachName />} />
-
-      </Routes>
-      <Footer />
-    </>
+      {/* Footer — hidden on mobile */}
+      <div className="hidden md:block">
+        <Footer />
+      </div>
+    </div>
   );
 };
 

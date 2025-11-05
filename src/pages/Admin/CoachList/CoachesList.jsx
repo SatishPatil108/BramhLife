@@ -75,7 +75,7 @@ const CoachesList = () => {
     setSubdomainId(coach.subdomain_id?.toString() || "");
     setProfessionalTitle(coach.professional_title || "");
     setBio(coach.bio || "");
-    setProfilePicture(null);
+    setProfilePicture(coach.profile_image_url || null);
     setErrors({});
     setShowForm(true);
 
@@ -124,7 +124,7 @@ const CoachesList = () => {
     formData.append("subdomain_id", subdomainId);
     formData.append("professional_title", professionalTitle);
     formData.append("bio", bio);
-    if (profilePicture) formData.append("profile_picture", profilePicture);
+    if (typeof profilePicture === 'object') formData.append("profile_picture", profilePicture);
 
     if (editingCoach) {
       dispatch(updateCoachAPI({ coachId: editingCoach.coach_id, coachData: formData })).then(() => resetForm());
@@ -161,15 +161,13 @@ const CoachesList = () => {
                   <img
                     src={
                       `${BASE_URL}${coach.profile_image_url}`
-
                     }
                     alt={coach.profile_image_url || "Coach Avatar"}
-                    className="w-full h-full object-fit transition-transform duration-300 hover:scale-105"
+                    className="w-full h-50 object-contain transition-transform duration-300 hover:scale-105"
                   // onError={(e) => (e.target.src = "/placeholder-avatar.png")}
                   />
                 </div>
               </div>
-
 
               {/* Middle: Info */}
               <div className="flex-1 text-center lg:text-left">
@@ -261,7 +259,7 @@ const CoachesList = () => {
               {profilePicture && (
                 <div className="mt-3">
                   <p className="text-sm text-gray-600 dark:text-gray-300">Selected File: {profilePicture.name}</p>
-                  <img src={URL.createObjectURL(profilePicture)} alt="Preview" className="w-24 h-24 object-cover mt-2 border rounded-md" />
+                  <img src={typeof profilePicture === 'object' ? URL.createObjectURL(profilePicture) : `${BASE_URL}${profilePicture}`} alt="Preview" className="w-24 h-24 object-cover mt-2 border rounded-md" />
                 </div>
               )}
             </div>

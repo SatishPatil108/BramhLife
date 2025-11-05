@@ -53,9 +53,9 @@ const initialState = {
   FAQs: [],
   allCoursesFeedback: [],
   error: null,
-  courses:[],// 29-09-25 
-  courseNames:[],
-  coachNames:[],
+  courses: [],// 29-09-25 
+  courseNames: [],
+  coachNames: [],
 };
 
 const userSlice = createSlice({
@@ -112,7 +112,7 @@ const userSlice = createSlice({
         if (res?.data) {
           state.subcategories = res.data;
         } else {
-          state.subcategories=[];
+          state.subcategories = [];
           state.error = res?.message || "Failed to fetch subcategories";
         }
       })
@@ -126,6 +126,7 @@ const userSlice = createSlice({
       .addCase(fetchCoachesVideosAPI.pending, (state) => {
         state.isLoading = true;
         state.error = null;
+        state.coachesVideos = []
       })
       .addCase(fetchCoachesVideosAPI.fulfilled, (state, action) => {
         state.isLoading = false;

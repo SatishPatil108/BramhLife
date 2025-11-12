@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import useHomepage from "./useHomepage";
-import { Users, BookOpen, Activity, ChevronDown } from "lucide-react";
+import { Users, BookOpen, Activity, ChevronDown, ArrowRight } from "lucide-react";
 import AutoScrollCarousel from "./AutoScrollCarousel";
 import "./animation.css";
+import Categories from "./components/getAllCategories/Categories";
+import BannerImage from "./components/bannerImages.jsx/BannerImage";
+import MusicList from "./components/getAllMusicList/MusicList";
 
 const BASE_URL = import.meta.env.VITE_BASE_URL_IMG;
 
@@ -15,9 +18,7 @@ function Homepage() {
 
   const thumbnails = dashboardData?.coaches || [];
   const allcoaches = dashboardData?.coaches || [];
-  const coachImages = dashboardData?.coach_profile_images?.map(
-    (img) => `${BASE_URL}${img}`
-  ) || [];
+  const navigate = useNavigate();
 
   // Detect screen size
   useEffect(() => {
@@ -90,7 +91,7 @@ function Homepage() {
 
 
       {/* 🎥 VIDEO THUMBNAILS */}
-      {thumbnails.length > 0 && (
+      {/* {thumbnails.length > 0 && (
         <section className="py-16 sm:py-20 bg-gradient-to-b from-purple-50 to-pink-50 mt-10 sm:mt-16 rounded-3xl">
           <div className="container mx-auto px-4 text-center mb-12 sm:mb-16">
             <h2 className="text-2xl sm:text-4xl md:text-5xl font-bold mb-4 sm:mb-6 bg-clip-text text-transparent bg-gradient-to-r from-pink-500 to-purple-500">
@@ -126,16 +127,29 @@ function Homepage() {
             </div>
           </div>
         </section>
-      )}
+      )} */}
+
+
+      {/* Banner Images Section */}
+      <BannerImage />
 
       {/* 👨‍🏫 COACHES SECTION */}
       {allcoaches.length > 0 && (
-        <section className="py-16 sm:py-20 px-2 sm:px-6 bg-gradient-to-b from-white to-purple-50">
-          <div className="container mx-auto text-center mb-12 sm:mb-16">
-            <h2 className="text-2xl sm:text-4xl md:text-5xl font-bold mb-4 sm:mb-6 bg-clip-text text-transparent bg-gradient-to-r from-purple-500 to-pink-500">
-              Meet Our Guiding Masters
+        <section className="relative py-2 sm:py-8 px-2 sm:px-6 bg-gradient-to-b from-pink-50 to-purple-50 mx-2">
+          {/* "View All" Button — fixed to top-right */}
+          <button
+            onClick={() => navigate('/coach-profile')}
+            className="absolute  right-4 sm:top-8 sm:right-10 text-sm sm:text-base cursor-pointer text-purple-600 hover:text-purple-500 font-medium transition-all flex items-center gap-1"
+          >
+            <span>View All</span>
+            <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5"/>
+          </button>
+
+          <div className="container mx-auto text-left mb-12 sm:mb-16 px-4">
+            <h2 className="text-xl sm:text-4xl md:text-5xl mb-4 sm:mb-6 bg-clip-text font-extrabold text-transparent bg-gradient-to-r from-purple-500 to-pink-500">
+              Masters & Guides 
             </h2>
-            <p className="text-base sm:text-lg md:text-xl max-w-3xl mx-auto text-gray-600 font-light">
+            <p className="text-base sm:text-lg md:text-xl max-w-3xl  text-gray-600 font-light">
               Learn from innovators and thought leaders dedicated to your success.
             </p>
           </div>
@@ -163,6 +177,13 @@ function Homepage() {
           </div>
         </section>
       )}
+
+
+      {/* Categories Section */}
+      <Categories />
+
+      {/* Meditation Audio List */}
+      <MusicList />
 
       {/* ❓ FAQ SECTION */}
       {FAQs && FAQs.length > 0 && (

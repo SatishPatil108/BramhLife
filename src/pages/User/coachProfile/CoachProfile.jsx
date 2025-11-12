@@ -21,7 +21,7 @@ const CoachProfile = () => {
   if (!coachProfile) return <p>No coach details available.</p>;
 
   return (
-    <div className="p-6 max-w-5xl mx-auto bg-white shadow-lg rounded-xl text-center">
+    <div className="p-6 max-w-5xl mx-auto bg-white shadow-lg rounded-xl text-center mb-10">
 
       <h1 className="text-4xl font-bold mb-2">{coachProfile.name}</h1>
 

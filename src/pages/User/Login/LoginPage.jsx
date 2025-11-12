@@ -52,7 +52,7 @@ const LoginPage = () => {
 
           {/* Inline feedback messages */}
           {error && (
-            <p className="text-red-600 font-medium text-center">{error}</p>
+            <p className="text-red-600 font-medium text-center">{error.message}</p>
           )}
           {userLoginSuccess && !error && (
             <p className="text-green-500 font-medium text-center">

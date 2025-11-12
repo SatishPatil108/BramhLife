@@ -12,5 +12,7 @@ export default {
       desktop: '768px',
     },
   },
-  plugins: [scrollbarHide()],
+  plugins: [scrollbarHide(),
+    require('@tailwindcss/line-clamp'),
+  ],
 };

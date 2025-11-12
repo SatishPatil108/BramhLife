@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+
 import {
   enrollInCourseAPI,
   fetchCoachDetailsAPI,
@@ -7,10 +8,15 @@ import {
   fetchCourseFeedbackById,
 } from "@/store/feature/user";
 
+import { toast } from 'react-toastify'
+
 const useCoachDetailsPage = (videoId) => {
   const dispatch = useDispatch();
-  const { coachDetails, courseDetails, isLoading, error, allCoursesFeedback, user } =
-    useSelector((state) => state.user); // Added `user` from redux state
+  const { coachDetails, courseDetails, isLoading, error, allCoursesFeedback } =
+    useSelector((state) => state.user);
+  const { user } = useSelector((state) => state.auth);
+
+  // Added `user` from redux state
 
   const [enrolling, setEnrolling] = useState(false);
   const [message, setMessage] = useState(""); // Inline message for login / success / error
@@ -51,9 +57,9 @@ const useCoachDetailsPage = (videoId) => {
 
       if (res?.data) {
         const { user_name, course_name } = res.data;
-        setMessage(`🎉 Welcome ${user_name}! You have successfully enrolled in "${course_name}".`);
+        toast.success(`🎉 Welcome ${user_name}! You have successfully enrolled in "${course_name}".`);
       } else {
-        setMessage(res?.message || "Enrollment successful!");
+        toast.success(res?.message || "Enrollment successful!");
       }
     } catch (err) {
       setMessage("Enrollment failed: " + (err?.message || "Unknown error"));
@@ -65,7 +71,7 @@ const useCoachDetailsPage = (videoId) => {
   // Handle enroll with login check
   const handleEnroll = () => {
     if (!user) {
-      setMessage("Please login first");
+      confirm("You must be logged in first!");
       return;
     }
     setMessage(""); // Clear previous messages

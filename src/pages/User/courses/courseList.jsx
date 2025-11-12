@@ -28,7 +28,7 @@ const CourseList = () => {
 
         {/* Loading & Error States */}
         {loading && (
-          <p className="text-center text-gray-500 animate-pulse">
+          <p className="text-center text-gray-500 animate-pulse pb-4">
             Loading courses...
           </p>
         )}

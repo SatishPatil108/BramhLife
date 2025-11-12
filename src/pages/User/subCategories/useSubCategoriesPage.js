@@ -12,8 +12,10 @@ const useSubCategoriesPage = (domain_id) => {
 
   }, [domain_id, dispatch]);
 
+  const subCats = subcategories[domain_id];
+
   return {
-    subcategories,
+    subcategories:subCats,
     loading: isLoading,
     error,
   };

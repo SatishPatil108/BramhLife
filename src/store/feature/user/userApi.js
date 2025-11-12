@@ -59,11 +59,11 @@ export const fetchCourseDetailsAPI = async (courseId) => {
 };
 
 //Fetch all coaches 
-export const fetchAllCoachesAPI = async (pageNo = 1, pageSize = 10) => {
-  return await makeRequest({
+export const fetchAllCoaches = async (pageNo, pageSize) => {
+    return await makeRequest({
     service: `user/courses/all-coaches/${pageNo}/${pageSize}`,
     method: API_METHODS.GET,
-    authRequired: true,
+    authRequired: false,
   });
 };
 

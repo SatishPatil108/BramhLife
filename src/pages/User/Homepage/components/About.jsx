@@ -62,7 +62,7 @@ function About() {
 
       {/* Story Section */}
       <div className="max-w-4xl mx-auto px-5 sm:px-8 py-14 sm:py-20 text-center">
-        <h2 className="text-3xl sm:text-4xl font-bold text-teal-300 mb-6 sm:mb-8">
+        <h2 className="text-3xl sm:text-4xl font-bold text-purple-500 mb-6 sm:mb-8">
           Why We Started BramhLife
         </h2>
         <p className="text-gray-500 text-lg sm:text-xl leading-relaxed">
@@ -81,7 +81,7 @@ function About() {
         </h3>
         <button
           onClick={handleExploreClick}
-          className="px-8 sm:px-10 py-3 sm:py-4 bg-gradient-to-r from-teal-400 to-blue-500 text-white rounded-full font-bold text-base sm:text-lg hover:scale-110 transition-transform duration-300 shadow-lg"
+          className="px-8 sm:px-10 py-3 sm:py-4 bg-gradient-to-r from-pink-500 to-purple-500 text-white rounded-full font-bold text-base sm:text-lg hover:scale-110 transition-transform duration-300 shadow-lg"
         >
           Explore Our Courses
         </button>

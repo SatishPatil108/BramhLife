@@ -4,9 +4,11 @@ import { useSelector } from "react-redux";
 const useAdminNavbar = () => {
   const navItems = [
     { name: "Dashboard", path: "/admin/dashboard" },
-    // { name: "Users", path: "/admin/users" },
     { name: "Coaches", path: "/admin/coaches" },
     { name: "Courses", path: "/admin/courses" },
+    { name: "Musics", path: "/admin/musics" },
+    { name: "Domains", path: "/admin/domains" },
+    { name: "FAQs", path: "/admin/frequently-asked-questions" },
   ];
   const { adminLoginSuccess } = useSelector((state) => state.auth);
   return { navItems,adminLoginSuccess };

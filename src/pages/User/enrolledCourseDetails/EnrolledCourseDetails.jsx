@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import useEnrolledCourseDetails from "./useEnrolledCourseDetails";
 import FeedbackForm from "../FeedbackForm";
 
@@ -9,12 +9,18 @@ const EnrolledCourseDetails = () => {
     useEnrolledCourseDetails(courseId);
 
   const [selectedVideo, setSelectedVideo] = useState(null);
-
+  const navigate = useNavigate();
   useEffect(() => {
     if (enrolledCourseDetails && enrolledCourseDetails.length > 0) {
       setSelectedVideo(enrolledCourseDetails[0]);
     }
   }, [enrolledCourseDetails]);
+
+  useEffect(() => {
+    if (error?.message === "Authorization token is missing.") {
+      navigate("/login");
+    }
+  }, [error, navigate]);
 
   if (isLoading)
     return (
@@ -22,8 +28,10 @@ const EnrolledCourseDetails = () => {
         Loading course videos...
       </p>
     );
-  if (error)
-    return <p className="text-red-600 text-center mt-10">Error: {error}</p>;
+
+  if (error) {
+    return <p className="text-red-600 text-center mt-10">Error: {error.message}</p>;
+  }
   if (!enrolledCourseDetails || enrolledCourseDetails.length === 0)
     return (
       <p className="text-gray-500 text-center mt-10">

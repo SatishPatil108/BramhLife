@@ -46,7 +46,7 @@ const CoachesInfoPage = ({ coachId }) => {
     );
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-pink-50 via-white to-purple-50 text-gray-900 flex flex-col">
+    <div className=" bg-gradient-to-br from-pink-50 via-white to-purple-50 text-gray-900 flex flex-col">
       <main className="flex-grow container mx-auto px-4 py-12">
         {/* Title */}
         <h1 className="text-4xl md:text-5xl font-extrabold text-center mb-12 bg-gradient-to-r">

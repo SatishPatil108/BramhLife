@@ -18,16 +18,17 @@ const SubCategoriesPage = () => {
       </p>
     );
   }
+  if (loading) return (<div>loading</div>)
 
-  const beginner = subcategories.filter(
+  const beginner = subcategories ? subcategories.filter(
     (sub) => sub.progressive_difficulty === 1
-  );
-  const intermediate = subcategories.filter(
+  ) : [];
+  const intermediate = subcategories ? subcategories.filter(
     (sub) => sub.progressive_difficulty === 2
-  );
-  const advanced = subcategories.filter(
+  ) : [];
+  const advanced = subcategories ? subcategories.filter(
     (sub) => sub.progressive_difficulty === 3
-  );
+  ) : [];
 
   const handleSubcategoryClick = (sub) => {
     navigate(`/coaches/${sub.subdomain_id}`, {

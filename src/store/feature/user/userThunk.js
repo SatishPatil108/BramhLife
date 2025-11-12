@@ -82,11 +82,11 @@ export const fetchCourseDetailsById = createAsyncThunk(
 );
 
 // Fetch all coaches
-export const fetchAllCoaches = createAsyncThunk(
+export const fetchAllCoachesAPI = createAsyncThunk(
   "user/fetchAllCoaches",
   async ({ pageNo = 1, pageSize = 10 }, thunkAPI) => {
     try {
-      const response = await userAPI.fetchAllCoachesAPI(pageNo, pageSize);
+      const response = await userAPI.fetchAllCoaches(pageNo, pageSize);
       return response;
     } catch (error) {
       return thunkAPI.rejectWithValue(error.response?.data || error.message);

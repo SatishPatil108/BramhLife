@@ -7,7 +7,6 @@ import {
   fetchCoachDetailsAPI,
   fetchCoachProfileAPI,
   fetchCourseDetailsById,
-  fetchAllCoaches,
   enrollInCourseAPI,
   fetchMyCoursesThunk,
   fetchEnrolledCourseDetailsThunk,
@@ -18,28 +17,14 @@ import {
   postCourseFeedbackAPI,
   searchCoursesAPI,
   fetchCourseNamesAndCoachNamesAPI,
+  fetchAllCoachesAPI
 } from "./userThunk";
 
-// import mind from "@/assets/mind.jpg";
-// import body from "@/assets/body.jpg";
-// import entrepreneurship from "@/assets/Entrepreneurship.jpg";
-// import relationships from "@/assets/relationship.jpg";
-// import career from "@/assets/carrier.jpg";
-// import soul from "@/assets/soul.jpg";
-
-// const categoryImagesMap = {
-//   Mind: mind,
-//   Body: body,
-//   Soul: soul,
-//   Entrepreneurship: entrepreneurship,
-//   Career: career,
-//   Relationships: relationships,
-// };
 
 const initialState = {
   isLoading: false,
   coursesCategories: [],
-  subcategories: [],
+  subcategories: {},
   coachesVideos: [],
   coachDetails: null,
   coachProfile: null,
@@ -109,10 +94,10 @@ const userSlice = createSlice({
       .addCase(fetchSubcategoriesAPI.fulfilled, (state, action) => {
         state.isLoading = false;
         const res = action.payload;
-        if (res?.data) {
-          state.subcategories = res.data;
+        if (res?.data && res.data.length != 0) {
+          state.subcategories[res?.data[0]?.domain_id] = res.data;
         } else {
-          state.subcategories = [];
+          state.subcategories[res?.domain_id] = [];
           state.error = res?.message || "Failed to fetch subcategories";
         }
       })
@@ -204,11 +189,11 @@ const userSlice = createSlice({
 
       // All coaches
 
-      .addCase(fetchAllCoaches.pending, (state) => {
+      .addCase(fetchAllCoachesAPI.pending, (state) => {
         state.isLoading = true;
         state.error = null;
       })
-      .addCase(fetchAllCoaches.fulfilled, (state, action) => {
+      .addCase(fetchAllCoachesAPI.fulfilled, (state, action) => {
         state.isLoading = false;
         const res = action.payload;
         if (res?.data) {
@@ -217,7 +202,7 @@ const userSlice = createSlice({
           state.error = res?.message || "Failed to fetch all coaches";
         }
       })
-      .addCase(fetchAllCoaches.rejected, (state, action) => {
+      .addCase(fetchAllCoachesAPI.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload || action.error.message;
       })

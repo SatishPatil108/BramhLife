@@ -1,0 +1,20 @@
+import { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchAllCoursesFeedbackAPI, fetchCoursesCategoriesAPI, fetchFAQsAPI, fetchUserDashboardDataAPI } from "@/store/feature/user";
+
+
+const useCategories = () => {
+  const dispatch = useDispatch();
+    const [selectedCategory, setSelectedCategory] = useState(null);
+  const {   isLoading, error,  coursesCategories } = useSelector(
+    (state) => state.user
+  );
+
+  useEffect(() => {     
+    dispatch(fetchCoursesCategoriesAPI({ pageNo: 1, pageSize: 10 }));
+  }, [dispatch]);
+
+  return {  loading: isLoading, error, coursesCategories,selectedCategory, setSelectedCategory };
+};
+
+export default useCategories;

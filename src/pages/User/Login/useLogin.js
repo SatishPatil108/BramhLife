@@ -29,7 +29,7 @@ const useLogin = () => {
       firstRender.current = false;
       return;
     }
-    console.log(userLoginSuccess);
+
     if (userLoginSuccess) {
       toast.success("Login successful ✅", {
         position: "top-center",

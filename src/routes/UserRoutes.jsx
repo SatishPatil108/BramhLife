@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 
 import SubCategoriesPage from "@/pages/User/subCategories";
@@ -16,8 +16,16 @@ import EnrolledCourseDetails from "@/pages/User/enrolledCourseDetails";
 import { CourseByNameOrCoachName } from "@/pages/User/courseByNameOrCoachName";
 import Footer from "@/components/footer/Footer";
 import UserLoggedOut from "@/pages/User/userLoggedOut";
+import { useDispatch } from "react-redux";
+import { checkUserLoggedIn } from "@/store/feature/auth/authSlice";
 
 const UserRoutes = () => {
+  const dispath = useDispatch();
+
+  useEffect(()=>{
+    dispath(checkUserLoggedIn());
+  },[dispath]);
+
   return (
     <div className="min-h-screen flex flex-col">
       {/* Header */}

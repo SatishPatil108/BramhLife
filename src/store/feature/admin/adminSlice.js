@@ -27,6 +27,11 @@ import {
   addCurriculumItemAPI,
   updateCurriculumItemAPI,
   deleteCurriculumItemAPI,
+  fetchAllMusicsAPI,
+  fetchMusicByIdAPI,
+  postMusicAPI,
+  updateMusicAPI,
+  deleteMusicAPI,
 } from "./adminThunk";
 
 const adminSlice = createSlice({
@@ -39,6 +44,8 @@ const adminSlice = createSlice({
     courses: [],
     coachesList: [],
     faqList: [],
+    audioList: [],
+    audioDetails: null,
     courseDetails: null,
     loading: false,
     error: null,
@@ -178,6 +185,19 @@ const adminSlice = createSlice({
           );
         }
       })
+
+
+      // music 
+      .addCase(postMusicAPI.fulfilled, (state, action) => {
+        state.audioList.push(action.payload);
+      })
+      .addCase(fetchAllMusicsAPI.fulfilled, (state, action) => {
+        state.audioList = action.payload;
+      })
+      // .addCase(fetchMusicByIdAPI.fulfilled, (state, action) => { })
+      // .addCase(updateMusicAPI.fulfilled, (state, action) => { })
+      // .addCase(deleteMusicAPI.fulfilled, (state, action) => { })
+
 
       // ✅ Global matchers
       .addMatcher(

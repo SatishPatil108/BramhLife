@@ -312,3 +312,27 @@ export const updateCurriculumItem = async (curriculumId, curriculumData) => {
     tokenType: "admin",
   });
 };
+
+
+// music
+
+// add new music
+export const postMusic = async (musicData) => {
+  return await makeRequest({
+    service: `admin/music`,
+    method: API_METHODS.POST,
+    data: musicData,
+    authRequired: true,
+    tokenType: "admin",
+  });
+};
+
+// fetch all music audio
+export const getMusicAudios = async (pageNo, pageSize) => {
+  return await makeRequest({
+    service: `admin/musics/${pageNo}/${pageSize}`,
+    method: API_METHODS.GET,
+    authRequired: true,
+    tokenType: "admin",
+  });
+};

@@ -26,14 +26,13 @@ const AdminNavbar = () => {
   }, [location.pathname]);
 
   const linkStyle = ({ isActive }) =>
-    `block px-4 py-2 rounded-full text-sm font-semibold transition-all duration-300 ${isActive
-      ? "bg-purple-600 text-white shadow-lg"
-      : "text-gray-900 hover:text-white hover:bg-purple-400"
+    `block px-4 py-2 rounded-full text-base font-semibold transition-all duration-300 ${isActive
+      ? "bg-purple-600 text-white shadow-lg "
+      : "text-gray-900 hover:text-white hover:bg-purple-400  lg:text-black sm:text-white"
     }`;
 
   const handleLogout = () => {
     if (confirm("are you sure to logout")) {
-
       dispatch(logoutAdmin());
       navigate("/admin/login");
     }

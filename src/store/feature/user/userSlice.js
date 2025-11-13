@@ -16,6 +16,7 @@ import {
   fetchCourseFeedbackById,
   postCourseFeedbackAPI,
   searchCoursesAPI,
+  fetchAllCoachesAPI,
   } from "./userThunk";
 
 const initialState = {

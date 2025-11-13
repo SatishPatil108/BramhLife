@@ -6,7 +6,7 @@ const useAdminNavbar = () => {
     { name: "Dashboard", path: "/admin/dashboard" },
     { name: "Coaches", path: "/admin/coaches" },
     { name: "Courses", path: "/admin/courses" },
-    { name: "Musics", path: "/admin/musics" },
+    // { name: "Musics", path: "/admin/musics" },
     { name: "Domains", path: "/admin/domains" },
     { name: "FAQs", path: "/admin/frequently-asked-questions" },
   ];

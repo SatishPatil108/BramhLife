@@ -26,7 +26,7 @@ const FileUploaderWithPreview = ({ imageFile = null, setImageFile, imageUrl = nu
         hover:border-purple-500 dark:border-gray-600 dark:hover:border-purple-400
         bg-gray-50 dark:bg-gray-800 transition-all duration-300"
       >
-        <span className="text-gray-600 dark:text-gray-300 text-sm">
+        <span className="text-gray-600 dark:text-gray-300 text-lg">
           Click to choose an image
         </span>
         <input

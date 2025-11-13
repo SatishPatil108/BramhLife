@@ -29,6 +29,8 @@ import {
   updateSubDomain,
   deleteCourseCurriculum,
   updateCurriculumItem,
+  postMusic,
+  getMusicAudios,
 }
   from "./adminApi";
 
@@ -265,22 +267,7 @@ export const fetchCourseDetailsAPI = createAsyncThunk(
   }
 );
 
-//add new course
 
-// old code
-// export const addNewCourseAPI = createAsyncThunk(
-//   "admin/addNewCourse",
-//   async (courseData, thunkAPI) => {
-//     try {
-//       const response = await addNewCourse(courseData);
-//       return response.data;
-//     } catch (error) {
-//       return thunkAPI.rejectWithValue(
-//         error.response?.data?.message || "Failed to add new course"
-//       );
-//     }
-//   }
-// );
 
 // new Code
 export const addNewCourseAPI = createAsyncThunk(
@@ -454,3 +441,40 @@ export const deleteFAQAPI = createAsyncThunk(
     }
   }
 );
+
+
+// music 
+// post music
+export const postMusicAPI = createAsyncThunk(
+  "admin/postmusic",
+  async (musicData, thunkAPI) => {
+    try {
+      const response = await postMusic(musicData);
+      return response.data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(
+        error.response?.message || "Failed to add music"
+      );
+    }
+  }
+);
+
+// fetch All music list
+export const fetchAllMusicsAPI = createAsyncThunk(
+  "admin/musics",
+  async ({ pageNo, pageSize }, thunkAPI) => {
+    try {
+      const response = await getMusicAudios(pageNo, pageSize);
+      return response.data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(
+        error?.message || "Failed to fetch musicAudios"
+      );
+    }
+  }
+);
+export const fetchMusicByIdAPI = createAsyncThunk();
+export const updateMusicAPI = createAsyncThunk();
+export const deleteMusicAPI = createAsyncThunk();
+
+

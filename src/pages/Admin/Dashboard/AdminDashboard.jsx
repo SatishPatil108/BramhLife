@@ -8,7 +8,7 @@ import { useNavigate } from "react-router-dom";
 import UserCountGraph from "./UserCountGraph";
 
 const StatCard = ({ title, value, icon: Icon, color }) => (
-  <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-md border border-gray-200 dark:border-gray-700
+  <div className="bg-[url(/card_background.png)] bg-cover bg-green-50 dark:bg-gray-800 rounded-2xl shadow-md border border-gray-200 dark:border-gray-700
                   flex flex-col justify-between items-center p-6 h-50 
                   transition-all duration-200 hover:scale-[1.02] active:scale-[0.98]">
     {/* Icon Section */}
@@ -50,7 +50,7 @@ function AdminDashboard() {
     );
 
   const statCards = [
-    { title: "Total Users", value: dashboardData?.total_users, icon: Users, color: { text: "text-blue-600", bg: "bg-blue-100" }, nav: "/admin/users" },
+    { title: "Total Users", value: dashboardData?.total_users, icon: Users, color: { text: "text-blue-600", bg: "bg-blue-100" } },
     { title: "Active Users (Month)", value: dashboardData?.active_users_month, icon: Activity, color: { text: "text-green-600", bg: "bg-green-100" } },
     { title: "New Signups (Week)", value: dashboardData?.new_signups_week, icon: TrendingUp, color: { text: "text-amber-600", bg: "bg-amber-100" } },
     { title: "Total Courses", value: dashboardData?.total_courses, icon: BookOpen, color: { text: "text-purple-600", bg: "bg-purple-100" }, nav: "/admin/courses" },
@@ -59,7 +59,7 @@ function AdminDashboard() {
   ];
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 font-sans text-gray-800 dark:text-gray-100">
+    <div className="min-h-screen bg-white dark:bg-gray-900 font-sans text-gray-800 dark:text-gray-100">
       {/* Header */}
       <header className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 shadow-sm sticky top-0 z-10">
         <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
@@ -71,7 +71,6 @@ function AdminDashboard() {
             <span className="text-gray-600 dark:text-gray-300 text-xs lg:text-xl">
               Welcome, <span className="font-semibold">{user?.name || "Admin"}</span>
             </span>
-           
           </div>
         </div>
       </header>
@@ -83,7 +82,7 @@ function AdminDashboard() {
           <h2 className="text-2xl font-bold mb-6">Key Metrics</h2>
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-6">
             {statCards.map((card, i) => (
-              <div key={i} onClick={() => card.nav && navigate(card.nav)} className="cursor-pointer">
+              <div key={i} onClick={() => card.nav && navigate(card.nav)} className={`${card.nav ? "cursor-pointer" : "cursor-not-allowed"}`}>
                 <StatCard {...card} />
               </div>
             ))}
@@ -99,7 +98,7 @@ function AdminDashboard() {
               {dashboardData.top_courses.map((course) => (
                 <div
                   key={course.course_id}
-                  className="bg-white dark:bg-gray-900 p-4 rounded-xl shadow-md border border-gray-100 dark:border-gray-700 hover:scale-[1.02] transition-transform cursor-pointer"
+                  className="bg-[url(/card_background.png)] bg-cover bg-green-50 dark:bg-gray-900 p-4 rounded-xl shadow-sm hover:shadow-md border border-gray-100 dark:border-gray-700 hover:scale-[1.02] transition-transform cursor-pointer"
                 >
                   <div>
                     <h3 className="text-lg font-bold truncate">{course.course_name}</h3>

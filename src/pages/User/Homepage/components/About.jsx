@@ -18,7 +18,7 @@ function About() {
         <p className="text-lg sm:text-xl max-w-3xl mx-auto leading-relaxed text-gray-600">
           At{" "}
           <span className="font-semibold bg-gradient-to-r from-purple-600 via-pink-500 to-purple-600 text-transparent bg-clip-text">
-            BramhLife
+            BrahmaLYF
           </span>
           , we believe everyone has the power to grow, heal, and transform. Our
           platform connects you with world-class coaches and programs that empower you
@@ -63,7 +63,7 @@ function About() {
       {/* Story Section */}
       <div className="max-w-4xl mx-auto px-5 sm:px-8 py-14 sm:py-20 text-center">
         <h2 className="text-3xl sm:text-4xl font-bold text-purple-500 mb-6 sm:mb-8">
-          Why We Started BramhLife
+          Why We Started BrahmaLYF
         </h2>
         <p className="text-gray-500 text-lg sm:text-xl leading-relaxed">
           Our journey began with a vision — to create a safe space where people

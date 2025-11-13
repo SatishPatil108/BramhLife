@@ -7,6 +7,7 @@ import AddCourseCurriculum from "./AddCourseCurriculum";
 import useDomainData from "./useDomainData";
 import { addNewCourseAPI } from "@/store/feature/admin";
 import { toast } from "react-toastify";
+import { validateForm } from "@/utils/validator";
 
 const steps = ["Add Course", "Add Curriculum"];
 
@@ -29,9 +30,6 @@ const CourseStepper = ({ onClose, coaches = [], coachesLoading = false }) => {
     videoDesc: "",
     videoUrl: "",
     videoThumbnail: null,
-    videoDurationMinutes: "",
-    videoDurationSeconds: "",
-    videoSequenceNo: "",
   });
 
   const [curriculums, setCurriculums] = useState([
@@ -51,9 +49,24 @@ const CourseStepper = ({ onClose, coaches = [], coachesLoading = false }) => {
   const handleNext = async () => {
     try {
       if (activeStep === 0) {
-        const missing = validateRequiredFields(courseData, Object.keys(courseData));
-        if (missing.length) {
-          toast.error(`Missing field: ${missing[0]}`, { autoClose: 1500 });
+        const trim = (val) => (typeof val === "string" ? val.trim() : val);
+        const requiredFields = [
+          { value: trim(courseData.domain), label: "Domain" },
+          { value: trim(courseData.subdomain), label: "Subdomain" },
+          { value: trim(courseData.coachId), label: "Coach" },
+          { value: trim(courseData.courseName), label: "Course Name" },
+          { value: trim(courseData.targetedAudience), label: "Targeted Audience" },
+          { value: trim(courseData.learningOutcome), label: "Learning Outcome" },
+          { value: trim(courseData.curriculumDesc), label: "Curriculum Description" },
+          { value: trim(courseData.courseDurationHours), label: "Course Duration Hours" },
+          { value: trim(courseData.courseDurationMinutes), label: "Course Duration Minutes" },
+          { value: trim(courseData.videoTitle), label: "Video Title" },
+          { value: trim(courseData.videoDesc), label: "Video Description" },
+          { value: trim(courseData.videoUrl), label: "Video URL" },
+          { value: trim(courseData.videoThumbnail), label: "Video Thumbnail" },
+        ];
+        if (!validateForm(requiredFields)) {
+
           return;
         }
         toast.success("Course info saved!", { autoClose: 1200 });
@@ -61,9 +74,24 @@ const CourseStepper = ({ onClose, coaches = [], coachesLoading = false }) => {
 
       if (activeStep === 1) {
         for (const item of curriculums) {
-          const missing = validateRequiredFields(item, Object.keys(item));
-          if (missing.length) {
-            toast.error(`Missing field: ${missing[0]}`, { autoClose: 1500 });
+          /**
+           header_type: string;
+    sequence_no: string;
+    title: string;
+    description: string;
+    video_url: string;
+    thumbnail_file: null;
+           */
+          const trim = (val) => (typeof val === "string" ? val.trim() : val);
+          const requiredFields = [
+            { value: trim(item.header_type), label: "Header Type" },
+            { value: trim(item.sequence_no), label: "Sequence No" },
+            { value: trim(item.title), label: "Title" },
+            { value: trim(item.description), label: "Description" },
+            { value: trim(item.video_url), label: "Video URL" },
+            { value: trim(item.thumbnail_file), label: "Thumbnail File" },
+          ];
+          if (!validateForm(requiredFields)) {
             return;
           }
         }
@@ -103,20 +131,18 @@ const CourseStepper = ({ onClose, coaches = [], coachesLoading = false }) => {
           <div key={index} className="flex items-center">
             <div className="flex flex-col items-center">
               <div
-                className={`w-10 h-10 rounded-full flex items-center justify-center transition-colors duration-300 ${
-                  index <= activeStep
-                    ? "bg-indigo-600 text-white shadow-lg"
-                    : "bg-gray-300 dark:bg-gray-700 text-gray-600 dark:text-gray-400"
-                }`}
+                className={`w-10 h-10 rounded-full flex items-center justify-center transition-colors duration-300 ${index <= activeStep
+                  ? "bg-indigo-600 text-white shadow-lg"
+                  : "bg-gray-300 dark:bg-gray-700 text-gray-600 dark:text-gray-400"
+                  }`}
               >
                 {index + 1}
               </div>
               <p
-                className={`mt-2 text-sm ${
-                  index <= activeStep
-                    ? "text-indigo-600 dark:text-indigo-400 font-semibold"
-                    : "text-gray-400 dark:text-gray-500"
-                }`}
+                className={`mt-2 text-sm ${index <= activeStep
+                  ? "text-indigo-600 dark:text-indigo-400 font-semibold"
+                  : "text-gray-400 dark:text-gray-500"
+                  }`}
               >
                 {label}
               </p>
@@ -124,11 +150,10 @@ const CourseStepper = ({ onClose, coaches = [], coachesLoading = false }) => {
 
             {index < steps.length - 1 && (
               <FaArrowRight
-                className={`mx-4 text-lg ${
-                  index < activeStep
-                    ? "text-indigo-600 dark:text-indigo-400"
-                    : "text-gray-400 dark:text-gray-500"
-                }`}
+                className={`mx-4 text-lg ${index < activeStep
+                  ? "text-indigo-600 dark:text-indigo-400"
+                  : "text-gray-400 dark:text-gray-500"
+                  }`}
               />
             )}
           </div>
@@ -177,3 +202,4 @@ const CourseStepper = ({ onClose, coaches = [], coachesLoading = false }) => {
 };
 
 export default CourseStepper;
+

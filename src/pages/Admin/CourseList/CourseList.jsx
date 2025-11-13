@@ -62,7 +62,7 @@ const CourseList = () => {
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                   className="bg-[url(/card_background.png)]
-                    bg-cover bg-center dark:bg-gray-800 rounded-2xl shadow-lg p-6 border border-gray-200 dark:border-gray-700 transition-all duration-300 cursor-pointer flex flex-col justify-between"
+                    bg-fit bg-green-50 dark:bg-gray-800 rounded-2xl shadow-lg p-6 border border-gray-200 dark:border-gray-700 transition-all duration-300 cursor-pointer flex flex-col justify-between"
                   onClick={() => handleCourseClick(course.course_id)}
                 >
                   <div>

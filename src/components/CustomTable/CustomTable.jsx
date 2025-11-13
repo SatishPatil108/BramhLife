@@ -5,20 +5,20 @@ const BASE_URL = import.meta.env.VITE_BASE_URL_IMG;
 
 const CustomTable = ({ columns, data, onEdit, onDelete, onRowClick }) => {
   return (
-    <div className="overflow-x-auto w-full bg-white dark:bg-gray-900 rounded-lg shadow-md  transition-colors duration-300">
-      <table className="min-w-full border border-gray-200 dark:border-gray-700 rounded-lg text-sm sm:text-base">
+    <div className="overflow-x-auto w-full  rounded-lg shadow-md  transition-colors duration-300">
+      <table className="min-w-full rounded-lg text-sm sm:text-base">
         <thead>
-          <tr className="bg-[#F6AB41] dark:bg-gray-800 hover:bg-[#f1b45f] dark:hover:bg-gray-700 transition-colors duration-200">
+          <tr className="bg-gradient-to-r from-purple-500  to-purple-500 text-white">
             {columns.map((col, idx) => (
               <th
                 key={idx}
                 scope="col"
-                className="px-4 sm:px-6 py-3 border-b border-gray-300 dark:border-gray-700 text-gray-800 dark:text-gray-300 font-semibold text-xs sm:text-sm uppercase tracking-wider text-center"
+                className="px-4 sm:px-6 py-3 border-b border-gray-300 dark:border-gray-700 text-white dark:text-gray-300 font-semibold text-xs sm:text-sm uppercase tracking-wider text-center"
               >
                 {col.header}
               </th>
             ))}
-            <th className="px-4 sm:px-6 py-3 border-b border-gray-300 dark:border-gray-700 text-gray-800 dark:text-gray-300 font-semibold text-xs sm:text-sm uppercase tracking-wider text-center">
+            <th className="px-4 sm:px-6 py-3 border-b border-gray-300 dark:border-gray-700 text-white dark:text-gray-300 font-semibold text-xs sm:text-sm uppercase tracking-wider text-center">
               Actions
             </th>
           </tr>
@@ -33,7 +33,7 @@ const CustomTable = ({ columns, data, onEdit, onDelete, onRowClick }) => {
                   rowIndex % 2 === 0
                     ? "bg-white dark:bg-gray-900"
                     : "bg-gray-50 dark:bg-gray-800"
-                } hover:bg-[#ffe5b6] dark:hover:bg-gray-700`}
+                } hover:bg-purple-200 dark:hover:bg-gray-700`}
                 onClick={() => onRowClick && onRowClick(row)}
               >
                 {columns.map((col, colIndex) => (
@@ -57,8 +57,8 @@ const CustomTable = ({ columns, data, onEdit, onDelete, onRowClick }) => {
                 ))}
 
                 {/* Actions Column */}
-                <td className="px-4 sm:px-6 py-3 border-b border-gray-200 dark:border-gray-700 text-center">
-                  <div className="flex flex-col lg:flex-row lg:gap-3 justify-center gap-2">
+                <td className="px-6 sm:px-6 py-3 border-b border-gray-200 dark:border-gray-700 text-center">
+                  <div className="flex flex-col lg:flex-row lg:gap-4 justify-center gap-2">
                     {/* Edit Button */}
                     <button
                       type="button"
@@ -72,7 +72,7 @@ const CustomTable = ({ columns, data, onEdit, onDelete, onRowClick }) => {
                                  dark:bg-blue-800 dark:hover:bg-blue-700
                                  transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500"
                     >
-                      <SquarePen className="text-blue-600 dark:text-blue-300 w-5 h-5 sm:w-6 sm:h-6 m-auto" />
+                      <SquarePen className="text-blue-600 dark:text-blue-300 w-5 h-5 sm:w-6 sm:h-6 m-auto cursor-pointer" />
                     </button>
 
                     {/* Delete Button */}
@@ -84,11 +84,11 @@ const CustomTable = ({ columns, data, onEdit, onDelete, onRowClick }) => {
                         e.stopPropagation();
                         onDelete(row);
                       }}
-                      className="p-2 sm:p-2.5 rounded-full bg-red-100 hover:bg-red-200
+                      className="p-2 rounded-full bg-red-100 hover:bg-red-200
                                  dark:bg-red-800 dark:hover:bg-red-700
                                  transition-colors focus:outline-none focus:ring-2 focus:ring-red-500"
                     >
-                      <Trash2 className="text-red-600 dark:text-red-300 w-5 h-5 sm:w-6 sm:h-6 m-auto" />
+                      <Trash2 className="text-red-600 dark:text-red-300 w-5 h-5 sm:w-6 sm:h-6 m-auto cursor-pointer" />
                     </button>
                   </div>
                 </td>

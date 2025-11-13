@@ -28,7 +28,7 @@ const AdminNavbar = () => {
   const linkStyle = ({ isActive }) =>
     `block px-4 py-2 rounded-full text-sm font-semibold transition-all duration-300 ${isActive
       ? "bg-purple-600 text-white shadow-lg"
-      : "text-gray-300 hover:text-white hover:bg-gray-800"
+      : "text-gray-900 hover:text-white hover:bg-purple-400"
     }`;
 
   const handleLogout = () => {
@@ -41,8 +41,8 @@ const AdminNavbar = () => {
 
   return (
     <header
-      className={`sticky top-0 left-0 w-full z-50 transition-all duration-500 ${isScrolled
-        ? "bg-gray-950/90 backdrop-blur-md shadow-xl"
+      className={`top-0 left-0 w-full z-50 transition-all duration-500 ${isScrolled
+        ? "bg-green-50 backdrop-blur-md shadow-xl"
         : "bg-transparent"
         }`}
     >
@@ -51,10 +51,10 @@ const AdminNavbar = () => {
           {/* Logo */}
           <Link
             to="/admin/dashboard"
-            className="text-2xl font-extrabold tracking-wide"
+            className="text-3xl font-extrabold tracking-wide"
           >
             <span className="bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-500 bg-clip-text text-transparent">
-              BramhLife
+              BrahmaLYF
             </span>
           </Link>
 
@@ -84,10 +84,11 @@ const AdminNavbar = () => {
 
           {/* Mobile Menu Button */}
           <button
-            className="md:hidden text-white text-2xl focus:outline-none"
+            className="md:hidden w-10 h-10 p-1 text-red-500 rounded-full bg-white text-3xl focus:outline-none"
             onClick={() => setMenuOpen(!menuOpen)}
           >
             {menuOpen ? <FiX /> : <FiMenu />}
+
           </button>
         </div>
       </div>

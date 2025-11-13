@@ -1,13 +1,14 @@
+import FileUploaderWithPreview from "@/components/FileUploaderWithPreview/FileUploaderWithPreview";
 import { useState } from "react";
 
 const AddCourseInfo = ({
   courseData = {},
-  setCourseData = () => {},
+  setCourseData = () => { },
   coaches = [],
   loadingCoaches = false,
   domains = [],
   subdomains = [],
-  fetchSubdomains = () => {},
+  fetchSubdomains = () => { },
 }) => {
   const [errors, setErrors] = useState({});
 
@@ -37,15 +38,17 @@ const AddCourseInfo = ({
       <div className="space-y-5">
         {/* Domain & Subdomain */}
         <div className="grid sm:grid-cols-2 gap-4">
+          {/* Domain */}
           <div>
             <label className="block font-medium text-gray-700 dark:text-gray-200 mb-1">
-              Domain
+              Domain <span className="text-red-500">*</span>
             </label>
             <select
               name="domain"
               value={courseData.domain ?? ""}
               onChange={handleDomainChange}
-              className={`${inputClass} ${errors.domain ? "border-red-500" : ""}`}
+              required
+              className={`${inputClass} ${errors.domain ? "border-red-500" : ""} focus:ring-2 focus:ring-purple-500 focus:border-purple-500`}
             >
               <option value="">Select Domain</option>
               {domains.map((d) => (
@@ -59,16 +62,18 @@ const AddCourseInfo = ({
             )}
           </div>
 
+          {/* Subdomain */}
           <div>
             <label className="block font-medium text-gray-700 dark:text-gray-200 mb-1">
-              Subdomain
+              Subdomain <span className="text-red-500">*</span>
             </label>
             <select
               name="subdomain"
               value={courseData.subdomain ?? ""}
               onChange={handleChange}
-              className={`${inputClass} ${errors.subdomain ? "border-red-500" : ""}`}
               disabled={!courseData.domain}
+              required
+              className={`${inputClass} ${errors.subdomain ? "border-red-500" : ""} focus:ring-2 focus:ring-purple-500 focus:border-purple-500`}
             >
               <option value="">Select Subdomain</option>
               {subdomains
@@ -88,19 +93,19 @@ const AddCourseInfo = ({
         {/* Coach */}
         <div>
           <label className="block font-medium text-gray-700 dark:text-gray-200 mb-1">
-            Coach
+            Coach <span className="text-red-500">*</span>
           </label>
           <select
             name="coachId"
             value={courseData.coachId ?? ""}
             onChange={handleChange}
-            className={`${inputClass} ${errors.coach ? "border-red-500" : ""}`}
+            required
+            className={`${inputClass} ${errors.coach ? "border-red-500" : ""} focus:ring-2 focus:ring-purple-500 focus:border-purple-500`}
           >
             <option value="">Select Coach</option>
             {coaches.map((coach) => {
               const id = coach.id ?? coach.coach_id ?? coach._id;
-              const name =
-                coach.name ?? coach.full_name ?? coach.coach_name ?? "Unknown";
+              const name = coach.name ?? coach.full_name ?? coach.coach_name ?? "Unknown";
               return (
                 <option key={id} value={id}>
                   {name}
@@ -121,14 +126,15 @@ const AddCourseInfo = ({
         ].map((f) => (
           <div key={f.name}>
             <label className="block font-medium text-gray-700 dark:text-gray-200 mb-1">
-              {f.label}
+              {f.label} <span className="text-red-500">*</span>
             </label>
             <input
               type="text"
               name={f.name}
               value={courseData[f.name] ?? ""}
               onChange={handleChange}
-              className={`${inputClass} ${errors[f.name] ? "border-red-500" : ""}`}
+              required
+              className={`${inputClass} ${errors[f.name] ? "border-red-500" : ""} focus:ring-2 focus:ring-purple-500 focus:border-purple-500`}
             />
             {errors[f.name] && (
               <p className="text-red-500 text-sm mt-1">{errors[f.name]}</p>
@@ -139,15 +145,14 @@ const AddCourseInfo = ({
         {/* Curriculum */}
         <div>
           <label className="block font-medium text-gray-700 dark:text-gray-200 mb-1">
-            Curriculum Description
+            Curriculum Description <span className="text-red-500">*</span>
           </label>
           <textarea
             name="curriculumDesc"
             value={courseData.curriculumDesc ?? ""}
             onChange={handleChange}
-            className={`${inputClass} h-28 resize-none ${
-              errors.curriculumDesc ? "border-red-500" : ""
-            }`}
+            required
+            className={`${inputClass} h-28 resize-none ${errors.curriculumDesc ? "border-red-500" : ""} focus:ring-2 focus:ring-purple-500 focus:border-purple-500`}
           />
           {errors.curriculumDesc && (
             <p className="text-red-500 text-sm mt-1">{errors.curriculumDesc}</p>
@@ -157,29 +162,33 @@ const AddCourseInfo = ({
         {/* Duration */}
         <div>
           <label className="font-medium text-gray-700 dark:text-gray-200">
-            Course Duration
+            Course Duration <span className="text-red-500">*</span>
           </label>
           <div className="flex flex-col sm:flex-row gap-3 mt-2">
             <div className="flex items-center gap-2">
               <span>Hours:</span>
               <input
                 type="number"
+                onWheel={(e) => e.target.blur()}
                 min={0}
                 name="courseDurationHours"
                 value={courseData.courseDurationHours ?? ""}
                 onChange={handleChange}
-                className={inputClass}
+                required
+                className={`${inputClass} focus:ring-2 focus:ring-purple-500 focus:border-purple-500`}
               />
             </div>
             <div className="flex items-center gap-2">
               <span>Minutes:</span>
               <input
                 type="number"
+                onWheel={(e) => e.target.blur()}
                 min={0}
                 name="courseDurationMinutes"
                 value={courseData.courseDurationMinutes ?? ""}
                 onChange={handleChange}
-                className={inputClass}
+                required
+                className={`${inputClass} focus:ring-2 focus:ring-purple-500 focus:border-purple-500`}
               />
             </div>
           </div>
@@ -197,14 +206,15 @@ const AddCourseInfo = ({
         ].map((f) => (
           <div key={f.name}>
             <label className="block font-medium text-gray-700 dark:text-gray-200 mb-1">
-              {f.label}
+              {f.label} <span className="text-red-500">*</span>
             </label>
             {f.type === "textarea" ? (
               <textarea
                 name={f.name}
                 value={courseData[f.name] ?? ""}
                 onChange={handleChange}
-                className={inputClass}
+                required
+                className={`${inputClass} focus:ring-2 focus:ring-purple-500 focus:border-purple-500`}
               />
             ) : (
               <input
@@ -212,7 +222,8 @@ const AddCourseInfo = ({
                 name={f.name}
                 value={courseData[f.name] ?? ""}
                 onChange={handleChange}
-                className={inputClass}
+                required
+                className={`${inputClass} focus:ring-2 focus:ring-purple-500 focus:border-purple-500`}
               />
             )}
           </div>
@@ -221,74 +232,19 @@ const AddCourseInfo = ({
         {/* Thumbnail Upload */}
         <div>
           <label className="block font-medium text-gray-700 dark:text-gray-200 mb-1">
-            Video Thumbnail
+            Video Thumbnail <span className="text-red-500">*</span>
           </label>
-          <input
-            type="file"
+          <FileUploaderWithPreview
+            imageFile={courseData.videoThumbnail}
+            setImageFile={(file) =>
+              setCourseData({ ...courseData, videoThumbnail: file })
+            }
             name="videoThumbnail"
-            onChange={handleChange}
-            className={inputClass}
-          />
-          {courseData.videoThumbnail && (
-            <a
-              href={URL.createObjectURL(courseData.videoThumbnail)}
-              target="_blank"
-            >
-              <img
-                src={URL.createObjectURL(courseData.videoThumbnail)}
-                alt="Thumbnail Preview"
-                className="w-32 h-32 mt-2 object-cover border rounded-lg shadow-md"
-              />
-            </a>
-          )}
-        </div>
-
-        {/* Video Duration */}
-        <div>
-          <label className="font-medium text-gray-700 dark:text-gray-200">
-            Video Duration
-          </label>
-          <div className="flex flex-col sm:flex-row gap-3 mt-2">
-            <div className="flex items-center gap-2">
-              <span>Minutes:</span>
-              <input
-                type="number"
-                min={0}
-                name="videoDurationMinutes"
-                value={courseData.videoDurationMinutes ?? ""}
-                onChange={handleChange}
-                className={inputClass}
-              />
-            </div>
-            <div className="flex items-center gap-2">
-              <span>Seconds:</span>
-              <input
-                type="number"
-                min={0}
-                name="videoDurationSeconds"
-                value={courseData.videoDurationSeconds ?? ""}
-                onChange={handleChange}
-                className={inputClass}
-              />
-            </div>
-          </div>
-        </div>
-
-        {/* Sequence */}
-        <div>
-          <label className="block font-medium text-gray-700 dark:text-gray-200 mb-1">
-            Video Sequence No
-          </label>
-          <input
-            type="number"
-            name="videoSequenceNo"
-            value={courseData.videoSequenceNo ?? ""}
-            onChange={handleChange}
-            className={inputClass}
           />
         </div>
       </div>
     </div>
+
   );
 };
 

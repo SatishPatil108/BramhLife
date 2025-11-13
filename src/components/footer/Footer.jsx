@@ -9,7 +9,7 @@ function Footer() {
         <div className="flex flex-col justify-between min-h-full">
           <div>
             <h2 className="text-2xl font-bold bg-gradient-to-r from-pink-500 to-purple-500 text-transparent bg-clip-text">
-              BramhLife
+              BrahmaLYF
             </h2>
             <p className="mt-2 sm:text-base text-gray-400">
               Empowering people to grow, heal, and transform through world-class
@@ -69,7 +69,7 @@ function Footer() {
 
       {/* Footer bottom */}
       <div className="text-center text-sm text-gray-400  border-t border-gray-300 ">
-        Copyright © {new Date().getFullYear()} BramhLife. All rights reserved.
+        Copyright © {new Date().getFullYear()} BrahmaLYF. All rights reserved.
       </div>
     </footer>
   );

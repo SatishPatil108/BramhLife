@@ -8,44 +8,44 @@ const useDomainsList = (pageNo = 1, pageSize = 10) => {
   const { domains, loading, error } = useSelector((state) => state.admin);
 
   useEffect(() => {
-  dispatch(getAllDomains(pageNo, pageSize));
-}, [dispatch, pageNo, pageSize]);
-
-const addDomain = (domainData) => {
-  dispatch(addNewDomain(domainData))
-    .unwrap()
-    .then(() => {
-      
-      dispatch(getAllDomains(pageNo, pageSize));
-    })
-    .catch((err) => {
-      console.error("Failed to add domain:", err);
-    });
-};
-
-
-const updateDomain = (domainId, domainName) => {
-  dispatch(updateDomainAPI({
-    domainId: domainId,
-    domainData: { domain_name: domainName }
-  }))
-  .unwrap()
-  .then(() => {
     dispatch(getAllDomains(pageNo, pageSize));
-  })
-  .catch(err => console.error("Failed to update domain:", err));
-};
+  }, [dispatch, pageNo, pageSize]);
 
-const deleteDomain = (domainId) => {
-  dispatch(deleteDomainAPI(domainId))
-    .unwrap()
-    .then(() => {
-      dispatch(getAllDomains(pageNo, pageSize)); 
-    })
-    .catch((err) => console.error("Failed to delete domain:", err));
-};
+  const addDomain = (domainData) => {
+    dispatch(addNewDomain(domainData))
+      .unwrap()
+      .then(() => {
 
-  return { domains, loading, error, addDomain, updateDomain , deleteDomain };
+        dispatch(getAllDomains(pageNo, pageSize));
+      })
+      .catch((err) => {
+        console.error("Failed to add domain:", err);
+      });
+  };
+
+
+  const updateDomain = (domainId, domainData) => {
+    dispatch(updateDomainAPI({
+      domainId: domainId,
+      domainData: domainData
+    }))
+      .unwrap()
+      .then(() => {
+        // dispatch(getAllDomains(pageNo, pageSize));
+      })
+      .catch(err => console.error("Failed to update domain:", err));
+  };
+
+  const deleteDomain = (domainId) => {
+    dispatch(deleteDomainAPI(domainId))
+      .unwrap()
+      .then(() => {
+        dispatch(getAllDomains(pageNo, pageSize));
+      })
+      .catch((err) => console.error("Failed to delete domain:", err));
+  };
+
+  return { domains, loading, error, addDomain, updateDomain, deleteDomain };
 };
 
 export default useDomainsList;

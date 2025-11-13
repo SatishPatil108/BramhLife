@@ -1,7 +1,8 @@
+import FileUploaderWithPreview from "@/components/FileUploaderWithPreview/FileUploaderWithPreview";
 import React, { useState, useEffect } from "react";
 import { toast } from "react-toastify";
 
-const AddCourseCurriculum = ({ curriculums = [], setCurriculum = () => {} }) => {
+const AddCourseCurriculum = ({ curriculums = [], setCurriculum = () => { } }) => {
   const [localCurriculums, setLocalCurriculums] = useState(curriculums);
 
   // Sync with parent
@@ -97,7 +98,10 @@ const AddCourseCurriculum = ({ curriculums = [], setCurriculum = () => {} }) => 
               name="header_type"
               value={curriculum.header_type}
               onChange={(e) => handleChange(index, e)}
-              className="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
+              required
+              className="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md
+                     bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100
+                     focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
             >
               <option value="">Select Header Type</option>
               <option value="Chapter">Chapter</option>
@@ -113,11 +117,15 @@ const AddCourseCurriculum = ({ curriculums = [], setCurriculum = () => {} }) => 
             </label>
             <input
               type="number"
+              onWheel={(e) => e.target.blur()}
               name="sequence_no"
               value={curriculum.sequence_no}
               onChange={(e) => handleChange(index, e)}
+              required
               placeholder="Enter sequence number"
-              className="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-purple-500"
+              className="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md
+                     bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100
+                     focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
             />
           </div>
 
@@ -131,8 +139,11 @@ const AddCourseCurriculum = ({ curriculums = [], setCurriculum = () => {} }) => 
               name="title"
               value={curriculum.title}
               onChange={(e) => handleChange(index, e)}
+              required
               placeholder="Enter title"
-              className="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-purple-500"
+              className="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md
+                     bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100
+                     focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
             />
           </div>
 
@@ -145,8 +156,12 @@ const AddCourseCurriculum = ({ curriculums = [], setCurriculum = () => {} }) => 
               name="description"
               value={curriculum.description}
               onChange={(e) => handleChange(index, e)}
+              required
               placeholder="Describe this chapter or section"
-              className="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-purple-500 h-24 resize-none"
+              className="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md
+                     bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100
+                     focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500
+                     h-24 resize-none"
             />
           </div>
 
@@ -160,8 +175,11 @@ const AddCourseCurriculum = ({ curriculums = [], setCurriculum = () => {} }) => 
               name="video_url"
               value={curriculum.video_url}
               onChange={(e) => handleChange(index, e)}
+              required
               placeholder="Enter video URL"
-              className="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-purple-500"
+              className="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md
+                     bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100
+                     focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
             />
           </div>
 
@@ -170,19 +188,13 @@ const AddCourseCurriculum = ({ curriculums = [], setCurriculum = () => {} }) => 
             <label className="block font-medium text-gray-700 dark:text-gray-200 mb-1">
               Upload Thumbnail <span className="text-red-500">*</span>
             </label>
-            <input
-              type="file"
-              accept="image/*"
-              onChange={(e) => handleThumbnailChange(index, e)}
-              className="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-purple-500"
+            <FileUploaderWithPreview
+              imageFile={curriculum.thumbnail_file}
+              setImageFile={(file) =>
+                handleThumbnailChange(index, { target: { files: [file] } })
+              }
+              name="thumbnail_file"
             />
-            {curriculum.thumbnail_file && (
-              <img
-                src={URL.createObjectURL(curriculum.thumbnail_file)}
-                alt="Thumbnail Preview"
-                className="w-full max-w-xs sm:max-w-sm md:max-w-md mt-3 aspect-video object-cover border rounded-lg shadow-md mx-auto"
-              />
-            )}
           </div>
 
           {/* Remove Button */}
@@ -205,12 +217,14 @@ const AddCourseCurriculum = ({ curriculums = [], setCurriculum = () => {} }) => 
         <button
           type="button"
           onClick={handleAddCurriculum}
-          className="px-5 py-2.5 bg-purple-600 hover:bg-purple-700 text-white font-medium rounded-md transition"
+          className="px-5 py-2.5 bg-purple-600 hover:bg-purple-700
+                 text-white font-medium rounded-md transition"
         >
           + Add Another Curriculum
         </button>
       </div>
     </div>
+
   );
 };
 

@@ -8,7 +8,7 @@ const CustomButton = ({ children, onClick, variant = "primary" }) => {
 
   switch (variant) {
     case "primary":
-      variantStyle = "bg-blue-600 hover:bg-blue-700 text-white";
+      variantStyle = "bg-blue-600 hover:bg-blue-700 text-white cursor-pointer";
       break;
     case "gradient":
       variantStyle =

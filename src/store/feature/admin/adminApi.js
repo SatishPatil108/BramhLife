@@ -196,9 +196,9 @@ export const fetchCoaches = async () => {
 
 //post curriculam data
 // Add curriculum outline for a course (POST)
-export const addCourseCurriculum = async (curriculumData) => {
+export const  addCourseCurriculum = async (courseId, curriculumData) => {
   return await makeRequest({
-    service: `admin/coaches/curriculum_outline`,
+    service: `admin/coaches/course/curriculum_outline/add/${courseId}`,
     method: API_METHODS.POST,
     data: curriculumData,
     authRequired: true,
@@ -292,3 +292,23 @@ export const deleteFAQ = async (faqId) => {
   });
 }
 
+//delete curriculum item
+export const deleteCourseCurriculum = async (courseId, curriculumId) => {
+  return await makeRequest({
+    service: `admin/coaches/course/curriculum_outline/${courseId}/${curriculumId}`,
+    method: API_METHODS.DELETE,
+    authRequired: true,
+    tokenType: "admin",
+  });
+};
+
+//update curriculum item
+export const updateCurriculumItem = async (curriculumId, curriculumData) => {
+  return await makeRequest({
+    service: `admin/coaches/course/curriculum_outline/update/${curriculumId}`,
+    method: API_METHODS.PUT,
+    data: curriculumData,
+    authRequired: true,
+    tokenType: "admin",
+  });
+};

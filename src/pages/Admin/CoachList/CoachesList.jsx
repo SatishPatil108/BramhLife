@@ -7,18 +7,18 @@ import {
   fetchAllSubDomainsAPI,
   updateCoachAPI,
 } from "@/store/feature/admin";
-import { FaEdit, FaTrash } from "react-icons/fa";
 import CustomButton from "@/components/CustomButton";
 import CustomDrawer from "@/components/CustomDrawer";
 import CoachInfo from "./CoachInfo";
+import FileUploaderWithPreview from "@/components/FileUploaderWithPreview/FileUploaderWithPreview";
+import { toast } from "react-toastify";
+import { SquarePen, Trash2 } from "lucide-react";
 
 const BASE_URL = import.meta.env.VITE_BASE_URL_IMG;
 
 const CoachesList = () => {
   const dispatch = useDispatch();
   const { coaches, loading, error, domains, subdomains } = useCoachesList();
-  console.log(coaches)
-
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [editingCoach, setEditingCoach] = useState(null);
   const [showForm, setShowForm] = useState(false);
@@ -95,7 +95,25 @@ const CoachesList = () => {
 
   const handleDeleteCoach = (coachId) => {
     if (window.confirm("Are you sure you want to delete this coach?")) {
-      dispatch(deleteCoachAPI(coachId));
+      const toastId = toast.loading('Deleting a coache...');
+
+      dispatch(deleteCoachAPI(coachId)).then(() => {
+        toast.update(toastId, {
+          render: "Coach is Deleted Successfully 🎉",
+          type: "success",
+          isLoading: false,
+          autoClose: 3000,
+        });
+        resetForm();
+      }).catch((error) => {
+        console.error(error);
+        toast.update(toastId, {
+          render: "Failed to Delete a Coach!",
+          type: "error",
+          isLoading: false,
+          autoClose: 3000,
+        })
+      });
     }
   };
 
@@ -124,12 +142,47 @@ const CoachesList = () => {
     formData.append("subdomain_id", subdomainId);
     formData.append("professional_title", professionalTitle);
     formData.append("bio", bio);
-    if (typeof profilePicture === 'object') formData.append("profile_picture", profilePicture);
+    if (typeof profilePicture === "object") formData.append("profile_picture", profilePicture);
 
     if (editingCoach) {
-      dispatch(updateCoachAPI({ coachId: editingCoach.coach_id, coachData: formData })).then(() => resetForm());
+      const toastId = toast.loading("Updating new coach............");
+
+      dispatch(updateCoachAPI({ coachId: editingCoach.coach_id, coachData: formData })).then(() => {
+        toast.update(toastId, {
+          render: "Coach is Updated Successfully 🎉",
+          type: "success",
+          isLoading: false,
+          autoClose: 3000,
+        });
+        resetForm();
+      }).catch((error) => {
+        console.error(error);
+        toast.update(toastId, {
+          render: "Failed to Update a Coach!",
+          type: "error",
+          isLoading: false,
+          autoClose: 3000,
+        })
+      });
     } else {
-      dispatch(addNewCoachAPI(formData)).then(() => resetForm());
+      const toastId = toast.loading("adding new coach............");
+      dispatch(addNewCoachAPI(formData)).then(() => {
+        toast.update(toastId, {
+          render: "New Coach is added successfully 🎉",
+          type: "success",
+          isLoading: false,
+          autoClose: 3000,
+        });
+        resetForm();
+      }).catch((error) => {
+        console.error(error);
+        toast.update(toastId, {
+          render: "Failed to add new Coach!",
+          type: "error",
+          isLoading: false,
+          autoClose: 3000,
+        });
+      });
     }
   };
 
@@ -144,15 +197,15 @@ const CoachesList = () => {
 
 
       {loading && <p className="text-blue-500 text-center text-lg">Loading coaches...</p>}
-      {error && <p className="text-red-500 text-center text-lg">Error: {error}</p>}
+      {error && <p className="text-red-500 text-center text-lg">Error: {error.message}</p>}
 
       {!loading && !error && coaches.length > 0 ? (
         <div className="space-y-6 max-w-6xl mx-auto">
           {coaches.map((coach) => (
             <div
               key={coach.coach_id}
-              className=" flex flex-col lg:flex-row items-center justify-between bg-[url(/card_background.png)]
-               bg-cover bg-center border border-gray-300 rounded-2xl p-6 hover:shadow-sm transition duration-300"
+              className="relative flex flex-col lg:flex-row bg-[url(/card_background.png)]
+              bg-cover bg-green-50 border border-gray-300 rounded-2xl p-6 hover:shadow-sm transition duration-300"
               onClick={() => handleRowClick(coach)}
             >
               {/* Left: Image */}
@@ -161,13 +214,15 @@ const CoachesList = () => {
                   <img
                     src={
                       `${BASE_URL}${coach.profile_image_url}`
+
                     }
                     alt={coach.profile_image_url || "Coach Avatar"}
-                    className="w-full h-50 object-contain transition-transform duration-300 hover:scale-105"
+                    className="w-full h-full object-fit transition-transform duration-300 hover:scale-105"
                   // onError={(e) => (e.target.src = "/placeholder-avatar.png")}
                   />
                 </div>
               </div>
+
 
               {/* Middle: Info */}
               <div className="flex-1 text-center lg:text-left">
@@ -181,24 +236,24 @@ const CoachesList = () => {
               </div>
 
               {/* Right: Buttons */}
-              <div className="flex flex-row lg:flex-col items-center justify-center gap-3 mt-4 lg:mt-0">
+              <div className="absolute top-4 right-4 flex gap-3 z-10">
                 <button
                   onClick={(e) => {
                     e.stopPropagation();
                     handleEditCoach(coach);
                   }}
-                  className="flex items-center gap-2 text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 transition text-base font-medium"
+                  className="p-2 rounded-full bg-blue-100 hover:bg-blue-200 dark:bg-blue-800 dark:hover:bg-blue-700 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500"
                 >
-                  <FaEdit /> Edit
+                  <SquarePen className="text-blue-600 dark:text-blue-300 w-5 h-5 sm:w-6 sm:h-6 m-auto cursor-pointer" />
                 </button>
                 <button
                   onClick={(e) => {
                     e.stopPropagation();
                     handleDeleteCoach(coach.coach_id);
                   }}
-                  className="flex items-center gap-2 text-red-600 dark:text-red-400 hover:text-red-800 dark:hover:text-red-300 transition text-base font-medium"
+                  className="p-2 rounded-full bg-red-100 hover:bg-red-200 dark:bg-red-800 dark:hover:bg-red-700 transition-colors focus:outline-none focus:ring-2 focus:ring-red-500"
                 >
-                  <FaTrash /> Delete
+                  <Trash2 className="text-red-600 dark:text-red-300 w-5 h-5 sm:w-6 sm:h-6 m-auto cursor-pointer" />
                 </button>
               </div>
             </div>
@@ -252,16 +307,13 @@ const CoachesList = () => {
 
             <div className="w-full">
               <label className="block mb-2 font-medium">Upload Profile Picture</label>
-              <label className="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed rounded-lg cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700 transition">
-                <span className="text-gray-500 dark:text-gray-300">Click to choose an image</span>
-                <input type="file" accept="image/*" className="hidden" onChange={(e) => setProfilePicture(e.target.files[0])} />
-              </label>
-              {profilePicture && (
-                <div className="mt-3">
-                  <p className="text-sm text-gray-600 dark:text-gray-300">Selected File: {profilePicture.name}</p>
-                  <img src={typeof profilePicture === 'object' ? URL.createObjectURL(profilePicture) : `${BASE_URL}${profilePicture}`} alt="Preview" className="w-24 h-24 object-cover mt-2 border rounded-md" />
-                </div>
-              )}
+              <FileUploaderWithPreview
+                imageFile={typeof profilePicture === "object" ? profilePicture : null}
+                imageUrl={typeof profilePicture === "string" ? profilePicture : null}
+                setImageFile={setProfilePicture}
+                name="profilePicture"
+              />
+
             </div>
 
             {errors.email && <p className="text-red-500 text-sm">{errors.email}</p>}

@@ -1,4 +1,3 @@
-
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import {
   addCourseCurriculum,
@@ -18,26 +17,18 @@ import {
   fetchAllCoaches,
   fetchAllCourses,
   fetchAllDomains,
-
   fetchCoachDetails,
-
   fetchCoaches,
-
   fetchCourseDetails,
-
-
   fetchFAQs,
-
-
   fetchSubDomains,
-
   updateCoach,
-
   updateCourse,
-
   updateDomain,
   updateFAQ,
-  updateSubDomain
+  updateSubDomain,
+  deleteCourseCurriculum,
+  updateCurriculumItem,
 }
   from "./adminApi";
 
@@ -120,7 +111,7 @@ export const deleteDomainAPI = createAsyncThunk(
 export const fetchAllSubDomainsAPI = createAsyncThunk(
   "subdomains/fetchAll",
   async ({ pageNo = 1, pageSize = 10, domainId }, { rejectWithValue }) => {
-    console.log("Fetching subdomains for domain ID ThunkS:", domainId);
+    // console.log("Fetching subdomains for domain ID ThunkS:", domainId);
     try {
       const response = await fetchSubDomains(pageNo, pageSize, domainId);
       // return the whole response object
@@ -299,7 +290,7 @@ export const addNewCourseAPI = createAsyncThunk(
       const response = await addNewCourse(courseData);
       return response.data;
     } catch (error) {
-      console.log("error",error);
+      console.log("error", error);
       return thunkAPI.rejectWithValue(
 
         error.response?.data?.message
@@ -338,6 +329,26 @@ export const deleteCourseAPI = createAsyncThunk(
     }
   }
 );
+
+// delete curriculum item
+export const deleteCurriculumItemAPI = createAsyncThunk(
+  "admin/deleteCurriculumItem",
+  async (data, thunkAPI) => {
+    const { courseId, curriculumId } = data;
+    console.log("Thunk deleting curriculum item with ID:", curriculumId);
+
+    try {
+      // Assuming there's an API function to delete curriculum item
+      await deleteCourseCurriculum(courseId, curriculumId);
+      return curriculumId;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(
+        error.response?.data?.message || "Failed to delete curriculum item"
+      );
+    }
+  }
+);
+
 //update course
 export const updateCourseAPI = createAsyncThunk(
   "admin/updateCourse",
@@ -348,6 +359,36 @@ export const updateCourseAPI = createAsyncThunk(
     } catch (error) {
       return thunkAPI.rejectWithValue(
         error.response?.data?.message || "Failed to update course"
+      );
+    }
+  }
+);
+
+// add curriculum item
+export const addCurriculumItemAPI = createAsyncThunk(
+  "admin/addCurriculumItem",
+  async ({ courseId, curriculumData }, thunkAPI) => {
+    try {
+      const response = await addCourseCurriculum(courseId, curriculumData);
+      return response.data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(
+        error.response?.data?.message || "Failed to add curriculum item"
+      );
+    }
+  }
+);
+
+// update curriculum item
+export const updateCurriculumItemAPI = createAsyncThunk(
+  "admin/updateCurriculumItem",
+  async ({ curriculumId, curriculumData }, thunkAPI) => {
+    try {
+      const response = await updateCurriculumItem(curriculumId, curriculumData);
+      return response.data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(
+        error.response?.data?.message || "Failed to update curriculum item"
       );
     }
   }

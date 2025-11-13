@@ -35,7 +35,7 @@ function Header() {
             className={`text-3xl font-bold tracking-wide bg-gradient-to-r from-purple-600 via-pink-500 to-purple-600 
              text-transparent bg-clip-text`}
           >
-            BramhLife
+            BrahmaLYF
           </h1>
         </NavLink>
 

@@ -5,6 +5,7 @@ import CustomButton from "@/components/CustomButton";
 import CustomDrawer from "@/components/CustomDrawer";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import FileUploaderWithPreview from "@/components/FileUploaderWithPreview/FileUploaderWithPreview";
 
 const BASE_URL = import.meta.env.VITE_BASE_URL_IMG;
 
@@ -19,6 +20,15 @@ const DomainsList = () => {
   const [domainThumbnail, setDomainThumbnail] = useState(null);
   const [domainThumbnailUrl, setDomainThumbnailUrl] = useState(null);
   const [errors, setErrors] = useState(false);
+
+  const resetForm = () => {
+    setIsDrawerOpen(false);
+    setEditingDomain(null);
+    setDomainName("");
+    setDomainThumbnail(null);
+    setDomainThumbnailUrl(null);
+    setErrors({});
+  }
 
   const navigate = useNavigate();
 
@@ -60,7 +70,6 @@ const DomainsList = () => {
     const { errors, isValid } = validateForm();
     setErrors(errors);
     if (!isValid) return;
-
     const formData = new FormData();
     formData.append("domain_name", domainName);
     if (domainThumbnail) formData.append("domain_thumbnail", domainThumbnail);
@@ -107,7 +116,7 @@ const DomainsList = () => {
         </p>
       )}
       {error && (
-        <p className="text-red-500 text-center text-2xl">{error}</p>
+        <p className="text-red-500 text-center text-2xl">{error.message}</p>
       )}
 
       {/* Table Section */}
@@ -131,12 +140,12 @@ const DomainsList = () => {
       {/* Add/Edit Domain Drawer */}
       <CustomDrawer
         isOpen={isDrawerOpen}
-        onClose={() => setIsDrawerOpen(false)}
+        onClose={() => resetForm()}
         title={editingDomain ? "Edit Domain" : "Add New Domain"}
       >
         <form
-          className="space-y-5 max-h-[85vh] overflow-y-auto px-2 sm:px-4 
-               scrollbar-thin scrollbar-thumb-gray-400 dark:scrollbar-thumb-gray-600 
+          className="space-y-5 max-h-[85vh] overflow-y-auto px-2 sm:px-4
+               scrollbar-thin scrollbar-thumb-gray-400 dark:scrollbar-thumb-gray-600
                scrollbar-track-transparent"
           onSubmit={handleSaveDomain}
         >
@@ -150,8 +159,8 @@ const DomainsList = () => {
               value={domainName}
               onChange={(e) => setDomainName(e.target.value)}
               placeholder="Enter domain name"
-              className={`w-full p-2.5 sm:p-3 border rounded-md shadow-sm 
-        text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-800 
+              className={`w-full p-2.5 sm:p-3 border rounded-md shadow-sm
+        text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-800
         placeholder-gray-400 dark:placeholder-gray-400
         focus:outline-none focus:ring-2 transition-all duration-200
         ${errors.name
@@ -169,44 +178,13 @@ const DomainsList = () => {
             <label className="block mb-2 font-medium text-gray-800 dark:text-gray-100">
               Upload Domain Thumbnail
             </label>
-            <label
-              className="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed rounded-lg cursor-pointer 
-        hover:border-purple-500 dark:border-gray-600 dark:hover:border-purple-400
-        bg-gray-50 dark:bg-gray-800 transition-all duration-300"
-            >
-              <span className="text-gray-600 dark:text-gray-300 text-sm">
-                Click to choose an image
-              </span>
-              <input
-                type="file"
-                name="domainThumbnail"
-                accept="image/*"
-                className="hidden"
-                onChange={(e) => setDomainThumbnail(e.target.files[0])}
-              />
-            </label>
-
-            {/* Image Preview */}
-            {(domainThumbnail || domainThumbnailUrl) && (
-              <div className="mt-3">
-                {domainThumbnail && (
-                  <p className="text-sm text-gray-600 dark:text-gray-300 truncate">
-                    Selected File: {domainThumbnail.name}
-                  </p>
-                )}
-                <div className="flex justify-center sm:justify-start">
-                  <img
-                    src={
-                      domainThumbnail
-                        ? URL.createObjectURL(domainThumbnail)
-                        : `${BASE_URL}${domainThumbnailUrl}`
-                    }
-                    alt="Preview"
-                    className="w-24 h-24 sm:w-28 sm:h-28 object-cover mt-2 border rounded-md dark:border-gray-600 shadow-md"
-                  />
-                </div>
-              </div>
-            )}
+            <FileUploaderWithPreview
+              key={editingDomain ? editingDomain.domain_id : "new"} // 👈 forces re-render per domain
+              imageFile={domainThumbnail}
+              setImageFile={setDomainThumbnail}
+              imageUrl={domainThumbnailUrl}
+              name="domainThumbnail"
+            />
           </div>
 
           {/* Save Button */}

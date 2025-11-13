@@ -41,7 +41,6 @@ const useSubDomainsList = (domainId) => {
   };
 
 const updateSubDomain = (subdomainId, data) => {
-  console.log("Updating subdomain with ID:", subdomainId, "and data:", data);
   dispatch(updateSubDomainAPI({ subdomainId, data }))
     .unwrap()
     .then(() => {

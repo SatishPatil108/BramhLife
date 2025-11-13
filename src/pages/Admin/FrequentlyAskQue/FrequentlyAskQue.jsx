@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { FaChevronDown, FaChevronUp, FaEdit, FaTrash } from "react-icons/fa";
+import { FaChevronDown, FaChevronUp } from "react-icons/fa";
 import useFrequentlyAskQue from "./useFrequentlyAskQue";
 import CustomButton from "@/components/CustomButton";
 import CustomDrawer from "@/components/CustomDrawer";
@@ -11,6 +11,8 @@ import {
   updateFAQAPI,
 } from "@/store/feature/admin";
 import usePagination from "@/hooks/usePagination";
+import { toast } from 'react-toastify'
+import { SquarePen, Trash2 } from "lucide-react";
 
 const FrequentlyAskQue = () => {
   const dispatch = useDispatch();
@@ -38,7 +40,24 @@ const FrequentlyAskQue = () => {
 
   const handleDeleteFAQ = async (id) => {
     if (window.confirm("Are you sure you want to delete this FAQ?")) {
-      await dispatch(deleteFAQAPI(id)).unwrap();
+      const toastId = toast.loading('Deleting a FAQs...');
+
+      await dispatch(deleteFAQAPI(id)).unwrap().then(() => {
+        toast.update(toastId, {
+          render: "FAQs is Deleted Successfully 🎉",
+          type: "success",
+          isLoading: false,
+          autoClose: 3000,
+        });
+      }).catch((error) => {
+        console.error(error);
+        toast.update(toastId, {
+          render: "Failed to Delete a FAQs!",
+          type: "error",
+          isLoading: false,
+          autoClose: 3000,
+        })
+      });
       dispatch(fetchFAQsAPI({ pageNo, pageSize }));
     }
   };
@@ -50,21 +69,53 @@ const FrequentlyAskQue = () => {
 
     try {
       if (isEditing) {
+        const toastId = toast.loading('Editing the FAQs....');
+
         await dispatch(
           updateFAQAPI({
             faqId: formData.id,
             faqData: { question: formData.question, answer: formData.answer },
           })
-        ).unwrap();
+        ).unwrap().then(() => {
+          toast.update(toastId, {
+            render: "FAQs is Updated Successfully 🎉",
+            type: "success",
+            isLoading: false,
+            autoClose: 3000,
+          });
+        }).catch(() => {
+          console.error(error);
+          toast.update(toastId, {
+            render: "Failed to Update a FAQs!!",
+            type: "error",
+            isLoading: false,
+            autoClose: 3000,
+          })
+        });
       } else {
-        await dispatch(addNewFAQAPI(formData)).unwrap();
+        const toastId = toast.loading("adding new FAQs............");
+        await dispatch(addNewFAQAPI(formData)).unwrap().then(() => {
+          toast.update(toastId, {
+            render: "New FAQs is added successfully 🎉",
+            type: "success",
+            isLoading: false,
+            autoClose: 3000,
+          });
+        }).catch((error) => {
+          console.error(error);
+          toast.update(toastId, {
+            render: "Failed to add new FAQs!!",
+            type: "error",
+            isLoading: false,
+            autoClose: 3000,
+          });
+        });
       }
-
       setFormData({ id: null, question: "", answer: "" });
       setIsDrawerOpen(false);
       dispatch(fetchFAQsAPI({ pageNo, pageSize }));
-    } catch (err) {
-      console.error("Failed to save FAQ:", err);
+    } catch (error) {
+      console.error("Failed to save FAQ:", error);
     }
   };
 
@@ -82,7 +133,7 @@ const FrequentlyAskQue = () => {
           </h2>
           <CustomButton
             onClick={handleAddFAQ}
-            className="px-5 py-2 sm:px-6 sm:py-2 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-lg shadow-lg hover:from-blue-600 hover:to-blue-700 transition duration-300 transform hover:scale-105 w-full sm:w-auto"
+            className="primary"
           >
             Add New FAQ
           </CustomButton>
@@ -107,7 +158,8 @@ const FrequentlyAskQue = () => {
               {faqList.map((faq, index) => (
                 <div
                   key={faq.id}
-                  className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-5 sm:p-6 transition-all duration-300 hover:shadow-2xl"
+                  className="bg-[url(/card_background.png)]
+                    bg-fit bg-green-50 dark:bg-gray-800 rounded-2xl shadow-sm p-5 sm:p-6 transition-all duration-300 hover:shadow-lg"
                 >
                   <div className="flex flex-col sm:flex-row justify-between items-start gap-3">
                     <button
@@ -124,14 +176,24 @@ const FrequentlyAskQue = () => {
                       )}
                     </button>
                     <div className="flex items-center space-x-3 sm:space-x-4 ml-auto">
-                      <FaEdit
-                        className="text-blue-500 text-lg sm:text-xl cursor-pointer hover:text-blue-700 dark:hover:text-blue-400 transition duration-200"
-                        onClick={() => handleEditFAQ(faq)}
-                      />
-                      <FaTrash
-                        className="text-red-500 text-lg sm:text-xl cursor-pointer hover:text-red-700 dark:hover:text-red-400 transition duration-200"
-                        onClick={() => handleDeleteFAQ(faq.id)}
-                      />
+                      <button className="p-2 rounded-full bg-blue-100 hover:bg-blue-200
+                                 dark:bg-blue-800 dark:hover:bg-blue-700
+                                 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <SquarePen
+                          className="text-blue-600 dark:text-blue-300 w-5 h-5 sm:w-6 sm:h-6 m-auto cursor-pointer"
+                          onClick={() => handleEditFAQ(faq)}
+                        />
+                      </button>
+
+                      <button className="p-2 rounded-full bg-red-100 hover:bg-red-200
+                                 dark:bg-red-800 dark:hover:bg-red-700
+                                 transition-colors focus:outline-none focus:ring-2 focus:ring-red-500">
+                        <Trash2
+                          className="text-red-600 dark:text-red-300 w-5 h-5 sm:w-6 sm:h-6 m-auto cursor-pointer"
+                          onClick={() => handleDeleteFAQ(faq.id)}
+                        />
+                      </button>
+
                     </div>
                   </div>
                   {openIndex === index && (

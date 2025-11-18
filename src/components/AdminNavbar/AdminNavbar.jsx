@@ -28,7 +28,7 @@ const AdminNavbar = () => {
   const linkStyle = ({ isActive }) =>
     `block px-4 py-2 rounded-full text-base font-semibold transition-all duration-300 ${isActive
       ? "bg-purple-600 text-white shadow-lg "
-      : "text-gray-900 hover:text-white hover:bg-purple-400  lg:text-black sm:text-white"
+      : "text-gray-900 hover:text-white hover:bg-purple-400  text-white sm:text-white"
     }`;
 
   const handleLogout = () => {
@@ -41,7 +41,7 @@ const AdminNavbar = () => {
   return (
     <header
       className={`top-0 left-0 w-full z-50 transition-all duration-500 ${isScrolled
-        ? "bg-green-50 backdrop-blur-md shadow-xl"
+        ? "bg-[#0c1022] backdrop-blur-md shadow-xl"
         : "bg-transparent"
         }`}
     >

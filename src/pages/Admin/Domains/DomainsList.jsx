@@ -56,10 +56,16 @@ const DomainsList = () => {
     let isValid = true;
     const errors = {};
     if (!domainName.trim()) {
-      errors.name = "Domain name is required.";
+      errors.domainName = "Domain name is required.";
       isValid = false;
     } else if (!/^[a-zA-Z ]+$/.test(domainName)) {
-      errors.name = "Name must only contain letters.";
+      errors.domainName = "Name must only contain letters.";
+      isValid = false;
+    }
+
+    // Domain Thumbnail
+    if (!domainThumbnail) {
+      errors.domainThumbnail = "Domain thumbnail is required.";
       isValid = false;
     }
     return { errors, isValid };
@@ -70,6 +76,7 @@ const DomainsList = () => {
     const { errors, isValid } = validateForm();
     setErrors(errors);
     if (!isValid) return;
+
     const formData = new FormData();
     formData.append("domain_name", domainName);
     if (domainThumbnail) formData.append("domain_thumbnail", domainThumbnail);
@@ -144,32 +151,31 @@ const DomainsList = () => {
         title={editingDomain ? "Edit Domain" : "Add New Domain"}
       >
         <form
-          className="space-y-5 max-h-[85vh] overflow-y-auto px-2 sm:px-4
+          className="space-y-5 max-h-[85vh]  px-2 sm:px-4
                scrollbar-thin scrollbar-thumb-gray-400 dark:scrollbar-thumb-gray-600
                scrollbar-track-transparent"
           onSubmit={handleSaveDomain}
         >
           {/* Domain Name */}
           <div>
-            <label className="block text-sm font-medium mb-1 text-gray-800 dark:text-gray-100">
+            <label className="block font-medium mb-1 text-gray-800 dark:text-gray-100">
               Domain Name
             </label>
             <input
               type="text"
+              name="domainName"
               value={domainName}
               onChange={(e) => setDomainName(e.target.value)}
               placeholder="Enter domain name"
-              className={`w-full p-2.5 sm:p-3 border rounded-md shadow-sm
-        text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-800
-        placeholder-gray-400 dark:placeholder-gray-400
-        focus:outline-none focus:ring-2 transition-all duration-200
-        ${errors.name
+              className={`w-full p-2.5 sm:p-3 border rounded-md shadow-sm text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-800
+            placeholder-gray-400 dark:placeholder-gray-400 focus:outline-none focus:ring-2 transition-all duration-200
+               ${errors.name
                   ? "border-red-500 focus:ring-red-500"
                   : "border-gray-300 dark:border-gray-600 focus:ring-purple-500 hover:border-purple-500"
                 }`}
             />
-            {errors.name && (
-              <p className="text-red-500 text-sm mt-1">{errors.name}</p>
+            {errors.domainName && (
+              <p className="text-red-500 text-base mt-1">{errors.domainName}</p>
             )}
           </div>
 
@@ -184,7 +190,11 @@ const DomainsList = () => {
               setImageFile={setDomainThumbnail}
               imageUrl={domainThumbnailUrl}
               name="domainThumbnail"
+  
             />
+            {errors.domainThumbnail && (
+              <p className="text-red-500 text-base mt-1">{errors.domainThumbnail}</p>
+            )}
           </div>
 
           {/* Save Button */}

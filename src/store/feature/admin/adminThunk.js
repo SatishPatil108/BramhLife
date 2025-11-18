@@ -30,7 +30,9 @@ import {
   deleteCourseCurriculum,
   updateCurriculumItem,
   postMusic,
-  getMusicAudios,
+  fetchMusics,
+  updateMusic,
+  deleteMusic,
 }
   from "./adminApi";
 
@@ -252,6 +254,7 @@ export const fetchAllCoursesAPI = createAsyncThunk(
     }
   }
 );
+
 //course details
 export const fetchCourseDetailsAPI = createAsyncThunk(
   "admin/fetchCourseDetails",
@@ -266,8 +269,6 @@ export const fetchCourseDetailsAPI = createAsyncThunk(
     }
   }
 );
-
-
 
 // new Code
 export const addNewCourseAPI = createAsyncThunk(
@@ -452,6 +453,7 @@ export const postMusicAPI = createAsyncThunk(
       const response = await postMusic(musicData);
       return response.data;
     } catch (error) {
+      console.error(error)
       return thunkAPI.rejectWithValue(
         error.response?.message || "Failed to add music"
       );
@@ -461,20 +463,47 @@ export const postMusicAPI = createAsyncThunk(
 
 // fetch All music list
 export const fetchAllMusicsAPI = createAsyncThunk(
-  "admin/musics",
+  "admin/get/musics",
   async ({ pageNo, pageSize }, thunkAPI) => {
     try {
-      const response = await getMusicAudios(pageNo, pageSize);
+      const response = await fetchMusics(pageNo, pageSize);
       return response.data;
     } catch (error) {
       return thunkAPI.rejectWithValue(
-        error?.message || "Failed to fetch musicAudios"
+        error.response?.message || "Failed to fetch musicAudios"
       );
     }
   }
 );
-export const fetchMusicByIdAPI = createAsyncThunk();
-export const updateMusicAPI = createAsyncThunk();
-export const deleteMusicAPI = createAsyncThunk();
+
+// update music details
+export const updateMusicAPI = createAsyncThunk(
+  "admin/update/music",
+  async ({ musicId, musicData }, thunkAPI) => {
+    try {
+      const response = await updateMusic(musicId, musicData);
+      return response.data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(
+        error.response?.data?.message || "Failed to update music"
+      );
+    }
+  }
+);
+
+// delete music 
+export const deleteMusicAPI = createAsyncThunk(
+  "admin/delete/music",
+  async (musicId, thunkAPI) => {
+    try {
+      await deleteMusic(musicId);
+      return musicId;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(
+        error.response?.data?.message || "Failed to delete Music"
+      );
+    }
+  }
+);
 
 

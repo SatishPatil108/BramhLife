@@ -2,7 +2,7 @@ import React from "react";
 
 const CustomButton = ({ children, onClick, variant = "primary" }) => {
   let baseStyle =
-    "px-4 py-1.5 rounded-full font-medium transition duration-300 focus:outline-none hover:bg-purple-300";
+    "px-4 py-1.5 rounded-full font-medium transition duration-300 focus:outline-none hover:opacity-60 cursor-pointer";
 
   let variantStyle = "";
 
@@ -24,7 +24,7 @@ const CustomButton = ({ children, onClick, variant = "primary" }) => {
       variantStyle = "bg-red-600 hover:bg-red-400 text-white cursor-pointer font-semibold";
       break;
     default:
-      variantStyle = "bg-blue-600 hover:bg-blue-700 text-white";
+      variantStyle = "bg-blue-600 hover:bg-blue-700 text-white hover:bg-blue-400";
   }
 
   return (

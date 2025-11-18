@@ -28,7 +28,6 @@ import {
   updateCurriculumItemAPI,
   deleteCurriculumItemAPI,
   fetchAllMusicsAPI,
-  fetchMusicByIdAPI,
   postMusicAPI,
   updateMusicAPI,
   deleteMusicAPI,
@@ -110,7 +109,6 @@ const adminSlice = createSlice({
           state.coaches[index] = { coach_id: action.payload.id, ...action.payload };
       })
       .addCase(deleteCoachAPI.fulfilled, (state, action) => {
-        // console.log(action.payload,JSON.parse(JSON.stringify(state.coaches)));
         state.coaches = state.coaches.filter((c) => c.coach_id !== action.payload);
       })
       .addCase(fetchCoachDetailsAPI.fulfilled, (state, action) => {
@@ -187,16 +185,28 @@ const adminSlice = createSlice({
       })
 
 
-      // music 
+      // meditation music 
       .addCase(postMusicAPI.fulfilled, (state, action) => {
-        state.audioList.push(action.payload);
+        state.audioList.musics.unshift(action.payload);
       })
       .addCase(fetchAllMusicsAPI.fulfilled, (state, action) => {
         state.audioList = action.payload;
       })
-      // .addCase(fetchMusicByIdAPI.fulfilled, (state, action) => { })
-      // .addCase(updateMusicAPI.fulfilled, (state, action) => { })
-      // .addCase(deleteMusicAPI.fulfilled, (state, action) => { })
+      .addCase(updateMusicAPI.fulfilled, (state, action) => {
+        console.log(action.payload);
+        state.audioList.musics = state.audioList.musics.map((music) => {
+          if (music.id == action.payload.music_id)
+            music = { id: action.payload.music_id, ...action.payload }
+          return music
+        })
+      })
+
+      .addCase(deleteMusicAPI.fulfilled, (state, action) => {
+        console.log(action.payload);
+        state.audioList.musics = state.audioList.musics.filter((m) => m.id !== action.payload.id);
+      })
+
+
 
 
       // ✅ Global matchers

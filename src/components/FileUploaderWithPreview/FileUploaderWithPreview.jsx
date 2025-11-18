@@ -22,11 +22,11 @@ const FileUploaderWithPreview = ({ imageFile = null, setImageFile, imageUrl = nu
   return (
     <div>
       <label
-        className="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed rounded-lg cursor-pointer
-        hover:border-purple-500 dark:border-gray-600 dark:hover:border-purple-400
+        className="flex flex-col items-center justify-center w-full my-2 h-32 border-2 border-dashed border-gray-400 rounded-lg cursor-pointer
+        hover:border-purple-500 dark:border-gray-600 dark:hover:border-purple-300
         bg-gray-50 dark:bg-gray-800 transition-all duration-300"
       >
-        <span className="text-gray-600 dark:text-gray-300 text-lg">
+        <span className="text-gray-600 dark:text-gray-300 text-base">
           Click to choose an image
         </span>
         <input
@@ -57,7 +57,7 @@ const FileUploaderWithPreview = ({ imageFile = null, setImageFile, imageUrl = nu
           </div>
         </div>
       )}
-      <p className="text-sm text-gray-500 dark:text-gray-400">
+      <p className="text-sm text-gray-500 dark:text-gray-400 mt-2">
               Supported formats: JPG, PNG, GIF
             </p>
     </div>

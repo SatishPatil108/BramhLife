@@ -158,8 +158,7 @@ const FrequentlyAskQue = () => {
               {faqList.map((faq, index) => (
                 <div
                   key={faq.id}
-                  className="bg-[url(/card_background.png)]
-                    bg-fit bg-green-50 dark:bg-gray-800 rounded-2xl shadow-sm p-5 sm:p-6 transition-all duration-300 hover:shadow-lg"
+                  className="dark:bg-gray-800 rounded-2xl shadow-sm p-5 sm:p-6 transition-all duration-300 hover:shadow-lg"
                 >
                   <div className="flex flex-col sm:flex-row justify-between items-start gap-3">
                     <button

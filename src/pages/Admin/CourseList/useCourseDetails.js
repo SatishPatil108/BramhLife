@@ -79,6 +79,7 @@ export const useCourseDetails = (courseId) => {
                 setIsDrawerOpen(false);
             })
             .catch((err) => {
+                console.error(err)
                 toast.update(toastId, {
                     render: err || "Failed to update course ❌",
                     type: "error",

@@ -13,11 +13,11 @@ import { About, Contact, Homepage } from "@/pages/User/Homepage";
 import { CourseList } from "@/pages/User/courses";
 import EnrolledCourses from "@/pages/User/myCourses";
 import EnrolledCourseDetails from "@/pages/User/enrolledCourseDetails";
-import { CourseByNameOrCoachName } from "@/pages/User/courseByNameOrCoachName";
 import Footer from "@/components/footer/Footer";
 import UserLoggedOut from "@/pages/User/userLoggedOut";
 import { useDispatch } from "react-redux";
 import { checkUserLoggedIn } from "@/store/feature/auth/authSlice";
+import MusicList from "@/pages/User/Homepage/components/getAllMusicList/MusicList";
 
 const UserRoutes = () => {
   const dispath = useDispatch();
@@ -39,6 +39,7 @@ const UserRoutes = () => {
           <Route path="/about" element={<About />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/courses" element={<CourseList />} />
+          <Route path="/musics" element={<MusicList />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/logout" element={<UserLoggedOut />} />
@@ -49,7 +50,6 @@ const UserRoutes = () => {
           <Route path="/coach-profile" element={<GetAllCoaches />} />
           <Route path="/my-courses" element={<EnrolledCourses />} />
           <Route path="/enrolled-course/:courseId" element={<EnrolledCourseDetails />} />
-          <Route path="/courses/course/search" element={<CourseByNameOrCoachName />} />
         </Routes>
       </main>
 

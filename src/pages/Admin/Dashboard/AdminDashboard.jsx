@@ -8,7 +8,7 @@ import { useNavigate } from "react-router-dom";
 import UserCountGraph from "./UserCountGraph";
 
 const StatCard = ({ title, value, icon: Icon, color }) => (
-  <div className="bg-[url(/card_background.png)] bg-cover bg-green-50 dark:bg-gray-800 rounded-2xl shadow-md border border-gray-200 dark:border-gray-700
+  <div className="dark:bg-gray-800 rounded-2xl shadow-md border border-gray-200 dark:border-gray-700
                   flex flex-col justify-between items-center p-6 h-50 
                   transition-all duration-200 hover:scale-[1.02] active:scale-[0.98]">
     {/* Icon Section */}
@@ -98,7 +98,7 @@ function AdminDashboard() {
               {dashboardData.top_courses.map((course) => (
                 <div
                   key={course.course_id}
-                  className="bg-[url(/card_background.png)] bg-cover bg-green-50 dark:bg-gray-900 p-4 rounded-xl shadow-sm hover:shadow-md border border-gray-100 dark:border-gray-700 hover:scale-[1.02] transition-transform cursor-pointer"
+                  className="bg-cover bg-center dark:bg-gray-900 p-4 rounded-xl shadow-sm hover:shadow-md border border-gray-100 dark:border-gray-700 hover:scale-[1.02] transition-transform cursor-pointer"
                 >
                   <div>
                     <h3 className="text-lg font-bold truncate">{course.course_name}</h3>

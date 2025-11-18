@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 const useFrequentlyAskQue = (pageNo , pageSize ) => {
   const dispatch = useDispatch();
   const { faqList, loading, error } = useSelector((state) => state.admin);
-
+  
   useEffect(() => {
     dispatch(fetchFAQsAPI({ pageNo, pageSize }));
   }, [dispatch, pageNo, pageSize]);

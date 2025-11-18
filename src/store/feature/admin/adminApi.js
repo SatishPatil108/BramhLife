@@ -13,7 +13,7 @@ export const fetchAdminDashboardData = async () => {
 //get all Domains List
 export const fetchAllDomains = async (pageNo = 1, pageSize = 10) => {
   return await makeRequest({
-    service: `admin/all-domains/${pageNo}/${pageSize}`,
+    service: `admin/domains/${pageNo}/${pageSize}`,
     method: API_METHODS.GET,
     authRequired: true,
     tokenType: "admin",
@@ -33,7 +33,7 @@ export const addDomain = async (domainData) => {
 //update a domain
 export const updateDomain = async (domainId, domainData) => {
   return await makeRequest({
-    service: `admin/domain/update/${domainId}`,
+    service: `admin/domain/${domainId}`,
     method: API_METHODS.PUT,
     data: domainData,
     authRequired: true,
@@ -44,7 +44,7 @@ export const updateDomain = async (domainId, domainData) => {
 //delete a domain
 export const deleteDomain = async (domainId) => {
   return await makeRequest({
-    service: `admin/domain/delete/${domainId}`,
+    service: `admin/domain/${domainId}`,
     method: API_METHODS.DELETE,
     authRequired: true,
     tokenType: "admin",
@@ -75,7 +75,7 @@ export const addSubDomain = async (subdomainData) => {
 //update a subdomain
 export const updateSubDomain = async (subdomainId, subdomainData) => {
   return await makeRequest({
-    service: `admin/subdomain/update/${subdomainId}`,
+    service: `admin/subdomain/${subdomainId}`,
     method: API_METHODS.PUT,
     data: subdomainData,
     authRequired: true,
@@ -83,18 +83,10 @@ export const updateSubDomain = async (subdomainId, subdomainData) => {
   });
 }
 
-// //delete a subdomain
-// export const deleteSubDomain=async(subdomainId)=>{
-//   return await makeRequest({
-//     service:`admin/subdomain/delete/${subdomainId}`,
-//     authRequired:true,
-//     tokenType:"admin",
-//   });
-// }
 // delete a subdomain with subdomain_id in the payload
 export const deleteSubDomain = async (subdomainId) => {
   return await makeRequest({
-    service: `admin/subdomain/delete/${subdomainId}`,
+    service: `admin/subdomain/${subdomainId}`,
     method: API_METHODS.DELETE,
     data: { subdomain_id: subdomainId },
     authRequired: true,
@@ -106,7 +98,7 @@ export const deleteSubDomain = async (subdomainId) => {
 // Fetch all coaches with pagination
 export const fetchAllCoaches = async (pageNo = 1, pageSize = 10) => {
   return await makeRequest({
-    service: `admin/all-coaches/${pageNo}/${pageSize}`,
+    service: `admin/coaches/${pageNo}/${pageSize}`,
     method: API_METHODS.GET,
     authRequired: true,
     tokenType: "admin",
@@ -116,7 +108,7 @@ export const fetchAllCoaches = async (pageNo = 1, pageSize = 10) => {
 // Add New Coach
 export const addNewCoach = async (coachData) => {
   return await makeRequest({
-    service: "admin/coaches",
+    service: "admin/coach",
     method: API_METHODS.POST,
     data: coachData,
     authRequired: true,
@@ -126,7 +118,7 @@ export const addNewCoach = async (coachData) => {
 //update a coach
 export const updateCoach = async (coachId, coachData) => {
   return await makeRequest({
-    service: `admin/coaches/update/${coachId}`,
+    service: `admin/coach/${coachId}`,
     method: API_METHODS.PUT,
     data: coachData,
     authRequired: true,
@@ -136,7 +128,7 @@ export const updateCoach = async (coachId, coachData) => {
 //delete a coach
 export const deleteCoach = async (coachId) => {
   return await makeRequest({
-    service: `admin/coaches/${coachId}`,
+    service: `admin/coach/${coachId}`,
     method: API_METHODS.DELETE,
     authRequired: true,
     tokenType: "admin",
@@ -146,7 +138,7 @@ export const deleteCoach = async (coachId) => {
 //coach details
 export const fetchCoachDetails = async (coachId) => {
   return await makeRequest({
-    service: `admin/coaches/${coachId}`,
+    service: `admin/coach/${coachId}`,
     method: API_METHODS.GET,
     authRequired: true,
     tokenType: "admin",
@@ -156,7 +148,7 @@ export const fetchCoachDetails = async (coachId) => {
 // Fetch all courses with pagination
 export const fetchAllCourses = async (pageNo = 1, pageSize = 50) => {
   return await makeRequest({
-    service: `admin/coaches/course/${pageNo}/${pageSize}`,
+    service: `admin/coaches/courses/${pageNo}/${pageSize}`,
     method: API_METHODS.GET,
     authRequired: true,
     tokenType: "admin",
@@ -165,6 +157,7 @@ export const fetchAllCourses = async (pageNo = 1, pageSize = 50) => {
 
 // course details
 export const fetchCourseDetails = async (courseId) => {
+  console.log(courseId);
   return await makeRequest({
     service: `admin/coaches/course/${courseId}`,
     method: API_METHODS.GET,
@@ -187,7 +180,7 @@ export const addNewCourse = async (courseData) => {
 //get all coaches
 export const fetchCoaches = async () => {
   return await makeRequest({
-    service: "admin/coach/all-coaches",
+    service: "admin/coaches",
     method: API_METHODS.GET,
     authRequired: true,
     tokenType: "admin",
@@ -198,7 +191,7 @@ export const fetchCoaches = async () => {
 // Add curriculum outline for a course (POST)
 export const  addCourseCurriculum = async (courseId, curriculumData) => {
   return await makeRequest({
-    service: `admin/coaches/course/curriculum_outline/add/${courseId}`,
+    service: `admin/coaches/course/curriculum_outline/${courseId}`,
     method: API_METHODS.POST,
     data: curriculumData,
     authRequired: true,
@@ -241,7 +234,7 @@ export const deleteCourse = async (courseId) => {
 //update course
 export const updateCourse = async (courseId, courseData) => {
   return await makeRequest({
-    service: `admin/coaches/course/update/${courseId}`,
+    service: `admin/coaches/course/${courseId}`,
     method: API_METHODS.PUT,
     data: courseData,
     authRequired: true,
@@ -253,7 +246,7 @@ export const updateCourse = async (courseId, courseData) => {
 // fetch Frequently Asked Questions list
 export const fetchFAQs = async (pageNo, pageSize) => {
   return await makeRequest({
-    service: `admin/faq/${pageNo}/${pageSize}`,
+    service: `admin/faqs/${pageNo}/${pageSize}`,
     method: API_METHODS.GET,
     authRequired: true,
     tokenType: "admin",
@@ -305,7 +298,7 @@ export const deleteCourseCurriculum = async (courseId, curriculumId) => {
 //update curriculum item
 export const updateCurriculumItem = async (curriculumId, curriculumData) => {
   return await makeRequest({
-    service: `admin/coaches/course/curriculum_outline/update/${curriculumId}`,
+    service: `admin/coaches/course/curriculum_outline/${curriculumId}`,
     method: API_METHODS.PUT,
     data: curriculumData,
     authRequired: true,
@@ -314,7 +307,7 @@ export const updateCurriculumItem = async (curriculumId, curriculumData) => {
 };
 
 
-// music
+// mediations  music 
 
 // add new music
 export const postMusic = async (musicData) => {
@@ -328,7 +321,7 @@ export const postMusic = async (musicData) => {
 };
 
 // fetch all music audio
-export const getMusicAudios = async (pageNo, pageSize) => {
+export const fetchMusics = async (pageNo, pageSize) => {
   return await makeRequest({
     service: `admin/musics/${pageNo}/${pageSize}`,
     method: API_METHODS.GET,
@@ -336,3 +329,25 @@ export const getMusicAudios = async (pageNo, pageSize) => {
     tokenType: "admin",
   });
 };
+
+// update music details
+export const updateMusic = async (id, data) => {
+  console.log(id)
+  return await makeRequest({
+    service: `admin/music/${id}`,
+    method: API_METHODS.PUT,
+    data: data,
+    authRequired: true,
+    tokenType: "admin",
+  });
+}
+
+// delete music
+export const deleteMusic = async (musicId) => {
+  return await makeRequest({
+    service: `admin/music/${musicId}`,
+    method: API_METHODS.DELETE,
+    authRequired: true,
+    tokenType: "admin",
+  });
+}

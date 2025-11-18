@@ -27,7 +27,7 @@ const AudioUploaderWithPreview = ({
         <div>
             {/* Upload Field */}
             <label
-                className="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed rounded-lg cursor-pointer
+                className="flex flex-col items-center justify-center w-full my-6 h-32 border-2 border-dashed rounded-lg cursor-pointer
         hover:border-purple-500 dark:border-gray-600 dark:hover:border-purple-400
         bg-gray-50 dark:bg-gray-800 transition-all duration-300"
             >

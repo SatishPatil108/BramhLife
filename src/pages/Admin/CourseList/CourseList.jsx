@@ -61,12 +61,11 @@ const CourseList = () => {
                   key={index}
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
-                  className="bg-[url(/card_background.png)]
-                    bg-fit bg-green-50 dark:bg-gray-800 rounded-2xl shadow-lg p-6 border border-gray-200 dark:border-gray-700 transition-all duration-300 cursor-pointer flex flex-col justify-between"
+                  className="dark:bg-gray-800 rounded-2xl  hover:shadow-sm p-6 border border-gray-200 dark:border-gray-700 transition-all duration-300 cursor-pointer flex flex-col justify-between"
                   onClick={() => handleCourseClick(course.course_id)}
                 >
                   <div>
-                    <h2 className="text-xl font-semibold text-gray-800 dark:text-gray-100 mb-2">
+                    <h2 className="text-xl font-semibold  dark:text-gray-100 mb-2">
                       {course.course_name}
                     </h2>
                     <p className="text-gray-500 dark:text-gray-400 text-sm mb-3">
@@ -74,19 +73,19 @@ const CourseList = () => {
                     </p>
 
                     <div className="mb-3">
-                      <h3 className="font-semibold text-gray-700 dark:text-gray-200 mb-1">
+                      <h3 className="font-semibold  dark:text-gray-200 mb-1">
                         For:
                       </h3>
-                      <p className="text-gray-600 dark:text-gray-300 text-sm line-clamp-3 whitespace-pre-line">
+                      <p className="text-gray-900 dark:text-gray-300 text-sm line-clamp-3 whitespace-pre-line">
                         {course.target_audience}
                       </p>
                     </div>
 
                     <div>
-                      <h3 className="font-semibold text-gray-700 dark:text-gray-200 mb-1">
+                      <h3 className="font-semibold  dark:text-gray-200 mb-1">
                         Overview:
                       </h3>
-                      <p className="text-gray-600 dark:text-gray-300 text-sm line-clamp-3">
+                      <p className="text-gray-900 dark:text-gray-300 text-sm line-clamp-3">
                         {course.curriculum_description}
                       </p>
                     </div>

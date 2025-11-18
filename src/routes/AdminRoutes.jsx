@@ -31,7 +31,7 @@ const AdminRoutes = () => {
         <Route path="domains" element={<DomainsList />} />
         <Route path="domains/:domainId/subdomains" element={<SubDomainsList />} />
         <Route path="coaches" element={<CoachesList />} />
-        {/* <Route path="musics" element={<MusicList />} /> */}
+        <Route path="musics" element={<MusicList />} />
         <Route path="courses" element={<CourseList />} />
         <Route path="courses/:courseId" element={<CourseDetails />} />
         <Route path="frequently-asked-questions" element={<FrequentlyAskQue />} />

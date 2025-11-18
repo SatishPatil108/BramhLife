@@ -15,14 +15,12 @@ const useDomainsList = (pageNo = 1, pageSize = 10) => {
     dispatch(addNewDomain(domainData))
       .unwrap()
       .then(() => {
-
         dispatch(getAllDomains(pageNo, pageSize));
       })
       .catch((err) => {
         console.error("Failed to add domain:", err);
       });
   };
-
 
   const updateDomain = (domainId, domainData) => {
     dispatch(updateDomainAPI({

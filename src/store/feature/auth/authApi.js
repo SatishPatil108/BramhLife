@@ -29,7 +29,7 @@ export const logoutUser = async () => {
 //admin login api
 export const adminLogin = async (credentials) => {
   return await makeRequest({
-    service: "admin/login",
+    service: "admin/auth/login",
     method: API_METHODS.POST,
     data: credentials,
     authRequired: false,

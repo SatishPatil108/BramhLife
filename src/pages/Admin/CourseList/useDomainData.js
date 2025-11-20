@@ -8,7 +8,7 @@ import { getAllDomains, fetchAllSubDomainsAPI } from "@/store/feature/admin";
  */
 const useDomainData = () => {
   const dispatch = useDispatch();
-  const { loading, error, domains, subdomains } = useSelector(
+  const { loading, error, domainsDetails, subdomainsDetails } = useSelector(
     (state) => state.admin
   );
 
@@ -30,7 +30,7 @@ const useDomainData = () => {
     [dispatch]
   );
 
-  return { loading, error, domains, subdomains, fetchSubdomains };
+  return { loading, error, domainsDetails, subdomainsDetails, fetchSubdomains };
 };
 
 export default useDomainData;

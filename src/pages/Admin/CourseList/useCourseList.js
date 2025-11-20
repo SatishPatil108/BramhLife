@@ -7,13 +7,13 @@ const useCourseList = (pageNo , pageSize ) => {
   const dispatch = useDispatch();
 
   // Select state from Redux store
-  const { courses, loading, error } = useSelector((state) => state.admin);
+  const { coursesDetails, loading, error } = useSelector((state) => state.admin);
 
   useEffect(() => {
     dispatch(fetchAllCoursesAPI({ pageNo, pageSize }));
   }, [dispatch, pageNo, pageSize]);
 
-  return { courses, loading, error };
+  return { coursesDetails, loading, error };
 };
 
 export default useCourseList;

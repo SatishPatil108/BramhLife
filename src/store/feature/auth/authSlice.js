@@ -28,16 +28,12 @@ const authSlice = createSlice({
       state.error = null;
     },
     resetFlags: (state) => {
-      // state.userLoginSuccess = false;
-      // state.adminLoginSuccess = false;
-      // state.registerSuccess = false;
     },
     logoutUser: (state) => {
       state.user = null;
       state.userToken = null;
       state.isUserAuthenticated = false;
       state.userLoginSuccess = false;
-
       localStorage.removeItem("isUserAuthenticated");
       localStorage.removeItem("user_info");
       localStorage.removeItem("user_token");
@@ -99,14 +95,10 @@ const authSlice = createSlice({
     builder
       // ----------------- User Login -----------------
       .addCase(loginUserAPI.pending, (state) => {
-        state.isLoading = true;
-        state.error = null;
         state.userLoginSuccess = false;
       })
       .addCase(loginUserAPI.fulfilled, (state, action) => {
-        state.isLoading = false;
         const res = action.payload;
-
         if (res?.data?.token) {
           state.isUserAuthenticated = true;
           state.userLoginSuccess = true;
@@ -120,23 +112,16 @@ const authSlice = createSlice({
         }
       })
       .addCase(loginUserAPI.rejected, (state, action) => {
-        state.isLoading = false;
         state.isUserAuthenticated = false;
         state.userLoginSuccess = false;
-
-        state.error = action.payload === "Network Error" ? "Please check internet connection" : action.payload || action.error.message;
       })
 
       // ----------------- User Register -----------------
       .addCase(registerUserAPI.pending, (state) => {
-        state.isLoading = true;
-        state.error = null;
         state.registerSuccess = false;
       })
       .addCase(registerUserAPI.fulfilled, (state, action) => {
-        state.isLoading = false;
         const res = action.payload;
-
         if (res?.response_code === 1 || res?.data?.id) {
           state.registerSuccess = true;
           state.user = res.data || null;
@@ -147,21 +132,15 @@ const authSlice = createSlice({
         }
       })
       .addCase(registerUserAPI.rejected, (state, action) => {
-        state.isLoading = false;
         state.registerSuccess = false;
-        state.error = action.payload === "Network Error" ? "Please check internet connection" : action.payload || action.error.message;
       })
 
       // ----------------- Admin Login -----------------
       .addCase(adminLoginAPI.pending, (state) => {
-        state.isLoading = true;
-        state.error = null;
         state.adminLoginSuccess = false;
       })
       .addCase(adminLoginAPI.fulfilled, (state, action) => {
-        state.isLoading = false;
         const res = action.payload;
-
         if (res?.data?.token) {
           state.isAdminAuthenticated = true;
           state.adminLoginSuccess = true;
@@ -175,13 +154,30 @@ const authSlice = createSlice({
         }
       })
       .addCase(adminLoginAPI.rejected, (state, action) => {
-        state.isLoading = false;
         state.isAdminAuthenticated = false;
         state.adminLoginSuccess = false;
-        state.error = action.payload === "Network Error" ? "Please check internet connection" : action.payload || action.error.message;
-
-      });
-
+      })
+      // ✅ Global matchers
+      .addMatcher(
+        (action) => action.type.endsWith("/pending"),
+        (state) => {
+          state.isLoading = true;
+          state.error = null;
+        }
+      )
+      .addMatcher(
+        (action) => action.type.endsWith("/fulfilled"),
+        (state) => {
+          state.isLoading = false;
+        }
+      )
+      .addMatcher(
+        (action) => action.type.endsWith("/rejected"),
+        (state, action) => {
+          state.isLoading = false;
+          state.error = action.payload === "Network Error" ? "Please check internet connection" : action.payload || action.error.message;
+        }
+      );
   },
 });
 
@@ -195,5 +191,3 @@ export const {
 } = authSlice.actions;
 
 export default authSlice.reducer;
-
-

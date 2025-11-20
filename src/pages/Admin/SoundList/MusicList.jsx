@@ -14,9 +14,9 @@ const BASE_URL = import.meta.env.VITE_BASE_URL_IMG;
 const MusicList = () => {
     const dispatch = useDispatch();
     const { pageNo, pageSize, nextPage, prevPage } = usePagination(1, 6);
-    const { audioList, loading, error, addMusic, updateMusicDetails, deleteMusic } = useMusicList(pageNo, pageSize);
+    const { audiosDetails, loading, error, addMusic, updateMusicDetails, deleteMusic } = useMusicList(pageNo, pageSize);
 
-    const musics = audioList?.musics || [];   // ⛳ FIX  
+    const musics = audiosDetails.audios;
 
     const [musicDetails, setMusicDetails] = useState({
         songName: '',
@@ -148,7 +148,6 @@ const MusicList = () => {
             }
 
             if (isEditing) {
-                console.log(musicDetails)
                 updateMusicDetails(musicDetails.songId, formData);
             } else {
                 addMusic(formData);
@@ -249,17 +248,17 @@ const MusicList = () => {
                         <div className="flex justify-center items-center gap-3 mt-10">
                             <button
                                 onClick={prevPage}
-                                disabled={!audioList.hasPrevPage}
+                                disabled={!audiosDetails.has_prev_page}
                                 className="px-4 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-md disabled:opacity-50 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
                             >
                                 Prev
                             </button>
                             <span className="text-gray-700 dark:text-gray-300 font-medium px-4">
-                                Page {audioList.currentPage}
+                                Page {audiosDetails.current_page}
                             </span>
                             <button
                                 onClick={nextPage}
-                                disabled={!audioList.hasNextPage}
+                                disabled={!audiosDetails.has_next_page}
                                 className="px-4 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-md disabled:opacity-50 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
                             >
                                 Next
@@ -267,8 +266,6 @@ const MusicList = () => {
                         </div>
                     </div>
                 )}
-
-
 
                 {/* Drawer Form */}
                 {isDrawerOpen && (
@@ -278,60 +275,70 @@ const MusicList = () => {
                         title={isEditing ? "Edit Song" : "Add New Song"}
                     >
                         <form onSubmit={handleSubmit} className="space-y-2">
-
-                            <input
-                                type="text"
-                                name="songName"
-                                value={musicDetails.songName}
-                                onChange={handleChange}
-                                placeholder="Enter the song name"
-                                className={`w-full p-2.5 sm:p-3 border rounded-md shadow-sm text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-800
+                            {/* Coach Name */}
+                            <div>
+                                <label className="block font-medium mb-1">Audio Name</label>
+                                <input
+                                    type="text"
+                                    name="songName"
+                                    value={musicDetails.songName}
+                                    onChange={handleChange}
+                                    placeholder="Enter the song name"
+                                    className={`w-full p-2.5 sm:p-3 rounded-md  text-gray-900 dark:text-gray-100 border bg-white dark:bg-gray-800
                              placeholder-gray-400 dark:placeholder-gray-400 focus:outline-none focus:ring-2 transition-all duration-200
                                     ${errors.name
-                                        ? "border-red-500 focus:ring-red-500"
-                                        : "border-gray-300 dark:border-gray-600 focus:ring-purple-500 hover:border-purple-500"
-                                    }`}
-                            />
-                            {errors.songName && <p className="text-red-500 text-base mb-2">{errors.songName}</p>}
+                                            ? "border-red-500 focus:ring-red-500"
+                                            : "border-gray-300 dark:border-gray-600 focus:ring-purple-500 hover:border-purple-500"
+                                        }`}
+                                />
+                                {errors.songName && <p className="text-red-500 text-base mb-2">{errors.songName}</p>}
+                            </div>
 
-                            <textarea
-                                name="songInfo"
-                                rows="4"
-                                value={musicDetails.songInfo}
-                                onChange={handleChange}
-                                placeholder="Enter the song information"
-                                className={`w-full my-1 p-2.5 sm:p-3 border rounded-md shadow-sm text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-800
-                             placeholder-gray-400 dark:placeholder-gray-400 focus:outline-none focus:ring-2 transition-all duration-200
+                            <div>
+                                <label className="block font-medium mb-1">Audio Information</label>
+                                <textarea
+                                    name="songInfo"
+                                    rows="4"
+                                    value={musicDetails.songInfo}
+                                    onChange={handleChange}
+                                    placeholder="Enter the audio information"
+                                    className={`w-full my-1 p-2.5 sm:p-3 border rounded-md shadow-sm text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-800
+                                    placeholder-gray-400 dark:placeholder-gray-400 focus:outline-none focus:ring-2 transition-all duration-200
                                     ${errors.name
-                                        ? "border-red-500 focus:ring-red-500"
-                                        : "border-gray-300 dark:border-gray-600 focus:ring-purple-500 hover:border-purple-500"
-                                    }`}
-                            />
-                            {errors.songInfo && <p className="text-red-500 text-base">{errors.songInfo}</p>}
+                                            ? "border-red-500 focus:ring-red-500"
+                                            : "border-gray-300 dark:border-gray-600 focus:ring-purple-500 hover:border-purple-500"
+                                        }`}
+                                />
+                                {errors.songInfo && <p className="text-red-500 text-base">{errors.songInfo}</p>}
+                            </div>
 
-                            <FileUploaderWithPreview
-                                imageFile={typeof musicDetails.songThumbnail === "object" ? musicDetails.songThumbnail : null}
-                                imageUrl={typeof musicDetails.songThumbnail === "string" ? musicDetails.songThumbnail : null}
-                                setImageFile={(file) =>
-                                    setMusicDetails((prev) => ({ ...prev, songThumbnail: file }))
-                                }
-                            />
-                            {errors.songThumbnail && <p className="text-red-500 text-base">{errors.songThumbnail}</p>}
+                            <div>
+                                <label className="block font-medium mb-1">Audio Thumbnail</label>
+                                <FileUploaderWithPreview
+                                    imageFile={typeof musicDetails.songThumbnail === "object" ? musicDetails.songThumbnail : null}
+                                    imageUrl={typeof musicDetails.songThumbnail === "string" ? musicDetails.songThumbnail : null}
+                                    setImageFile={(file) =>
+                                        setMusicDetails((prev) => ({ ...prev, songThumbnail: file }))
+                                    }
+                                />
+                                {errors.songThumbnail && <p className="text-red-500 text-base">{errors.songThumbnail}</p>}
+                            </div>
 
+                            <div>
+                                <label className="block font-medium">Audio File</label>
+                                <AudioUploaderWithPreview
+                                    audioFile={musicDetails.songFile}
+                                    setAudioFile={(file) =>
+                                        setMusicDetails((prev) => ({ ...prev, songFile: file }))
+                                    }
+                                />
 
-                            <AudioUploaderWithPreview
-                                audioFile={musicDetails.songFile}
-                                setAudioFile={(file) =>
-                                    setMusicDetails((prev) => ({ ...prev, songFile: file }))
-                                }
-                            />
-
-                            {errors.songFile && <p className="text-red-500 text-base">{errors.songFile}</p>}
+                                {errors.songFile && <p className="text-red-500 text-base">{errors.songFile}</p>}
+                            </div>
 
                             <CustomButton type="submit" className="w-full bg-green-600 text-white py-2 mt-3">
                                 {isEditing ? "Update Song" : "Save Song"}
                             </CustomButton>
-
                         </form>
                     </CustomDrawer>
                 )}

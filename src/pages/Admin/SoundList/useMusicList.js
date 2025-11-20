@@ -11,7 +11,7 @@ import { toast } from "react-toastify";
 
 const useMusicList = (pageNo, pageSize) => {
     const dispatch = useDispatch();
-    const { audioList, loading, error } = useSelector((state) => state.admin);
+    const { audiosDetails, loading, error } = useSelector((state) => state.admin);
 
     // Fetch music list
     useEffect(() => {
@@ -94,7 +94,7 @@ const useMusicList = (pageNo, pageSize) => {
             });
     };
 
-    return { audioList, loading, error, addMusic, updateMusicDetails, deleteMusic };
+    return { audiosDetails, loading, error, addMusic, updateMusicDetails, deleteMusic };
 };
 
 export default useMusicList;

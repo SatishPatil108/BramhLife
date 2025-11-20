@@ -3,7 +3,7 @@ import { makeRequest, API_METHODS } from "../../../api/axiosClient";
 
 export const loginUser = async (credentials) => {
   return await makeRequest({
-    service: "user/login",
+    service: "user/auth/login",
     method: API_METHODS.POST,
     data: credentials,
     authRequired: false, 

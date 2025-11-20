@@ -10,23 +10,28 @@ import FileUploaderWithPreview from "@/components/FileUploaderWithPreview/FileUp
 const BASE_URL = import.meta.env.VITE_BASE_URL_IMG;
 
 const DomainsList = () => {
-  const { domains, loading, error, addDomain, updateDomain, deleteDomain } = useDomainsList();
+  const { domainsDetails, loading, error, addDomain, updateDomain, deleteDomain } = useDomainsList();
+  const domains = domainsDetails.domains;
 
+  // drawer state and other
   const [selectedDomainId, setSelectedDomainId] = useState(null);
   const [showSubDomains, setShowSubDomains] = useState(false);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
-  const [domainName, setDomainName] = useState("");
   const [editingDomain, setEditingDomain] = useState(null);
-  const [domainThumbnail, setDomainThumbnail] = useState(null);
-  const [domainThumbnailUrl, setDomainThumbnailUrl] = useState(null);
   const [errors, setErrors] = useState(false);
 
+  // form state
+  const [domainForm, setDomainForm] = useState({
+    domainName: '',
+    domainThumbnail: null
+  })
   const resetForm = () => {
     setIsDrawerOpen(false);
     setEditingDomain(null);
-    setDomainName("");
-    setDomainThumbnail(null);
-    setDomainThumbnailUrl(null);
+    setDomainForm({
+      domainName: '',
+      domainThumbnail: null
+    });
     setErrors({});
   }
 
@@ -40,8 +45,10 @@ const DomainsList = () => {
 
   const openDrawerForEdit = (domain) => {
     setEditingDomain(domain);
-    setDomainName(domain.domain_name);
-    setDomainThumbnailUrl(domain.domain_thumbnail);
+    setDomainForm({
+      domainName: domain.domain_name,
+      domainThumbnail: domain.domain_thumbnail
+    });
     setIsDrawerOpen(true);
   };
 
@@ -55,16 +62,16 @@ const DomainsList = () => {
   const validateForm = () => {
     let isValid = true;
     const errors = {};
-    if (!domainName.trim()) {
+    if (!domainForm.domainName.trim()) {
       errors.domainName = "Domain name is required.";
       isValid = false;
-    } else if (!/^[a-zA-Z ]+$/.test(domainName)) {
+    } else if (!/^[a-zA-Z ]+$/.test(domainForm.domainName)) {
       errors.domainName = "Name must only contain letters.";
       isValid = false;
     }
 
     // Domain Thumbnail
-    if (!domainThumbnail) {
+    if (!domainForm.domainThumbnail) {
       errors.domainThumbnail = "Domain thumbnail is required.";
       isValid = false;
     }
@@ -78,8 +85,8 @@ const DomainsList = () => {
     if (!isValid) return;
 
     const formData = new FormData();
-    formData.append("domain_name", domainName);
-    if (domainThumbnail) formData.append("domain_thumbnail", domainThumbnail);
+    formData.append("domain_name", domainForm.domainName);
+    if (typeof domainForm.domainThumbnail == "object") formData.append("domain_thumbnail", domainForm.domainThumbnail);
 
     if (editingDomain) {
       updateDomain(editingDomain.domain_id, formData);
@@ -89,10 +96,11 @@ const DomainsList = () => {
       toast.success("New domain added successfully!");
     }
 
-    setDomainThumbnail(null);
-    setDomainThumbnailUrl(null);
+    setDomainForm({
+      domainName: "",
+      domainThumbnail: null
+    })
     setIsDrawerOpen(false);
-    setDomainName("");
     setEditingDomain(null);
   };
 
@@ -107,8 +115,10 @@ const DomainsList = () => {
           onClick={() => {
             setIsDrawerOpen(true);
             setEditingDomain(null);
-            setDomainName("");
-            setDomainThumbnailUrl(null);
+            setDomainForm({
+              domainName: "",
+              domainThumbnail: null
+            });
           }}
           variant="dark"
         >
@@ -164,8 +174,8 @@ const DomainsList = () => {
             <input
               type="text"
               name="domainName"
-              value={domainName}
-              onChange={(e) => setDomainName(e.target.value)}
+              value={domainForm.domainName}
+              onChange={(e) => setDomainForm((prev) => { return { ...prev, domainName: e.target.value } })}
               placeholder="Enter domain name"
               className={`w-full p-2.5 sm:p-3 border rounded-md shadow-sm text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-800
             placeholder-gray-400 dark:placeholder-gray-400 focus:outline-none focus:ring-2 transition-all duration-200
@@ -186,11 +196,13 @@ const DomainsList = () => {
             </label>
             <FileUploaderWithPreview
               key={editingDomain ? editingDomain.domain_id : "new"} // 👈 forces re-render per domain
-              imageFile={domainThumbnail}
-              setImageFile={setDomainThumbnail}
-              imageUrl={domainThumbnailUrl}
+              imageFile={typeof domainForm.domainThumbnail == "object" ? domainForm.domainThumbnail : null}
+              setImageFile={(file) =>
+                setDomainForm((prev) => ({ ...prev, domainThumbnail: file }))
+              }
+              imageUrl={typeof domainForm.domainThumbnail == "string" ? domainForm.domainThumbnail : null}
               name="domainThumbnail"
-  
+
             />
             {errors.domainThumbnail && (
               <p className="text-red-500 text-base mt-1">{errors.domainThumbnail}</p>

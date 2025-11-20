@@ -5,13 +5,13 @@ import { useDispatch, useSelector } from "react-redux";
 
 const useFrequentlyAskQue = (pageNo , pageSize ) => {
   const dispatch = useDispatch();
-  const { faqList, loading, error } = useSelector((state) => state.admin);
+  const { faqsDetails, loading, error } = useSelector((state) => state.admin);
   
   useEffect(() => {
     dispatch(fetchFAQsAPI({ pageNo, pageSize }));
   }, [dispatch, pageNo, pageSize]);
 
-  return { faqList, loading, error };
+  return { faqsDetails, loading, error };
 };
 
 export default useFrequentlyAskQue;

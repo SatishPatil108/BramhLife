@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 const useDomainsList = (pageNo = 1, pageSize = 10) => {
   const dispatch = useDispatch();
 
-  const { domains, loading, error } = useSelector((state) => state.admin);
+  const { domainsDetails, loading, error } = useSelector((state) => state.admin);
 
   useEffect(() => {
     dispatch(getAllDomains(pageNo, pageSize));
@@ -43,7 +43,7 @@ const useDomainsList = (pageNo = 1, pageSize = 10) => {
       .catch((err) => console.error("Failed to delete domain:", err));
   };
 
-  return { domains, loading, error, addDomain, updateDomain, deleteDomain };
+  return { domainsDetails, loading, error, addDomain, updateDomain, deleteDomain };
 };
 
 export default useDomainsList;

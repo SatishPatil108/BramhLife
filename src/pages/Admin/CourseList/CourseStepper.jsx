@@ -13,8 +13,10 @@ const steps = ["Add Course", "Add Curriculum"];
 
 const CourseStepper = ({ onClose, coaches = [], coachesLoading = false }) => {
   const dispatch = useDispatch();
-  const { domains, subdomains, fetchSubdomains } = useDomainData();
+  const { domainsDetails, subdomainsDetails, fetchSubdomains } = useDomainData();
 
+  const domains = domainsDetails.domains;
+  const subdomains = subdomainsDetails.subdomains;
   const [activeStep, setActiveStep] = useState(0);
   const [courseData, setCourseData] = useState({
     domain: "",

@@ -4,7 +4,7 @@ import { makeRequest, API_METHODS } from "../../../api/axiosClient";
 // Fetch all course categories
 export const fetchCoursesCategories = async (pageNo = 1, pageSize = 10) => {
   return await makeRequest({
-    service: `user/all-domains/${pageNo}/${pageSize}`,
+    service: `user/domains/${pageNo}/${pageSize}`,
     method: API_METHODS.GET,
     authRequired: false,
   });
@@ -118,7 +118,7 @@ export const fetchFAQList = async (pageNo = 1, pageSize = 10) => {
 //get all courses feedback with pagination
 export const fetchAllCourseFeedback = async (pageNo = 1, pageSize = 10) => {
   return await makeRequest({
-    service: `user/courses/course/all-courses-feedback/${pageNo}/${pageSize}`,
+    service: `user/courses/course/all-courses-feedbacks/${pageNo}/${pageSize}`,
     method: API_METHODS.GET,
     authRequired: false,
   });

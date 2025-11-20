@@ -9,7 +9,8 @@ import {
 
 const useSubDomainsList = (domainId) => {
   const dispatch = useDispatch();
-  const { subdomains, loading, error } = useSelector((state) => state.admin);
+  const { subdomainsDetails, loading, error } = useSelector((state) => state.admin);
+  const subdomains = subdomainsDetails.subdomains;
 
   useEffect(() => {
     if (domainId && !isNaN(domainId)) {

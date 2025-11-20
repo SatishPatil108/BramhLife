@@ -17,12 +17,15 @@ import { SquarePen, Trash2 } from "lucide-react";
 const FrequentlyAskQue = () => {
   const dispatch = useDispatch();
   const { pageNo, pageSize, nextPage, prevPage } = usePagination(1, 6);
-  const { faqList, loading, error } = useFrequentlyAskQue(pageNo, pageSize);
+  const { faqsDetails, loading, error } = useFrequentlyAskQue(pageNo, pageSize);
+
+  const faqList = faqsDetails.faqs;
 
   const [openIndex, setOpenIndex] = useState(null);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [formData, setFormData] = useState({ id: null, question: "", answer: "" });
   const [isEditing, setIsEditing] = useState(false);
+  const [errors, setErrors] = useState(false);
 
   const toggleFAQ = (index) => setOpenIndex(openIndex === index ? null : index);
 
@@ -32,8 +35,15 @@ const FrequentlyAskQue = () => {
     setIsDrawerOpen(true);
   };
 
+  const resetForm = () => {
+    setIsDrawerOpen(false);
+    setIsEditing(false);
+    setErrors({});
+  }
+
   const handleEditFAQ = (faq) => {
     setIsEditing(true);
+    setErrors({});
     setFormData({ id: faq.id, question: faq.question, answer: faq.answer });
     setIsDrawerOpen(true);
   };
@@ -49,6 +59,7 @@ const FrequentlyAskQue = () => {
           isLoading: false,
           autoClose: 3000,
         });
+        
       }).catch((error) => {
         console.error(error);
         toast.update(toastId, {
@@ -64,8 +75,26 @@ const FrequentlyAskQue = () => {
 
   const handleChange = (e) => setFormData({ ...formData, [e.target.name]: e.target.value });
 
+  const validateForm = () => {
+    let isValid = true;
+    const errors = {};
+    if (!formData.question.trim()) {
+      errors.question = "Ask the question is required.";
+      isValid = false;
+    }
+
+    if (!formData.answer) {
+      errors.answer = "FAQs answer is required.";
+      isValid = false;
+    }
+    return { errors, isValid };
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const { errors, isValid } = validateForm();
+    setErrors(errors);
+    if (!isValid) return;
 
     try {
       if (isEditing) {
@@ -112,8 +141,9 @@ const FrequentlyAskQue = () => {
         });
       }
       setFormData({ id: null, question: "", answer: "" });
-      setIsDrawerOpen(false);
       dispatch(fetchFAQsAPI({ pageNo, pageSize }));
+      
+      setIsDrawerOpen(false);
     } catch (error) {
       console.error("Failed to save FAQ:", error);
     }
@@ -231,13 +261,13 @@ const FrequentlyAskQue = () => {
         {isDrawerOpen && (
           <CustomDrawer
             isOpen={isDrawerOpen}
-            onClose={() => setIsDrawerOpen(false)}
+            onClose={() => resetForm()}
             title={isEditing ? "Edit FAQ" : "Add New FAQ"}
             footer={null}
           >
             <form onSubmit={handleSubmit} className="space-y-6">
               <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                <label className="block text-base font-medium text-gray-700 dark:text-gray-300">
                   Question
                 </label>
                 <input
@@ -245,13 +275,16 @@ const FrequentlyAskQue = () => {
                   name="question"
                   value={formData.question}
                   onChange={handleChange}
-                  className="mt-1 block w-full border border-gray-300 dark:border-gray-600 rounded-md shadow-sm px-4 py-2 text-sm focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+                  className="mt-1 block w-full border border-gray-300 dark:border-gray-600 rounded-md shadow-sm px-4 py-2 text-base focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
                   placeholder="Enter FAQ question"
-                  required
+                  
                 />
+                {errors.question && (
+                  <p className="text-red-500 text-base mt-2 px-2">{errors.question}</p>
+                )}
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                <label className="block text-base font-medium text-gray-700 dark:text-gray-300">
                   Answer
                 </label>
                 <textarea
@@ -259,10 +292,13 @@ const FrequentlyAskQue = () => {
                   rows="4"
                   value={formData.answer}
                   onChange={handleChange}
-                  className="mt-1 block w-full border border-gray-300 dark:border-gray-600 rounded-md shadow-sm px-4 py-2 text-sm focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+                  className="mt-1 block w-full border border-gray-300 dark:border-gray-600 rounded-md shadow-sm px-4 py-2 text-base focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
                   placeholder="Enter FAQ answer"
-                  required
+                  
                 />
+                {errors.answer && (
+                  <p className="text-red-500 text-base mt-2 px-2">{errors.answer}</p>
+                )}
               </div>
               <div className="flex justify-end">
                 <CustomButton

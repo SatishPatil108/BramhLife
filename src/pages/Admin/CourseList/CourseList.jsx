@@ -11,7 +11,8 @@ import { motion, AnimatePresence } from "framer-motion";
 
 const CourseList = () => {
   const { pageNo, pageSize, nextPage, prevPage } = usePagination(1, 6);
-  const { courses, loading, error } = useCourseList(pageNo, pageSize);
+  const { coursesDetails, loading, error } = useCourseList(pageNo, pageSize);
+  const courses = coursesDetails.courses;
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -98,7 +99,7 @@ const CourseList = () => {
             <div className="flex justify-center items-center gap-3 mt-10">
               <button
                 onClick={prevPage}
-                disabled={pageNo === 1}
+                disabled={!coursesDetails.has_prev_page}
                 className="px-4 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-md disabled:opacity-50 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
               >
                 Prev
@@ -108,7 +109,7 @@ const CourseList = () => {
               </span>
               <button
                 onClick={nextPage}
-                disabled={courses.length < pageSize}
+                disabled={!coursesDetails.has_next_page}
                 className="px-4 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-md disabled:opacity-50 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
               >
                 Next

@@ -2,10 +2,8 @@ import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import useCoachesList from "./useCoachesList";
 import {
-  addNewCoachAPI,
   deleteCoachAPI,
   fetchAllSubDomainsAPI,
-  updateCoachAPI,
 } from "@/store/feature/admin";
 import CustomButton from "@/components/CustomButton";
 import CustomDrawer from "@/components/CustomDrawer";
@@ -18,42 +16,61 @@ const BASE_URL = import.meta.env.VITE_BASE_URL_IMG;
 
 const CoachesList = () => {
   const dispatch = useDispatch();
-  const { coaches, loading, error, domains, subdomains } = useCoachesList();
+  const { coachesDetails, loading, error, domainsDetails, subdomainsDetails, addnewCoach, updateCoachDetails, deleteCoach } = useCoachesList();
+
+  const coaches = coachesDetails.coaches;
+  const domains = domainsDetails.domains;
+  const subdomains = subdomainsDetails.subdomains;
+
+  // drawer and other state
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
-  const [editingCoach, setEditingCoach] = useState(null);
+  const [editingCoach, setEditingCoach] = useState(false);
   const [showForm, setShowForm] = useState(false);
   const [selectedCoach, setSelectedCoach] = useState(null);
   const [errors, setErrors] = useState({});
 
   // Form states
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [contactNumber, setContactNumber] = useState("");
-  const [experience, setExperience] = useState("");
-  const [domainId, setDomainId] = useState("");
-  const [subdomainId, setSubdomainId] = useState("");
-  const [professionalTitle, setProfessionalTitle] = useState("");
-  const [bio, setBio] = useState("");
-  const [profilePicture, setProfilePicture] = useState(null);
+  const [coachForm, setCoachForm] = useState({
+    name: '',
+    email: '',
+    contactNumber: '',
+    experience: '',
+    domainId: '',
+    subdomainId: '',
+    professionalTitle: '',
+    bio: '',
+    profilePicture: null
+  })
+
+  // handle change 
+  const handleChange = (e) => {
+    if (e.target.name == "domainId") {
+      const selectedDomainId = e.target.value;
+      if (selectedDomainId) dispatch(fetchAllSubDomainsAPI({ domainId: selectedDomainId }));
+    }
+    setCoachForm({ ...coachForm, [e.target.name]: e.target.value });
+  }
 
   const resetForm = () => {
-    setName("");
-    setEmail("");
-    setContactNumber("");
-    setExperience("");
-    setDomainId("");
-    setSubdomainId("");
-    setProfessionalTitle("");
-    setBio("");
-    setProfilePicture(null);
+    setCoachForm({
+      name: '',
+      email: '',
+      contactNumber: '',
+      experience: '',
+      domainId: '',
+      subdomainId: '',
+      professionalTitle: '',
+      bio: '',
+      profilePicture: null
+    })
     setErrors({});
-    setEditingCoach(null);
+    setEditingCoach(false);
     setShowForm(false);
     setIsDrawerOpen(false);
   };
 
   const handleAddCoach = () => {
-    resetForm();
+    setEditingCoach(false);
     setShowForm(true);
     setIsDrawerOpen(true);
   };
@@ -66,16 +83,19 @@ const CoachesList = () => {
   };
 
   const handleEditCoach = (coach) => {
+  
     setEditingCoach(coach);
-    setName(coach.name || "");
-    setEmail(coach.email || "");
-    setContactNumber(coach.contact_number || "");
-    setExperience(coach.experience || "");
-    setDomainId(coach.domain_id?.toString() || "");
-    setSubdomainId(coach.subdomain_id?.toString() || "");
-    setProfessionalTitle(coach.professional_title || "");
-    setBio(coach.bio || "");
-    setProfilePicture(coach.profile_image_url || null);
+    setCoachForm({
+      name: coach.name,
+      email: coach.email,
+      contactNumber: coach.contact_number,
+      experience: coach.experience,
+      domainId: coach.domain_id,
+      subdomainId: coach.subdomain_id,
+      professionalTitle: coach.professional_title,
+      bio: coach.bio,
+      profilePicture: coach.profile_image_url,
+    })
     setErrors({});
     setShowForm(true);
 
@@ -86,86 +106,60 @@ const CoachesList = () => {
     setIsDrawerOpen(true);
   };
 
-  const handleDomainChange = (e) => {
-    const selectedDomainId = e.target.value;
-    setDomainId(selectedDomainId);
-    setSubdomainId("");
-    if (selectedDomainId) dispatch(fetchAllSubDomainsAPI({ domainId: selectedDomainId }));
-  };
-
   const handleDeleteCoach = (coachId) => {
-    if (window.confirm("Are you sure you want to delete this coach?")) {
-      const toastId = toast.loading('Deleting a coache...');
-
-      dispatch(deleteCoachAPI(coachId)).then(() => {
-        toast.update(toastId, {
-          render: "Coach is Deleted Successfully 🎉",
-          type: "success",
-          isLoading: false,
-          autoClose: 3000,
-        });
-        resetForm();
-      }).catch((error) => {
-        console.error(error);
-        toast.update(toastId, {
-          render: "Failed to Delete a Coach!",
-          type: "error",
-          isLoading: false,
-          autoClose: 3000,
-        })
-      });
-    }
+    deleteCoach(coachId);
   };
 
   const validateForm = () => {
     let isValid = true;
     const errors = {};
 
-    if (!name.trim()) {
+    if (!coachForm.name.trim()) {
       errors.name = "Coach name is required.";
       isValid = false;
     }
 
-    if (!email.trim()) {
+    if (!coachForm.email.trim()) {
       errors.email = "Email is required.";
     }
-    else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(coachForm.email)) {
       errors.email = "Enter a valid email address.";
     }
 
-    if (!contactNumber.trim()) {
+    if (!coachForm.contactNumber.trim()) {
       errors.contactNumber = "Contact number is required.";
     }
-    else if (!/^[0-9]{10}$/.test(contactNumber)) {
-      errors.contactNumber = "Contact number must be 10 digits.";
+    else if (!/^\d{10}$/.test(coachForm.contactNumber)) {
+      errors.contactNumber = "Contact number must be exactly 10 digits (no spaces or special characters).";
     }
 
-    if (!experience.trim()) {
+
+    if (!coachForm.experience.trim()) {
       errors.experience = "Experience is required.";
       isValid = false;
     }
 
-    if (!professionalTitle.trim()) {
+    if (!coachForm.professionalTitle.trim()) {
       errors.professionalTitle = "professional title name is required.";
       isValid = false;
     }
 
-    if (!domainId.trim()) {
+    if (!coachForm.domainId) {
       errors.domainId = "Select the domain is required.";
       isValid = false;
     }
 
-    if (!subdomainId.trim()) {
+    if (!coachForm.subdomainId) {
       errors.subdomainId = "Select the subdomain is required.";
       isValid = false;
     }
 
-    if (!bio.trim()) {
+    if (!coachForm.bio.trim()) {
       errors.bio = "Coach bio is required.";
       isValid = false;
     }
 
-    if (!profilePicture) {
+    if (!coachForm.profilePicture) {
       errors.profilePicture = "Profile picture is required.";
       isValid = false;
     }
@@ -177,60 +171,25 @@ const CoachesList = () => {
     e.preventDefault();
     const { errors, isValid } = validateForm();
     setErrors(errors);
-
-    if (!validateForm()) return;
+    if (!isValid) return;
 
     const formData = new FormData();
-    formData.append("name", name);
-    formData.append("email", email);
-    formData.append("contact_number", contactNumber);
-    formData.append("experience", experience);
-    formData.append("domain_id", domainId);
-    formData.append("subdomain_id", subdomainId);
-    formData.append("professional_title", professionalTitle);
-    formData.append("bio", bio);
-    if (typeof profilePicture === "object") formData.append("profile_picture", profilePicture);
+    formData.append("name", coachForm.name);
+    formData.append("email", coachForm.email);
+    formData.append("contact_number", coachForm.contactNumber);
+    formData.append("experience", coachForm.experience);
+    formData.append("domain_id", coachForm.domainId);
+    formData.append("subdomain_id", coachForm.subdomainId);
+    formData.append("professional_title", coachForm.professionalTitle);
+    formData.append("bio", coachForm.bio);
+    if (typeof coachForm.profilePicture === "object") formData.append("profile_picture", coachForm.profilePicture);
 
-    // if (editingCoach) {
-    //   const toastId = toast.loading("Updating new coach............");
-
-    //   dispatch(updateCoachAPI({ coachId: editingCoach.coach_id, coachData: formData })).then(() => {
-    //     toast.update(toastId, {
-    //       render: "Coach is Updated Successfully 🎉",
-    //       type: "success",
-    //       isLoading: false,
-    //       autoClose: 3000,
-    //     });
-    //     resetForm();
-    //   }).catch((error) => {
-    //     console.error(error);
-    //     toast.update(toastId, {
-    //       render: "Failed to Update a Coach!",
-    //       type: "error",
-    //       isLoading: false,
-    //       autoClose: 3000,
-    //     })
-    //   });
-    // } else {
-    //   const toastId = toast.loading("adding new coach............");
-    //   dispatch(addNewCoachAPI(formData)).then(() => {
-    //     toast.update(toastId, {
-    //       render: "New Coach is added successfully 🎉",
-    //       type: "success",
-    //       isLoading: false,
-    //       autoClose: 3000,
-    //     });
-    //     resetForm();
-    //   }).catch((error) => {
-    //     console.error(error);
-    //     toast.update(toastId, {
-    //       render: "Failed to add new Coach!",
-    //       type: "error",
-    //       isLoading: false,
-    //       autoClose: 3000,
-    //     });
-    //   });
-    // }
+    if (editingCoach) {
+      updateCoachDetails(editingCoach.coach_id, formData);
+    } else {
+      addnewCoach(formData);
+    }
+    resetForm();
   };
 
   return (
@@ -315,7 +274,7 @@ const CoachesList = () => {
       {/* Drawer */}
       <CustomDrawer
         isOpen={isDrawerOpen}
-        onClose={resetForm}
+        onClose={() => setIsDrawerOpen(false)}
         title={showForm ? (editingCoach ? "Edit Coach" : "Add New Coach") : "Coach Details"}
         footer={
           showForm && (
@@ -326,142 +285,196 @@ const CoachesList = () => {
         }
       >
         {showForm ? (
-          <form className="flex-1 overflow-y-auto space-y-4 pr-2" onSubmit={handleSaveCoach}>
-            <div className="grid grid-cols-2 sm:grid-cols-1 gap-4">
+          <form
+            className="flex-1 overflow-y-auto space-y-4 pr-2 p-1"
+            onSubmit={handleSaveCoach}
+          >
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+
+              {/* Coach Name */}
               <div>
-                <label className="block font-medium mb-1 text-gray-800 dark:text-gray-100">
-                  Coach Name
-                </label>
-                <input type="text" value={name} onChange={(e) => setName(e.target.value)} placeholder="Enter the coach name"
-                  className={`w-full mx-1 p-2.5 sm:p-3 border rounded-md shadow-sm text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-800
-                  placeholder-gray-400 dark:placeholder-gray-400 focus:outline-none focus:ring-2 transition-all duration-200
+                <label className="block font-medium mb-1">Coach Name</label>
+                <input
+                  type="text"
+                  name="name"
+                  value={coachForm.name}
+                  onChange={handleChange}
+                  placeholder="Enter the coach name"
+                  className={`w-full p-2.5 sm:p-3 border rounded-md shadow-sm text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-800
+                             placeholder-gray-400 dark:placeholder-gray-400 focus:outline-none focus:ring-2 transition-all duration-200
                     ${errors.name
                       ? "border-red-500 focus:ring-red-500"
                       : "border-gray-300 dark:border-gray-600 focus:ring-purple-500 hover:border-purple-500"
-                    }`} />
-                {errors.name && <p className="text-red-500 text-base mt-1 px-2">{errors.name}</p>}
-
+                    }`}
+                />
+                {errors.name && <p className="text-red-500 text-base mt-1">{errors.name}</p>}
               </div>
 
+              {/* Email */}
               <div>
-                <label className="block font-medium mb-1 text-gray-800 dark:text-gray-100">
-                  Email
-                </label>
-                <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Enter the email"
-                  className={`w-full mx-1 p-2.5 sm:p-3 border rounded-md shadow-sm text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-800
-                  placeholder-gray-400 dark:placeholder-gray-400 focus:outline-none focus:ring-2 transition-all duration-200
+                <label className="block font-medium mb-1">Email</label>
+                <input
+                  type="email"
+                  name="email"
+                  value={coachForm.email}
+                  onChange={handleChange}
+                  placeholder="Enter the email"
+                  className={`w-full p-2.5 sm:p-3 border rounded-md shadow-sm text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-800
+                             placeholder-gray-400 dark:placeholder-gray-400 focus:outline-none focus:ring-2 transition-all duration-200
                     ${errors.name
                       ? "border-red-500 focus:ring-red-500"
                       : "border-gray-300 dark:border-gray-600 focus:ring-purple-500 hover:border-purple-500"
-                    }`} />
-                {errors.email && <p className="text-red-500 text-base mt-1 px-2">{errors.email}</p>}
+                    }`}
+                />
+                {errors.email && <p className="text-red-500 text-base mt-1">{errors.email}</p>}
               </div>
 
+              {/* Contact Number */}
               <div>
-                <label className="block font-medium mb-1 text-gray-800 dark:text-gray-100">
-                  Contact Number
-                </label>
-                <input type="number" value={contactNumber} onChange={(e) => setContactNumber(e.target.value)} placeholder="Enter the contact number"
-                  className={`w-full mx-1 p-2.5 sm:p-3 border rounded-md shadow-sm text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-800
-                  placeholder-gray-400 dark:placeholder-gray-400 focus:outline-none focus:ring-2 transition-all duration-200
+                <label className="block font-medium mb-1">Contact Number</label>
+                <input
+                  type="number"
+                  name="contactNumber"
+                  value={coachForm.contactNumber}
+                  onChange={handleChange}
+                  placeholder="Enter contact number"
+                  className={`w-full p-2.5 sm:p-3 border rounded-md shadow-sm text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-800
+                             placeholder-gray-400 dark:placeholder-gray-400 focus:outline-none focus:ring-2 transition-all duration-200
                     ${errors.name
                       ? "border-red-500 focus:ring-red-500"
                       : "border-gray-300 dark:border-gray-600 focus:ring-purple-500 hover:border-purple-500"
-                    }`} />
-                {errors.contactNumber && <p className="text-red-500 text-base mt-1 px-2">{errors.contactNumber}</p>}
-
+                    }`}
+                />
+                {errors.contactNumber && (
+                  <p className="text-red-500 text-base mt-1">{errors.contactNumber}</p>
+                )}
               </div>
 
+              {/* Experience */}
               <div>
-                <label className="block font-medium mb-1 text-gray-800 dark:text-gray-100">
-                  Experience
-                </label>
-                <input type="number" value={experience} onChange={(e) => setExperience(e.target.value)} placeholder="Enter the year of experience"
-                  className={`w-full mx-1 p-2.5 sm:p-3 border rounded-md shadow-sm text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-800
-                  placeholder-gray-400 dark:placeholder-gray-400 focus:outline-none focus:ring-2 transition-all duration-200
+                <label className="block font-medium mb-1">Experience</label>
+                <input
+                  type="number"
+                  name="experience"
+                  value={coachForm.experience}
+                  onChange={handleChange}
+                  placeholder="Years of experience"
+                  className={`w-full p-2.5 sm:p-3 border rounded-md shadow-sm text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-800
+                             placeholder-gray-400 dark:placeholder-gray-400 focus:outline-none focus:ring-2 transition-all duration-200
                     ${errors.name
                       ? "border-red-500 focus:ring-red-500"
                       : "border-gray-300 dark:border-gray-600 focus:ring-purple-500 hover:border-purple-500"
-                    }`} />
-                {errors.experience && <p className="text-red-500 text-base mt-1 px-2">{errors.experience}</p>}
+                    }`}
+                />
+                {errors.experience && (
+                  <p className="text-red-500 text-base mt-1">{errors.experience}</p>
+                )}
               </div>
 
+              {/* Professional Title */}
               <div>
-                <label className="block font-medium mb-1 text-gray-800 dark:text-gray-100">
-                  Professional Title
-                </label>
-                <input type="text" value={professionalTitle} onChange={(e) => setProfessionalTitle(e.target.value)} placeholder="Enter the professional title"
-                  className={`w-full mx-1 p-2.5 sm:p-3 border rounded-md shadow-sm text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-800
-                  placeholder-gray-400 dark:placeholder-gray-400 focus:outline-none focus:ring-2 transition-all duration-200
+                <label className="block font-medium mb-1">Professional Title</label>
+                <input
+                  type="text"
+                  name="professionalTitle"
+                  value={coachForm.professionalTitle}
+                  onChange={handleChange}
+                  placeholder="Enter professional title"
+                  className={`w-full p-2.5 sm:p-3 border rounded-md shadow-sm text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-800
+                             placeholder-gray-400 dark:placeholder-gray-400 focus:outline-none focus:ring-2 transition-all duration-200
                     ${errors.name
                       ? "border-red-500 focus:ring-red-500"
                       : "border-gray-300 dark:border-gray-600 focus:ring-purple-500 hover:border-purple-500"
-                    }`} />
-                {errors.professionalTitle && <p className="text-red-500 text-base mt-1 px-2">{errors.professionalTitle}</p>}
+                    }`}
+                />
+                {errors.professionalTitle && (
+                  <p className="text-red-500 text-base mt-1">{errors.professionalTitle}</p>
+                )}
               </div>
 
+              {/* Domain */}
               <div>
-                <label className="block font-medium mb-1 text-gray-800 dark:text-gray-100">
-                  Domain
-                </label>
-                <select value={domainId} onChange={handleDomainChange}
-                  className={`w-full mx-1 p-2.5 sm:p-3 border rounded-md shadow-sm text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-800
-                  placeholder-gray-400 dark:placeholder-gray-400 focus:outline-none focus:ring-2 transition-all duration-200
+                <label className="block font-medium mb-1">Domain</label>
+                <select
+                  name="domainId"
+                  value={coachForm.domainId}
+                  onChange={handleChange}
+                  className={`w-full p-2.5 sm:p-3 border rounded-md shadow-sm text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-800
+                             placeholder-gray-400 dark:placeholder-gray-400 focus:outline-none focus:ring-2 transition-all duration-200
                     ${errors.name
                       ? "border-red-500 focus:ring-red-500"
                       : "border-gray-300 dark:border-gray-600 focus:ring-purple-500 hover:border-purple-500"
-                    }`} >
+                    }`}
+                >
                   <option value="">Select Domain</option>
                   {domains?.map((d) => (
-                    <option key={d.domain_id} value={d.domain_id?.toString()}>{d.domain_name}</option>
+                    <option key={d.domain_id} value={d.domain_id}>
+                      {d.domain_name}
+                    </option>
                   ))}
                 </select>
-                {errors.domainId && <p className="text-red-500 text-base mt-1 px-2">{errors.domainId}</p>}
+                {errors.domainId && (
+                  <p className="text-red-500 text-base mt-1">{errors.domainId}</p>
+                )}
               </div>
 
+              {/* Subdomain */}
               <div>
-                <label className="block font-medium mb-1 text-gray-800 dark:text-gray-100">
-                  Sub Domain
-                </label>
-                <select value={subdomainId} onChange={(e) => setSubdomainId(e.target.value)}
-                  className={`w-full mx-1 p-2.5 sm:p-3 border rounded-md shadow-sm text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-800
-                  placeholder-gray-400 dark:placeholder-gray-400 focus:outline-none focus:ring-2 transition-all duration-200
+                <label className="block font-medium mb-1">Sub Domain</label>
+                <select
+                  name="subdomainId"
+                  value={coachForm.subdomainId}
+                  onChange={handleChange}
+                  className={`w-full p-2.5 sm:p-3 border rounded-md shadow-sm text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-800
+                             placeholder-gray-400 dark:placeholder-gray-400 focus:outline-none focus:ring-2 transition-all duration-200
                     ${errors.name
                       ? "border-red-500 focus:ring-red-500"
                       : "border-gray-300 dark:border-gray-600 focus:ring-purple-500 hover:border-purple-500"
-                    }`} >
+                    }`}
+                >
                   <option value="">Select Subdomain</option>
                   {subdomains?.map((s) => (
-                    <option key={s.subdomain_id} value={s.subdomain_id?.toString()}>{s.subdomain_name}</option>
+                    <option key={s.subdomain_id} value={s.subdomain_id}>
+                      {s.subdomain_name}
+                    </option>
                   ))}
                 </select>
-                {errors.subdomainId && <p className="text-red-500 text-base mt-1 px-2">{errors.subdomainId}</p>}
+                {errors.subdomainId && (
+                  <p className="text-red-500 text-base mt-1">{errors.subdomainId}</p>
+                )}
               </div>
 
-              <div>
-                <label className="block font-medium mb-1 text-gray-800 dark:text-gray-100">
-                  Coach Bio
-                </label>
-                <textarea value={bio} onChange={(e) => setBio(e.target.value)} placeholder="Enter the coach bio"
-                  className={`w-full mx-1 p-2.5 sm:p-3 border rounded-md shadow-sm text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-800
-                  placeholder-gray-400 dark:placeholder-gray-400 focus:outline-none focus:ring-2 transition-all duration-200
+              {/* Bio – Full width always */}
+              <div className="col-span-1 lg:col-span-2">
+                <label className="block font-medium mb-1">Coach Bio</label>
+                <textarea
+                  name="bio"
+                  value={coachForm.bio}
+                  onChange={handleChange}
+                  placeholder="Enter bio"
+                  className={`w-full p-2.5 sm:p-3 border rounded-md shadow-sm text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-800
+                             placeholder-gray-400 dark:placeholder-gray-400 focus:outline-none focus:ring-2 transition-all duration-200
                     ${errors.name
                       ? "border-red-500 focus:ring-red-500"
                       : "border-gray-300 dark:border-gray-600 focus:ring-purple-500 hover:border-purple-500"
-                    }`} />
-
-                {errors.bio && <p className="text-red-500 text-base mt-1 px-2">{errors.bio}</p>}
+                    }`}
+                />
+                {errors.bio && <p className="text-red-500 text-base mt-1">{errors.bio}</p>}
               </div>
 
-              <div className="w-full mb-10">
+              {/* Profile Picture – Full width */}
+              <div className="col-span-1 lg:col-span-2 mb-10">
                 <label className="block font-medium mb-2">Upload Profile Picture</label>
                 <FileUploaderWithPreview
-                  imageFile={typeof profilePicture === "object" ? profilePicture : null}
-                  imageUrl={typeof profilePicture === "string" ? profilePicture : null}
-                  setImageFile={setProfilePicture}
-                  name="profilePicture"
+                  imageFile={typeof coachForm.profilePicture === "object" ? coachForm.profilePicture : null}
+                  imageUrl={typeof coachForm.profilePicture === "string" ? coachForm.profilePicture : null}
+                  setImageFile={(file) =>
+                    setCoachForm((prev) => ({ ...prev, profilePicture: file }))
+                  }
                 />
-                {errors.profilePicture && <p className="text-red-500 text-base mt-1 px-2">{errors.profilePicture}</p>}
+                {errors.profilePicture && (
+                  <p className="text-red-500 text-base mt-1">{errors.profilePicture}</p>
+                )}
               </div>
             </div>
           </form>

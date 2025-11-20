@@ -4,7 +4,7 @@ import { fetchCoachesVideosAPI } from "@/store/feature/user";
 
 const useCoachesInfoPage = (subdomainId, coachId) => {
   const dispatch = useDispatch();
-  const { coachesVideos, isLoading, error } = useSelector((state) => state.user);
+  const { videosDetails, isLoading, error } = useSelector((state) => state.user);
 
   useEffect(() => {
     if (subdomainId === undefined) subdomainId = 0;
@@ -12,14 +12,14 @@ const useCoachesInfoPage = (subdomainId, coachId) => {
 
     dispatch(fetchCoachesVideosAPI({
       pageNo: 1,
-      pageSize: 20,
+      pageSize: 10,
       subdomainId,
       coachId
     }));
-  }, [subdomainId,coachId, dispatch]);
+  }, [subdomainId, coachId, dispatch]);
 
   return {
-    videos: coachesVideos || [],
+    videosDetails,
     loading: isLoading,
     error,
   };

@@ -2,14 +2,14 @@
 import { createSlice } from "@reduxjs/toolkit";
 import {
   fetchCoursesCategoriesAPI,
-  fetchSubcategoriesAPI,
+  fetchSubdomainsDetailsAPI,
   fetchCoachesVideosAPI,
   fetchCoachDetailsAPI,
   fetchCoachProfileAPI,
   fetchCourseDetailsById,
   enrollInCourseAPI,
-  fetchMyCoursesThunk,
-  fetchEnrolledCourseDetailsThunk,
+  fetchMyCoursesAPI,
+  fetchEnrolledCourseDetailsAPI,
   fetchUserDashboardDataAPI,
   fetchFAQsAPI,
   fetchAllCoursesFeedbackAPI,
@@ -17,22 +17,21 @@ import {
   postCourseFeedbackAPI,
   searchCoursesAPI,
   fetchAllCoachesAPI,
-  } from "./userThunk";
+} from "./userThunk";
 
 const initialState = {
   isLoading: false,
-  coursesCategories: [],
-  subcategories: {},
-  coachesVideos: [],
+  domainsDetails: { domains: [] },
+  subdomainsDetails: {},
+  videosDetails: { videos: [] },
   coachDetails: null,
   coachProfile: null,
   courseDetails: null,
   coaches: [],
-  myCourses: [],
+  myCoursesDetails: { courses: [] },
   dashboardData: null,
   enrolledCourseDetails: null,
-  totalCourses: 0,
-  FAQs: [],
+  FAQsDetails: { faqs: [] },
   allCoursesFeedback: [],
   courses: [],
   error: null,
@@ -46,10 +45,10 @@ const userSlice = createSlice({
       state.error = null;
     },
     clearSubcategories: (state) => {
-      state.subcategories = {};
+      state.subdomainsDetails = {};
     },
     resetCoachesVideos: (state) => {
-      state.coachesVideos = [];
+      state.videosDetails.videos = [];
       state.error = null;
       state.isLoading = false;
     },
@@ -62,17 +61,17 @@ const userSlice = createSlice({
     builder
       .addCase(fetchCoursesCategoriesAPI.fulfilled, (state, action) => {
         const res = action.payload;
-        state.coursesCategories = res?.data || [];
+        state.domainsDetails = res?.data || [];
       })
 
-      .addCase(fetchSubcategoriesAPI.fulfilled, (state, action) => {
+      .addCase(fetchSubdomainsDetailsAPI.fulfilled, (state, action) => {
         const res = action.payload;
-        const domainId = res?.data?.[0]?.domain_id || res?.domain_id;
-        state.subcategories[domainId] = res?.data || [];
+        const domainId = res?.data?.subdomains?.[0]?.domain_id;
+        state.subdomainsDetails[domainId] = res?.data || [];
       })
 
       .addCase(fetchCoachesVideosAPI.fulfilled, (state, action) => {
-        state.coachesVideos = action.payload?.data || [];
+        state.videosDetails = action.payload;
       })
 
       .addCase(fetchCoachDetailsAPI.fulfilled, (state, action) => {
@@ -91,13 +90,11 @@ const userSlice = createSlice({
         state.coaches = action.payload?.data || [];
       })
 
-      .addCase(fetchMyCoursesThunk.fulfilled, (state, action) => {
-        const data = action.payload?.data || [];
-        state.myCourses = data;
-        state.totalCourses = data.length;
+      .addCase(fetchMyCoursesAPI.fulfilled, (state, action) => {
+        state.myCoursesDetails = action.payload;
       })
 
-      .addCase(fetchEnrolledCourseDetailsThunk.fulfilled, (state, action) => {
+      .addCase(fetchEnrolledCourseDetailsAPI.fulfilled, (state, action) => {
         state.enrolledCourseDetails = action.payload?.data || null;
       })
 
@@ -106,7 +103,7 @@ const userSlice = createSlice({
       })
 
       .addCase(fetchFAQsAPI.fulfilled, (state, action) => {
-        state.FAQs = action.payload?.data || [];
+        state.FAQsDetails = action.payload ;
       })
 
       .addCase(fetchAllCoursesFeedbackAPI.fulfilled, (state, action) => {

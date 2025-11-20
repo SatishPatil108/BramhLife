@@ -4,9 +4,9 @@ import { useDispatch, useSelector } from "react-redux";
 
 const useCoursesList = () => {
   const dispatch = useDispatch();
-  const { coursesCategories, isLoading, error, courseNames, coachNames } = useSelector((state) => state.user);
+  const { domainsDetails, isLoading, error, courseNames, coachNames } = useSelector((state) => state.user);
+  const domains = domainsDetails.domains;
 
-  // console.log(coachNames, coachNames);
   const fetchCourseNamesAndCoachNames = () => {
     dispatch(fetchCourseNamesAndCoachNamesAPI());
   }
@@ -20,7 +20,7 @@ const useCoursesList = () => {
   }, [dispatch]);
 
   // Normalize courses to always have domain_id
-  const courses = coursesCategories?.map(course => ({
+  const courses = domains?.map(course => ({
     ...course,
     domain_id: course.domain_id || course.id
   }));

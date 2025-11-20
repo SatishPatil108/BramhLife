@@ -5,7 +5,9 @@ import { BookOpen, Clock, Calendar } from "lucide-react";
 import { FaBookOpen, FaExclamationCircle } from "react-icons/fa";
 
 const EnrolledCourses = () => {
-  const { myCourses, isLoading, error } = useEnrolledCourses();
+  const { myCoursesDetails, isLoading, error } = useEnrolledCourses();
+  const myCourses = myCoursesDetails.courses;
+
   const navigate = useNavigate();
 
   if (isLoading) {
@@ -24,8 +26,8 @@ const EnrolledCourses = () => {
           <p className="mt-4 text-lg font-medium text-gray-700">
             You haven't enrolled in any courses yet.
           </p>
-         
-          <Link to={'/courses'}  className="mt-4 px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition">Explore Courses</Link>
+
+          <Link to={'/courses'} className="mt-4 px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition">Explore Courses</Link>
         </div>
       );
     }

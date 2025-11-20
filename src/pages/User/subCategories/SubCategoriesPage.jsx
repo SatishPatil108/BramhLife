@@ -7,9 +7,11 @@ const SubCategoriesPage = () => {
   const { domain_id } = useParams();
   const location = useLocation();
   const navigate = useNavigate();
+  const { subdomainsDetails, loading, error } = useSubCategoriesPage(domain_id);
 
-  const domainName = location.state?.domain_name || "Subcategories";
-  const { subcategories, loading, error } = useSubCategoriesPage(domain_id);
+  const domainName = subdomainsDetails?.subdomains?.[0]?.domain_name || "Subdomains";
+
+  const subdomains = subdomainsDetails?.subdomains || [];
 
   if (!domain_id) {
     return (
@@ -18,15 +20,15 @@ const SubCategoriesPage = () => {
       </p>
     );
   }
-  if (loading) return (<div>loading</div>)
+  if (loading) return (<div className="text-center text-xl mt-1">loading...</div>)
 
-  const beginner = subcategories ? subcategories.filter(
+  const beginner = subdomains ? subdomains.filter(
     (sub) => sub.progressive_difficulty === 1
   ) : [];
-  const intermediate = subcategories ? subcategories.filter(
+  const intermediate = subdomains ? subdomains.filter(
     (sub) => sub.progressive_difficulty === 2
   ) : [];
-  const advanced = subcategories ? subcategories.filter(
+  const advanced = subdomains ? subdomains.filter(
     (sub) => sub.progressive_difficulty === 3
   ) : [];
 
@@ -76,7 +78,7 @@ const SubCategoriesPage = () => {
       <main className="flex-grow container mx-auto px-6">
         {/* Page Title - Always show */}
         <div className="text-center mb-6">
-          <h1 className="text-4xl md:text-5xl font-extrabold text-gray-800">
+          <h1 className="text-4xl md:text-5xl font-extrabold text-gray-800 mt-1">
             {domainName}
           </h1>
         </div>

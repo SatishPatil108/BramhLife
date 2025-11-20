@@ -43,7 +43,7 @@ export const fetchCoachDetails = async (videoId) => {
 // Fetch coach profile by coach ID
 export const fetchCoachProfile = async (coachId) => {
   return await makeRequest({
-    service: `user/courses/coaches/${coachId}`,
+    service: `user/courses/coach/${coachId}`,
     method: API_METHODS.GET,
     authRequired: true,
   });
@@ -80,7 +80,7 @@ export const enrollInCourseAPIById = async (courseId) => {
 };
 
 // This function fetches the courses that the user is enrolled in
-export const fetchMyCoursesAPI = async (pageNo = 1, pageSize = 10) => {
+export const fetchMyCourses = async (pageNo = 1, pageSize = 10) => {
   return await makeRequest({
     service: `user/courses/course/my-courses/${pageNo}/${pageSize}`,
     method: API_METHODS.GET,
@@ -89,7 +89,7 @@ export const fetchMyCoursesAPI = async (pageNo = 1, pageSize = 10) => {
 };
 
 //enrolled course details
-export const fetchEnrolledCourseDetailsAPI = async (courseId) => {
+export const fetchEnrolledCourseDetails = async (courseId) => {
   return await makeRequest({
     service: `user/coaches/my-course-videos/${courseId}`,
     method: API_METHODS.GET,

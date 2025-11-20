@@ -5,11 +5,11 @@ import FeedbackForm from "../FeedbackForm";
 
 const EnrolledCourseDetails = () => {
   const { courseId } = useParams();
-  const { enrolledCourseDetails, isLoading, error } =
-    useEnrolledCourseDetails(courseId);
-
+  const { enrolledCourseDetails, isLoading, error } = useEnrolledCourseDetails(courseId);
   const [selectedVideo, setSelectedVideo] = useState(null);
   const navigate = useNavigate();
+  const BASE_URL = import.meta.env.VITE_BASE_URL_IMG;
+
   useEffect(() => {
     if (enrolledCourseDetails && enrolledCourseDetails.length > 0) {
       setSelectedVideo(enrolledCourseDetails[0]);
@@ -84,7 +84,7 @@ const EnrolledCourseDetails = () => {
             onClick={() => setSelectedVideo(video)}
           >
             <img
-              src={video.thumbnail_url}
+              src={`${BASE_URL}${video.thumbnail_url}`}
               alt={video.title}
               className="w-full md:w-72 h-48 md:h-48 object-cover"
             />
@@ -101,7 +101,6 @@ const EnrolledCourseDetails = () => {
         ))}
       </div>
 
-      {/* Feedback Form */}
       {/* Feedback Form */}
       <div className="mt-10">
         {enrolledCourseDetails.length > 0 && (

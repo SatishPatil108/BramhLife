@@ -16,7 +16,7 @@ export const fetchCoursesCategoriesAPI = createAsyncThunk(
 );
 
 // Fetch subcategories for a specific domain
-export const fetchSubcategoriesAPI = createAsyncThunk(
+export const fetchSubdomainsDetailsAPI = createAsyncThunk(
   "user/fetchSubcategories",
   async ({ domainId, pageNo = 1, pageSize = 10 }, thunkAPI) => {
     try {
@@ -35,7 +35,7 @@ export const fetchCoachesVideosAPI = createAsyncThunk(
     // console.log(subdomainId,coachId)
     try {
       const response = await userAPI.fetchCoachesVideos(pageNo, pageSize, subdomainId, coachId);
-      return response;
+      return response?.data;
     } catch (error) {
       return thunkAPI.rejectWithValue(error.response?.data || error.message);
     }
@@ -108,12 +108,12 @@ export const enrollInCourseAPI = createAsyncThunk(
 );
 
 // Fetch enrolled courses
-export const fetchMyCoursesThunk = createAsyncThunk(
+export const fetchMyCoursesAPI = createAsyncThunk(
   "user/fetchMyCourses",
   async ({ pageNo = 1, pageSize = 10 }, thunkAPI) => {
     try {
-      const response = await userAPI.fetchMyCoursesAPI(pageNo, pageSize);
-      return response;
+      const response = await userAPI.fetchMyCourses(pageNo, pageSize);
+      return response.data;
     } catch (error) {
       return thunkAPI.rejectWithValue(error.response?.data || error.message);
     }
@@ -121,11 +121,11 @@ export const fetchMyCoursesThunk = createAsyncThunk(
 );
 
 // Fetch enrolled course details
-export const fetchEnrolledCourseDetailsThunk = createAsyncThunk(
+export const fetchEnrolledCourseDetailsAPI = createAsyncThunk(
   "user/fetchEnrolledCourseDetails",
   async (courseId, thunkAPI) => {
     try {
-      const response = await userAPI.fetchEnrolledCourseDetailsAPI(courseId);
+      const response = await userAPI.fetchEnrolledCourseDetails(courseId);
       return response;
     } catch (error) {
       return thunkAPI.rejectWithValue(error.response?.data || error.message);
@@ -151,7 +151,7 @@ export const fetchFAQsAPI = createAsyncThunk(
   async ({ pageNo = 1, pageSize = 10 }, thunkAPI) => {
     try {
       const response = await userAPI.fetchFAQList(pageNo, pageSize);
-      return response;
+      return response.data;
     } catch (error) {
       return thunkAPI.rejectWithValue(error.response?.data || error.message);
     }

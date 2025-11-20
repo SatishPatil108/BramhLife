@@ -8,7 +8,10 @@ const CoachesInfoPage = ({ coachId }) => {
   const { subdomainId } = useParams();
   const navigate = useNavigate();
   const location = useLocation();
-  const { videos, loading, error } = useCoachesInfoPage(subdomainId, coachId);
+  const { videosDetails, loading, error } = useCoachesInfoPage(subdomainId, coachId);
+  const videos = videosDetails?.videos || [];
+
+
   const subdomainName = location.state?.subdomain_name || "Programs";
 
   if (loading)

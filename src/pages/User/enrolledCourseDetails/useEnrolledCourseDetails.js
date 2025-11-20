@@ -1,7 +1,7 @@
 
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchEnrolledCourseDetailsThunk } from "@/store/feature/user/userThunk";
+import { fetchEnrolledCourseDetailsAPI } from "@/store/feature/user/userThunk";
 
 const useEnrolledCourseDetails = (courseId) => {
   const dispatch = useDispatch();
@@ -13,7 +13,7 @@ const useEnrolledCourseDetails = (courseId) => {
   useEffect(() => {
     if (courseId) {
       // ✅ Dispatch the thunk
-      dispatch(fetchEnrolledCourseDetailsThunk(courseId));
+      dispatch(fetchEnrolledCourseDetailsAPI(courseId));
     }
   }, [dispatch, courseId]);
 

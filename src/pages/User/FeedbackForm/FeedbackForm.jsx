@@ -40,7 +40,7 @@ const FeedbackForm = ({ courseId, enrollmentId }) => {
   return (
     <form
       onSubmit={handleSubmit}
-      className="max-w-md mx-auto p-6 bg-gray-50 shadow-md rounded-2xl space-y-4"
+      className="max-w-md mx-auto p-6 bg-gray-50 shadow-md rounded-2xl space-y-4 mb-16"
     >
       <h2 className="text-xl font-bold text-gray-800 text-center">
         Submit Your Feedback

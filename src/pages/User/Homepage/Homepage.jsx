@@ -11,7 +11,8 @@ import MusicList from "./components/getAllMusicList/MusicList";
 const BASE_URL = import.meta.env.VITE_BASE_URL_IMG;
 
 function Homepage() {
-  const { dashboardData, loading, error, FAQs } = useHomepage();
+  const { dashboardData, loading, error, FAQsDetails } = useHomepage();
+  const FAQs=FAQsDetails.faqs;
   const [showVideo, setShowVideo] = useState(false);
   const [openFAQ, setOpenFAQ] = useState(null);
   const [isMobile, setIsMobile] = useState(false);
@@ -88,46 +89,6 @@ function Homepage() {
           </div>
         </div>
       </section>
-
-
-      {/* 🎥 VIDEO THUMBNAILS */}
-      {/* {thumbnails.length > 0 && (
-        <section className="py-16 sm:py-20 bg-gradient-to-b from-purple-50 to-pink-50 mt-10 sm:mt-16 rounded-3xl">
-          <div className="container mx-auto px-4 text-center mb-12 sm:mb-16">
-            <h2 className="text-2xl sm:text-4xl md:text-5xl font-bold mb-4 sm:mb-6 bg-clip-text text-transparent bg-gradient-to-r from-pink-500 to-purple-500">
-              Forge Lasting Transformations
-            </h2>
-            <p className="text-base sm:text-lg md:text-xl max-w-3xl mx-auto text-gray-600 font-light">
-              Access immersive micro-coaching sessions designed by experts to elevate your mind, body, and soul.
-            </p>
-          </div>
-
-          <div className="relative overflow-hidden w-full group">
-            <div
-              className={`flex gap-4 sm:gap-8 w-max ${shouldAnimateThumbnails
-                ? "animate-scroll-horizontal group-hover:[animation-play-state:paused]"
-                : ""
-                }`}
-            >
-              {thumbnails.map((thumb, index) => (
-                <div
-                  key={index}
-                  className="relative flex-shrink-0 w-64 sm:w-80 md:w-[22rem] h-48 sm:h-60 md:h-72 rounded-3xl shadow-sm border border-gray-200 overflow-hidden group/item"
-                >
-                  <img
-                    src={`${BASE_URL}${thumb}`}
-                    alt={`Video Thumbnail ${index + 1}`}
-                    className="w-full h-full object-cover group-hover/item:scale-110 transition-transform duration-500"
-                  />
-                  <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover/item:opacity-100 transition-all duration-300">
-                    <span className="text-white text-3xl">▶</span>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-      )} */}
 
 
       {/* Banner Images Section */}

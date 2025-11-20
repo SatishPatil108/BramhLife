@@ -5,16 +5,16 @@ import { fetchAllCoursesFeedbackAPI, fetchCoursesCategoriesAPI, fetchFAQsAPI, fe
 
 const useCategories = () => {
   const dispatch = useDispatch();
-    const [selectedCategory, setSelectedCategory] = useState(null);
-  const {   isLoading, error,  coursesCategories } = useSelector(
+  const [selectedCategory, setSelectedCategory] = useState(null);
+  const { isLoading, error, domainsDetails } = useSelector(
     (state) => state.user
   );
 
-  useEffect(() => {     
+  useEffect(() => {
     dispatch(fetchCoursesCategoriesAPI({ pageNo: 1, pageSize: 10 }));
   }, [dispatch]);
 
-  return {  loading: isLoading, error, coursesCategories,selectedCategory, setSelectedCategory };
+  return { loading: isLoading, error, domainsDetails, selectedCategory, setSelectedCategory };
 };
 
 export default useCategories;

@@ -5,7 +5,7 @@ import { fetchAllCoursesFeedbackAPI, fetchCoursesCategoriesAPI, fetchFAQsAPI, fe
 
 const useHomepage = () => {
   const dispatch = useDispatch();
-  const { dashboardData, isLoading, error, FAQs, allCoursesFeedback } = useSelector(
+  const { dashboardData, isLoading, error, FAQsDetails, allCoursesFeedback } = useSelector(
     (state) => state.user
   );
 
@@ -16,7 +16,7 @@ const useHomepage = () => {
     
   }, [dispatch]);
 
-  return { dashboardData, loading: isLoading, error, FAQs, allCoursesFeedback };
+  return { dashboardData, loading: isLoading, error, FAQsDetails, allCoursesFeedback };
 };
 
 export default useHomepage;

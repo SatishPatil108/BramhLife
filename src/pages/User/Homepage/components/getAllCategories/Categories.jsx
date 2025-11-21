@@ -27,7 +27,7 @@ const Categories = () => {
             )}
             {error && <p className="text-center text-red-600">{error.message}</p>}
 
-            <div className="grid  grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-7 mt-6 gap-4 text-center">
+            <div className="flex overflow-x-auto scroll-smooth scrollbar-hide snap-x snap-mandatory gap-6 px-2 mt-4">
                 {
                     domains.map((category, index) => {
                         return <a href={`#${category.domain_id}`} onClick={() => setSelectedCategory(category.domain_name)} key={index}

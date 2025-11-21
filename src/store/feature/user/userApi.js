@@ -60,7 +60,7 @@ export const fetchCourseDetailsAPI = async (courseId) => {
 
 //Fetch all coaches 
 export const fetchAllCoaches = async (pageNo, pageSize) => {
-    return await makeRequest({
+  return await makeRequest({
     service: `user/courses/all-coaches/${pageNo}/${pageSize}`,
     method: API_METHODS.GET,
     authRequired: false,
@@ -115,6 +115,15 @@ export const fetchFAQList = async (pageNo = 1, pageSize = 10) => {
   });
 }
 
+//getall musiclist with pagination
+export const fetchMusicList = async (pageNo = 1, pageSize = 10) => {
+  return await makeRequest({
+    service: `user/musics/${pageNo}/${pageSize}`,
+    method: API_METHODS.GET,
+    authRequired: false,
+  });
+}
+
 //get all courses feedback with pagination
 export const fetchAllCourseFeedback = async (pageNo = 1, pageSize = 10) => {
   return await makeRequest({
@@ -145,7 +154,6 @@ export const postCourseFeedback = async (feedbackData) => {
 };
 
 //search courses by keyword 
-
 export const searchCourses = async (pageNo = 1, pageSize = 10, searchData = {}) => {
   const courseName = encodeURIComponent(searchData.courseName || 'null');
   const coachName = encodeURIComponent(searchData.coachName || 'null');
@@ -157,13 +165,3 @@ export const searchCourses = async (pageNo = 1, pageSize = 10, searchData = {}) 
   });
 };
 
-// fetch course names and coach names for drop down
-export const getCourseNamesAndCoachNames = async () => {
-
-  return await makeRequest({
-    service: `user/course-names-coach-names`,
-    method: API_METHODS.GET,
-    authRequired: true,
-
-  });
-};

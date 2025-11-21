@@ -11,8 +11,8 @@ const EnrolledCourseDetails = () => {
   const BASE_URL = import.meta.env.VITE_BASE_URL_IMG;
 
   useEffect(() => {
-    if (enrolledCourseDetails && enrolledCourseDetails.length > 0) {
-      setSelectedVideo(enrolledCourseDetails[0]);
+    if (enrolledCourseDetails) {
+      setSelectedVideo(enrolledCourseDetails);
     }
   }, [enrolledCourseDetails]);
 
@@ -76,7 +76,7 @@ const EnrolledCourseDetails = () => {
       )}
 
       {/* Video List */}
-      <div className="space-y-6">
+      {/* <div className="space-y-6">
         {enrolledCourseDetails.map((video) => (
           <div
             key={video.id}
@@ -99,7 +99,7 @@ const EnrolledCourseDetails = () => {
             </div>
           </div>
         ))}
-      </div>
+      </div> */}
 
       {/* Feedback Form */}
       <div className="mt-10">

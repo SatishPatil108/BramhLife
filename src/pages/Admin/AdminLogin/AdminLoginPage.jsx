@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import useLoginPage from "./useLoginPage";
@@ -19,9 +19,11 @@ const AdminLoginPage = () => {
 
   const navigate = useNavigate();
 
-  if (loginSuccess) {
-    navigate("admin/dashboard");
-  }
+  useEffect(() => {
+    if (loginSuccess) {
+      navigate("admin/dashboard");
+    }
+  }, [loginSuccess, navigate])
 
   return (
     <main className="min-h-screen flex items-center justify-center bg-[url(/gradientBackground.png)] bg-cover bg-no-repeat px-6">
@@ -91,8 +93,8 @@ const AdminLoginPage = () => {
             type="submit"
             disabled={loading}
             className={`w-full py-3 rounded-lg font-semibold transition-all duration-300 cursor-pointer ${loading
-                ? "bg-indigo-300 dark:bg-indigo-600 cursor-not-allowed"
-                : "bg-indigo-600 hover:bg-indigo-400 text-white shadow-md"
+              ? "bg-indigo-300 dark:bg-indigo-600 cursor-not-allowed"
+              : "bg-indigo-600 hover:bg-indigo-400 text-white shadow-md"
               }`}
           >
             {loading ? "Logging in..." : "Login"}

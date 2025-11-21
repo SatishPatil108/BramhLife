@@ -17,6 +17,7 @@ import {
   postCourseFeedbackAPI,
   searchCoursesAPI,
   fetchAllCoachesAPI,
+  fetchMusicListAPI
 } from "./userThunk";
 
 const initialState = {
@@ -32,6 +33,7 @@ const initialState = {
   dashboardData: null,
   enrolledCourseDetails: null,
   FAQsDetails: { faqs: [] },
+  musicsDetails: { musics: [] },
   allCoursesFeedback: [],
   courses: [],
   error: null,
@@ -95,7 +97,7 @@ const userSlice = createSlice({
       })
 
       .addCase(fetchEnrolledCourseDetailsAPI.fulfilled, (state, action) => {
-        state.enrolledCourseDetails = action.payload?.data || null;
+        state.enrolledCourseDetails = action.payload[0];
       })
 
       .addCase(fetchUserDashboardDataAPI.fulfilled, (state, action) => {
@@ -103,7 +105,11 @@ const userSlice = createSlice({
       })
 
       .addCase(fetchFAQsAPI.fulfilled, (state, action) => {
-        state.FAQsDetails = action.payload ;
+        state.FAQsDetails = action.payload;
+      })
+
+      .addCase(fetchMusicListAPI.fulfilled, (state, action) => {
+        state.musicsDetails = action.payload;
       })
 
       .addCase(fetchAllCoursesFeedbackAPI.fulfilled, (state, action) => {

@@ -126,7 +126,7 @@ export const fetchEnrolledCourseDetailsAPI = createAsyncThunk(
   async (courseId, thunkAPI) => {
     try {
       const response = await userAPI.fetchEnrolledCourseDetails(courseId);
-      return response;
+      return response.data;
     } catch (error) {
       return thunkAPI.rejectWithValue(error.response?.data || error.message);
     }
@@ -228,3 +228,15 @@ export const fetchCourseNamesAndCoachNamesAPI = createAsyncThunk(
     }
   }
 );
+
+// fetch all musics
+export const fetchMusicListAPI = createAsyncThunk('user/fetchMusicList',
+  async ({ pageNo = 1, pageSize = 10 }, thunkAPI) => {
+    try {
+      const response = await userAPI.fetchMusicList( pageNo, pageSize );
+      return response?.data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.response?.data || error.message);
+    }
+  }
+)

@@ -42,7 +42,7 @@ const SubCategoriesPage = () => {
     subs.map((sub) => (
       <div
         key={sub.subdomain_id}
-        className="group relative border-1 border-gray-300  rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition duration-300 cursor-pointer bg-white"
+        className="group relative border-1 border-gray-300 rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition duration-300 cursor-pointer bg-white"
         onClick={() => handleSubcategoryClick(sub)}
       >
         {/* Image */}
@@ -74,7 +74,7 @@ const SubCategoriesPage = () => {
     ));
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white text-black flex flex-col pt-4">
+    <div className="min-h-screen bg-gradient-to-b pb-10 from-gray-50 to-white text-black flex flex-col pt-4">
       <main className="flex-grow container mx-auto px-6">
         {/* Page Title - Always show */}
         <div className="text-center mb-6">

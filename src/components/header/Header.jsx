@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { NavLink, useLocation } from "react-router-dom";
 import { useHeader } from "./useHeader";
+import SearchBarWithDatalist from "@/pages/User/Homepage/components/searchbar/SearchBarWithDatalist";
 
 function Header() {
   const { links } = useHeader();
@@ -26,33 +27,45 @@ function Header() {
 
   return (
     <header
-      className={`top-0 left-0 w-full z-50 transition-all duration-500 bg-[url(/gradientBackground.png)]`}
+      className={`top-0 left-0 w-full mb-2 z-50 transition-all duration-500 bg-[url(/gradientBackground.png)]`}
     >
       {/* Desktop Header */}
-      <div className="hidden md:flex container mx-auto items-center justify-between py-3 px-10">
-        <NavLink to="/">
+      <div className="hidden md:flex container mx-auto items-center gap-4 lg:gap-6 py-3 px-4 lg:px-10">
+
+        {/* Logo */}
+        <NavLink to="/" className="whitespace-nowrap">
           <h1
-            className={`text-3xl font-bold tracking-wide bg-gradient-to-r from-purple-600 via-pink-500 to-purple-600 
-             text-transparent bg-clip-text`}
+            className="text-xl md:text-2xl lg:text-3xl font-bold tracking-wide 
+                 bg-gradient-to-r from-purple-600 via-pink-500 to-purple-600 
+                 text-transparent bg-clip-text"
           >
             BrahmaLYF
           </h1>
         </NavLink>
 
-        <nav aria-label="Main navigation">
-          <ul className="flex flex-row items-center gap-6">
+        {/* Search Bar */}
+        <div className="flex-1 max-w-sm md:max-w-md lg:max-w-lg">
+          <SearchBarWithDatalist />
+        </div>
+
+        {/* Navigation */}
+        <nav aria-label="Main navigation" className="shrink-0">
+          <ul className="flex items-center gap-2 md:gap-2 lg:gap-5">
             {links.map((link) => (
               <li key={link.to}>
                 <NavLink
                   to={link.to}
+                  onClick={() => scrollTo(0, 0)}
                   className={({ isActive }) =>
-                    `inline-flex items-center gap-2 px-5 py-2 rounded-full font-semibold transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-purple-500 focus-visible:ring-offset-2
-                     ${isActive
+                    `inline-flex items-center gap-1 md:gap-2
+              px-2 md:px-3 lg:px-5 
+              py-1.5 md:py-2 
+              rounded-full font-semibold transition-all duration-300
+              text-[10px] md:text-xs lg:text-base
+              ${isActive
                       ? "bg-purple-600 text-white shadow-md"
                       : "text-purple-800 hover:text-white hover:bg-purple-400"}`
                   }
-                  aria-current={location.pathname === link.to ? "page" : undefined}
-                  onClick={() => scrollTo(0, 0)}
                 >
                   {link.label}
                 </NavLink>
@@ -61,6 +74,7 @@ function Header() {
           </ul>
         </nav>
       </div>
+
 
       {/* Mobile Bottom Navigation */}
       <nav

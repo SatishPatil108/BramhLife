@@ -15,9 +15,9 @@ import {
   fetchAllCoursesFeedbackAPI,
   fetchCourseFeedbackById,
   postCourseFeedbackAPI,
-  searchCoursesAPI,
   fetchAllCoachesAPI,
-  fetchMusicListAPI
+  fetchMusicListAPI,
+  searchAPI
 } from "./userThunk";
 
 const initialState = {
@@ -28,12 +28,13 @@ const initialState = {
   coachDetails: null,
   coachProfile: null,
   courseDetails: null,
-  coaches: [],
+  coachesDetails: { coaches: [] },
   myCoursesDetails: { courses: [] },
   dashboardData: null,
   enrolledCourseDetails: null,
   FAQsDetails: { faqs: [] },
   musicsDetails: { musics: [] },
+  searchDetails: {},
   allCoursesFeedback: [],
   courses: [],
   error: null,
@@ -89,7 +90,7 @@ const userSlice = createSlice({
       })
 
       .addCase(fetchAllCoachesAPI.fulfilled, (state, action) => {
-        state.coaches = action.payload?.data || [];
+        state.coachesDetails = action.payload;
       })
 
       .addCase(fetchMyCoursesAPI.fulfilled, (state, action) => {
@@ -129,8 +130,8 @@ const userSlice = createSlice({
         }
       })
 
-      .addCase(searchCoursesAPI.fulfilled, (state, action) => {
-        state.courses = action.payload?.data || [];
+      .addCase(searchAPI.fulfilled, (state, action) => {
+        state.searchDetails = action.payload;
       })
 
       // 🔥 Universal loaders

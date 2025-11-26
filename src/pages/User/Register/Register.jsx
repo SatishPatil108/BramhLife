@@ -17,93 +17,46 @@ const Register = () => {
   } = useRegister();
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-[url(/gradientBackground.png)] bg-cover bg-no-repeat px-2">
-      <div className="bg-white sm:w-[36%] w-full mx-4 p-8 sm:p-8 rounded-3xl shadow-xl">
-        <h2 className="text-xl sm:text-2xl font-bold text-center mb-8">
-          Create Your Account
-        </h2>
+    <div className="min-h-screen flex items-center justify-center  px-2">
+      <form onSubmit={handleRegister} className="bg-white text-gray-500 w-full max-w-[340px] mx-4 md:p-6 p-4 py-8 text-left text-sm rounded-lg shadow-[0px_0px_10px_0px] shadow-black/10">
+        <h2 className="text-2xl font-bold mb-6 text-center text-gray-800">Sign Up</h2>
 
-        <form onSubmit={handleRegister} className="space-y-4">
-          {/* Name */}
-          <div>
-            <label className="block mb-2 font-semibold text-black text-lg">
-              Full Name
-            </label>
-            <input
-              type="text"
-              className="w-full bg-white border border-gray-300 text-black rounded-xl px-4 py-3 text-base placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-500"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              required
-              placeholder="Enter your name"
-            />
-          </div>
+        <input id="email"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          className="w-full border mt-1 bg-indigo-500/5 mb-2 border-gray-500/10 outline-none rounded py-2.5 px-3" type="text" placeholder="Username" required
+        />
 
-          {/* Email */}
-          <div>
-            <label className="block mb-2 font-semibold text-black text-lg">
-              Email
-            </label>
-            <input
-              type="email"
-              className="w-full bg-white border border-gray-300 text-black rounded-xl px-4 py-3 text-base placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-500"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-              placeholder="you@example.com"
-            />
-          </div>
+        <input id="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          className="w-full border mt-1 bg-indigo-500/5 mb-2 border-gray-500/10 outline-none rounded py-2.5 px-3" type="email" placeholder="Email" required />
 
-          {/* Password */}
-          <div>
-            <label className="block mb-2 font-semibold text-black text-lg">
-              Password
-            </label>
-            <input
-              type="password"
-              className="w-full bg-white border border-gray-300 text-black rounded-xl px-4 py-3 text-base placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-500"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-              placeholder="Create a password"
-            />
-          </div>
+        <input id="email" value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          className="w-full border mt-1 bg-indigo-500/5 mb-7 border-gray-500/10 outline-none rounded py-2.5 px-3" type="text" placeholder="Password" required />
 
-          {/* Inline feedback messages */}
-          {error && (
-            <p className="text-red-600 font-medium text-center">{error}</p>
-          )}
-          {userRegisterSuccess && !error && (
-            <p className="text-green-500 font-medium text-center">
-              ✅ Registration successful!
-            </p>
-          )}
-
-          <button
-            type="submit"
-            disabled={loading}
-            className={`w-full py-3 rounded-xl text-lg font-semibold transition duration-300 ${
-              loading
-                ? "bg-teal-300 cursor-not-allowed"
-                : "bg-gradient-to-r from-pink-500 to-purple-500 hover:opacity-50 text-white shadow-sm cursor-pointer"
-            }`}
-          >
-            {loading ? "Registering..." : "Register"} 
-          </button>
-        </form>
-
-        <div className="text-center mt-6">
-          <p className="text-black sm:text-xl text-balance">
-            Already have an account?{" "}
-            <Link
-              to="/login"
-              className="text-blue-500 font-bold hover:underline"
-            >
-              Login here
-            </Link>
+        {/* Inline feedback messages */}
+        {error && (
+          <p className="text-red-600 font-medium text-center">{error}</p>
+        )}
+        {userRegisterSuccess && !error && (
+          <p className="text-green-500 font-medium text-center">
+            ✅ Registration successful!
           </p>
-        </div>
-      </div>
+        )}
+
+        <button className="w-full mb-3 bg-indigo-500 hover:bg-indigo-600 transition-all active:scale-95 py-2.5 rounded text-white font-medium"> {loading ? "Registering..." : "Register"} </button>
+
+        <p className="text-center mt-4">Already have an account? {' '}
+          <Link
+            to="/login"
+            className="text-blue-500 font-bold hover:underline"
+          >
+            Login here
+          </Link>
+        </p>
+      </form>
     </div>
   );
 };

@@ -59,7 +59,7 @@ const EnrolledCourses = () => {
           <div
             key={course.course_id}
             onClick={() => navigate(`/enrolled-course/${course.course_id}`)}
-            className="cursor-pointer bg-white border border-gray-200 hover:border-blue-500 rounded-xl shadow-sm p-5 transition duration-300 hover:shadow-md group"
+            className="cursor-pointer bg-white border border-gray-200 hover:border-purple-600 rounded-xl hover:shadow-sm p-5 transition duration-300 group"
           >
             <h3 className="text-xl font-semibold text-gray-800 group-hover:text-blue-600 flex items-center gap-2">
               <BookOpen className="text-blue-500 w-5 h-5" />

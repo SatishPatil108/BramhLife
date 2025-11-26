@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { LucideMail, UserCircle2, MessageCircle } from 'lucide-react'
 
 function Contact() {
   const [form, setForm] = useState({ name: "", email: "", message: "" });
@@ -11,62 +12,88 @@ function Contact() {
     e.preventDefault();
     alert("Thanks for contacting us!");
     setForm({ name: "", email: "", message: "" });
+    console.log(form);
   };
 
   return (
-    <div className="min-h-screen bg-[url(/gradientBackground.png)] bg-cover bg-no-repeat  p-8 py-10 flex items-center justify-center">
-      <div className="w-full max-w-sm sm:max-w-md md:max-w-lg lg:max-w-[420px] bg-white  p-6 sm:p-8 md:p-10 lg:p-6 rounded-2xl shadow-2xl lg:shadow-[0_0_25px_rgba(0,0,0,0.3)]">
-        <h1 className="text-2xl sm:text-3xl font-extrabold text-center mb-4 sm:mb-6 ">
-          Contact Us
+    <div className="min-h-screen bg-purple-50 p-8 py-10 flex items-center justify-center">
+      <section className="px-4 md:px-16 lg:px-24 xl:px-32 w-full">
+
+        <h1 className="text-4xl font-semibold bg-clip-text text-transparent bg-gradient-to-r from-pink-600 via-purple-600 to-pink-600 text-center mx-auto mt-4">
+          Reach out to us
         </h1>
 
-        <p className="text-gray-600 text-sm sm:text-base text-center mb-6 sm:mb-8">
-          We'd love to hear from you. Whether you're a coach or a student, drop
-          us a message below.
+        <p className="text-gray-700 text-center mt-2 max-w-md mx-auto">
+          We'd love to hear from you. Whether you're a coach or a student, drop  us a message below.
         </p>
 
-        <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-5">
-          <input
-            type="text"
-            name="name"
-            placeholder="Your Name"
-            className="w-full border border-gray-300 bg-white text-black p-2 sm:p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-400 text-sm sm:text-base"
-            value={form.name}
-            onChange={handleChange}
-            required
-            tabIndex={1}
-          />
+        <form onSubmit={handleSubmit} className="grid sm:grid-cols-2 gap-3 sm:gap-5 max-w-2xl mx-auto text-gray-700 mt-16 w-full mb-10">
 
-          <input
-            type="email"
-            name="email"
-            placeholder="Your Email"
-            className="w-full border border-gray-300 bg-white text-black p-2 sm:p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-400 text-sm sm:text-base"
-            value={form.email}
-            onChange={handleChange}
-            required
-            tabIndex={2}
-          />
+          {/* Name */}
+          <div>
+            <p className="mb-2 font-medium">Your name</p>
+            <div className="flex items-center pl-3 rounded-lg overflow-hidden border border-gray-300 focus-within:border-pink-500 bg-white">
+              <UserCircle2 className="text-gray-400" />
+              <input
+                placeholder="Enter your name"
+                className="w-full p-3 bg-transparent outline-none"
+                type="text"
+                name="name"
+                value={form.name}
+                onChange={handleChange}
+                required
+                tabIndex={1}
+              />
+            </div>
+          </div>
 
-          <textarea
-            name="message"
-            placeholder="Your Message"
-            className="w-full border border-gray-300 bg-white text-black p-2 sm:p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-400 text-sm sm:text-base h-24 sm:h-28 resize-none"
-            value={form.message}
-            onChange={handleChange}
-            required
-            tabIndex={3}
-          ></textarea>
+          {/* Email */}
+          <div>
+            <p className="mb-2 font-medium">Email id</p>
+            <div className="flex items-center pl-3 rounded-lg overflow-hidden border border-gray-300 focus-within:border-pink-500 bg-white gap-2">
+              <LucideMail className="text-gray-400" />
+              <input
+                placeholder="Enter your email"
+                className="w-full p-3 bg-transparent outline-none"
+                type="email"
+                name="email"
+                value={form.email}
+                onChange={handleChange}
+                required
+                tabIndex={2}
+              />
+            </div>
+          </div>
 
-          <button
-            tabIndex={4}
-            type="submit"
-            className="w-full bg-gradient-to-r from-pink-500 to-purple-500 hover:opacity-50 transition-all duration-300 text-white font-bold py-2 sm:py-3 rounded-lg shadow-lg text-sm sm:text-base hover:shadow-sm cursor-pointer"
-          >
-            Send Message
-          </button>
+          {/* Message */}
+          <div className="sm:col-span-2 relative">
+            <p className="mb-2 font-medium">Message</p>
+            <MessageCircle className="text-gray-400 absolute m-3" />
+            <textarea
+              name="message"
+              rows="8"
+              placeholder="Enter your message"
+              className="focus:border-pink-500 resize-none w-full px-12 p-3 bg-white outline-none rounded-lg overflow-hidden border border-gray-300"
+              value={form.message}
+              onChange={handleChange}
+              required
+              tabIndex={3}
+            ></textarea>
+          </div>
+
+          {/* Submit Button */}
+          <div className="w-full flex justify-center items-center mb-8">
+            <button
+              type="submit"
+              className="text-lg gap-2 w-full mt-4 cursor-pointer font-bold bg-purple-600 hover:opacity-80 text-white px-10 py-3 rounded-full"
+              tabIndex={4}
+            >
+              Submit
+            </button>
+          </div>
+
         </form>
-      </div>
+      </section>
     </div>
   );
 }

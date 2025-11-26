@@ -52,9 +52,9 @@ const CourseList = () => {
               key={course.domain_id}
               className="
                 group relative 
-                shadow-sm border border-gray-200 
+                border border-gray-200 
                 rounded-2xl overflow-hidden 
-                hover:shadow-xl transition-all duration-300 
+                hover:shadow-sm transition-all duration-300 
                 cursor-pointer bg-white
                 w-[90%] sm:w-[80%] md:w-full
                 max-w-sm sm:max-w-none

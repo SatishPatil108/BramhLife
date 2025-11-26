@@ -19,7 +19,7 @@ const SubCategories = ({ category }) => {
   };
 
   return (
-    <div className="mt-8">
+    <div className="mt-8 bg-purple-50">
       {/* Loading */}
       {loading && (
         <p className="text-center text-gray-500 animate-pulse">
@@ -53,7 +53,7 @@ const SubCategories = ({ category }) => {
                 whileHover={{ scale: 1.03 }}
                 onClick={() => handleSubcategoryClick(subcategory)}
                 className="w-[250px] sm:w-[300px] md:w-[320px] 
-                flex-shrink-0 cursor-pointer bg-white snap-start group relative shadow-sm border border-gray-200 rounded-2xl overflow-hidden hover:shadow-xl transition-all duration-300"
+                flex-shrink-0 cursor-pointer bg-white snap-start group relative shadow-sm border border-gray-200 rounded-2xl overflow-hidden hover:shadow-sm transition-all duration-300"
               >
                 {/* Image */}
                 <div className="overflow-hidden flex justify-center items-center h-[160px] bg-gray-50">

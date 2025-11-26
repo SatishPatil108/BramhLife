@@ -8,7 +8,7 @@ export function useHeader() {
 
   const links = [
     { to: "/home", label: "Home" , icon:Home },
-    { to: "/courses", label: "Courses", icon:BookOpen },
+    { to: "/categories", label: "Categories", icon:BookOpen },
     { to: "/about", label: "About", icon: Command },
     { to: "/contact", label: "Contact", icon: Mail },
   ];

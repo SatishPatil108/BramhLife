@@ -7,7 +7,6 @@ const BASE_URL = import.meta.env.VITE_BASE_URL_IMG;
 
 const CoachProfile = () => {
   const { coachId } = useParams();
-  // console.log(coachId)
   const { coachProfile, loading, error } = useCoachProfile(coachId);
 
   if (loading) return <p>Loading coach details...</p>;

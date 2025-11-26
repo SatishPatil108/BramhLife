@@ -61,7 +61,7 @@ export const fetchCourseDetailsAPI = async (courseId) => {
 //Fetch all coaches 
 export const fetchAllCoaches = async (pageNo, pageSize) => {
   return await makeRequest({
-    service: `user/courses/all-coaches/${pageNo}/${pageSize}`,
+    service: `user/courses/coaches/${pageNo}/${pageSize}`,
     method: API_METHODS.GET,
     authRequired: false,
   });
@@ -136,7 +136,7 @@ export const fetchAllCourseFeedback = async (pageNo = 1, pageSize = 10) => {
 //get course feedback by course ID with pagination
 export const fetchCourseFeedback = async (courseId, pageNo = 1, pageSize = 10) => {
   return await makeRequest({
-    service: `user/courses/course/course-feedback/${pageNo}/${pageSize}/${courseId}`,
+    service: `user/courses/course/course-feedbacks/${pageNo}/${pageSize}/${courseId}`,
     method: API_METHODS.GET,
     authRequired: true,
   });
@@ -154,12 +154,9 @@ export const postCourseFeedback = async (feedbackData) => {
 };
 
 //search courses by keyword 
-export const searchCourses = async (pageNo = 1, pageSize = 10, searchData = {}) => {
-  const courseName = encodeURIComponent(searchData.courseName || 'null');
-  const coachName = encodeURIComponent(searchData.coachName || 'null');
-
+export const search  = async (searchStr) => {
   return await makeRequest({
-    service: `user/courses/course/search/${courseName}/${coachName}/${pageNo}/${pageSize}`,
+    service: `user/search/${searchStr}`,
     method: API_METHODS.GET,
     authRequired: true,
   });

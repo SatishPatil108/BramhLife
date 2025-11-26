@@ -87,7 +87,7 @@ export const fetchAllCoachesAPI = createAsyncThunk(
   async ({ pageNo = 1, pageSize = 10 }, thunkAPI) => {
     try {
       const response = await userAPI.fetchAllCoaches(pageNo, pageSize);
-      return response;
+      return response.data;
     } catch (error) {
       return thunkAPI.rejectWithValue(error.response?.data || error.message);
     }
@@ -197,39 +197,7 @@ export const postCourseFeedbackAPI = createAsyncThunk(
   }
 );
 
-//search course
-// thunk
-export const searchCoursesAPI = createAsyncThunk(
-  "user/searchCourses",
-  async ({ pageNo = 1, pageSize = 10, searchData }, thunkAPI) => {
-    try {
-      // FIX: send searchQuery inside an object
-      // console.log(searchQuery);
-      const response = await userAPI.searchCourses(pageNo, pageSize, searchData);
-      return response;
-    } catch (error) {
-      return thunkAPI.rejectWithValue(error.response?.data || error.message);
-    }
-  }
-);
-
-//fetch Course Names And Coach Names
-// thunk
-export const fetchCourseNamesAndCoachNamesAPI = createAsyncThunk(
-  "user/fetchCourseNamesAndCoachNames",
-  async (_, thunkAPI) => {
-    try {
-
-      const response = await userAPI.getCourseNamesAndCoachNames();
-
-      return response?.data;
-    } catch (error) {
-      return thunkAPI.rejectWithValue(error.response?.data || error.message);
-    }
-  }
-);
-
-// fetch all musics
+ // fetch all musics
 export const fetchMusicListAPI = createAsyncThunk('user/fetchMusicList',
   async ({ pageNo = 1, pageSize = 10 }, thunkAPI) => {
     try {
@@ -239,4 +207,17 @@ export const fetchMusicListAPI = createAsyncThunk('user/fetchMusicList',
       return thunkAPI.rejectWithValue(error.response?.data || error.message);
     }
   }
+);
+
+// search
+export const searchAPI = createAsyncThunk('user/search',
+  async (searchStr , thunkAPI) => {
+    try {
+      const response = await userAPI.search(searchStr);
+      return response?.data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.response?.data || error.message);
+    }
+  }
 )
+

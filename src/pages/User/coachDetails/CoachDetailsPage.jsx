@@ -180,7 +180,7 @@ const CoachDetailsPage = () => {
             )}
           </div>
         </section>
-      )}
+      )}  
 
       {/* Coach Info */}
       <section
@@ -226,7 +226,7 @@ const CoachDetailsPage = () => {
             </p>
 
             <Link
-              to={`/coach-profile/${coach.coach_id}`}
+              to={`/coach/${coach.coach_id}`}
               className="inline-block mt-4 text-blue-700 font-semibold hover:text-blue-900 hover:underline transition"
             >
               Learn more about {coach.coach_name}

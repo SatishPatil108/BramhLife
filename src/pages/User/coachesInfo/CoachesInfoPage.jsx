@@ -30,7 +30,7 @@ const CoachesInfoPage = ({ coachId }) => {
 
         {error === "No records found" ? (
           <>
-            <p className="mb-3 text-xl text-gray-600">
+            <p className="mb-3 text-xl text-gray-600 text-center">
               No courses available currently.
             </p>
             <button

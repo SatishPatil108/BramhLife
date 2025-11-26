@@ -1,18 +1,19 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import useHomepage from "./useHomepage";
-import { Users, BookOpen, Activity, ChevronDown, ArrowRight } from "lucide-react";
+import { Users, BookOpen, Activity, ChevronDown, ArrowRight, Search } from "lucide-react";
 import AutoScrollCarousel from "./AutoScrollCarousel";
 import "./animation.css";
 import Categories from "./components/getAllCategories/Categories";
 import BannerImage from "./components/bannerImages.jsx/BannerImage";
 import MusicList from "./components/getAllMusicList/MusicList";
+import FAQPage from "./components/FAQsSections/FAQPage";
+import SearchBarWithDatalist from "./components/searchbar/SearchBarWithDatalist";
 
 const BASE_URL = import.meta.env.VITE_BASE_URL_IMG;
 
 function Homepage() {
-  const { dashboardData, loading, error, FAQsDetails } = useHomepage();
-  const FAQs=FAQsDetails.faqs;
+  const { dashboardData, loading, error, searchDetails, onSubmitSearch } = useHomepage();
   const [showVideo, setShowVideo] = useState(false);
   const [openFAQ, setOpenFAQ] = useState(null);
   const [isMobile, setIsMobile] = useState(false);
@@ -58,33 +59,17 @@ function Homepage() {
             Step into a world of transformation. Discover programs designed to awaken your mind, elevate your spirit, and master every dimension of your life.
           </p>
 
-          <div className="flex flex-col sm:flex-row justify-center items-center gap-4 sm:gap-6">
-            <Link
-              to="/courses"
-              className="px-8 sm:px-10 py-3 sm:py-4 bg-gradient-to-r from-pink-500 to-purple-500 text-white rounded-full font-semibold shadow-lg hover:shadow-2xl transition-transform hover:scale-105"
-            >
-              Explore Our Programs
-            </Link>
-            <button
-              onClick={() => setShowVideo(true)}
-              className="px-8 sm:px-10 py-3 sm:py-4 cursor-pointer text-white bg-gradient-to-r from-teal-400 to-blue-500 rounded-full font-semibold shadow-lg hover:shadow-2xl transition-transform hover:scale-105"
-            >
-              ▶ Watch Our Story
-            </button>
+          {/* Mobile Search Bar inside Hero */}
+          <div className="md:hidden w-full max-w-sm mx-auto mt-4 z-50">
+            <SearchBarWithDatalist />
           </div>
 
-          {/* Responsive Search Bar */}
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6 md:gap-8 p-4 sm:p-6 md:p-8 w-full">
-            <input
-              type="text"
-              placeholder="Search..."
-              className="bg-gray-200 text-black px-4 sm:px-5 md:px-6 py-2 sm:py-2.5 w-[90%] sm:w-[70%] md:w-[50%] rounded-lg border-none focus:outline-none focus:ring-2 focus:ring-purple-400 text-base sm:text-lg transition-all duration-300"
-            />
+          <div className="flex flex-col sm:flex-row justify-center items-center  sm:gap-6">
             <button
-              type="button"
-              className="font-bold bg-gradient-to-r from-pink-500 to-purple-500 px-5 py-2 sm:px-6 sm:py-2.5 rounded-lg text-white text-base sm:text-lg hover:opacity-80 active:scale-95 transition-all duration-300 w-[40%] sm:w-28 md:w-32 cursor-pointer"
+              onClick={() => setShowVideo(true)}
+              className="px-8 mt-8 lg:mt-0 sm:px-10 py-3 sm:py-4 cursor-pointer text-white bg-gradient-to-r from-teal-400 to-blue-500 rounded-full font-semibold shadow-lg hover:shadow-2xl transition-transform hover:scale-105"
             >
-              Search
+              ▶ Watch Our Story
             </button>
           </div>
         </div>
@@ -96,19 +81,19 @@ function Homepage() {
 
       {/* 👨‍🏫 COACHES SECTION */}
       {allcoaches.length > 0 && (
-        <section className="relative py-2 sm:py-8 px-2 sm:px-6 bg-gradient-to-b from-pink-50 to-purple-50 mx-2">
+        <section className="relative py-2 sm:py-8 px-2 sm:px-6 bg-purple-50 mx-2">
           {/* "View All" Button — fixed to top-right */}
           <button
-            onClick={() => navigate('/coach-profile')}
+            onClick={() => navigate('/coaches')}
             className="absolute  right-4 sm:top-8 sm:right-10 text-sm sm:text-base cursor-pointer text-purple-600 hover:text-purple-500 font-medium transition-all flex items-center gap-1"
           >
             <span>View All</span>
-            <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5"/>
+            <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5" />
           </button>
 
           <div className="container mx-auto text-left mb-12 sm:mb-16 px-4">
             <h2 className="text-xl sm:text-4xl md:text-5xl mb-4 sm:mb-6 bg-clip-text font-extrabold text-transparent bg-gradient-to-r from-purple-500 to-pink-500">
-              Masters & Guides 
+              Masters & Guides
             </h2>
             <p className="text-base sm:text-lg md:text-xl max-w-3xl  text-gray-600 font-light">
               Learn from innovators and thought leaders dedicated to your success.
@@ -120,13 +105,14 @@ function Homepage() {
               {allcoaches.map((coach, index) => (
                 <div
                   key={index}
-                  className="flex flex-col items-center flex-shrink-0 snap-center w-24 sm:w-36 md:w-44 hover:scale-95 transition-transform duration-300 cursor-pointer"
+                  className="flex flex-col items-center flex-shrink-0 snap-center w-24 sm:w-36 md:w-44 hover:scale-95 transition-transform duration-300 "
                 >
                   <div className="w-24 h-24 sm:w-36 sm:h-36 md:w-44 md:h-44 rounded-full shadow-lg border border-gray-200 overflow-hidden">
                     <img
                       src={`${BASE_URL}${coach.coach_profile_image}`}
                       alt={`Coach ${index + 1}`}
-                      className="w-full h-full object-contain rounded-full"
+                      className="w-full h-full object-contain rounded-full cursor-pointer"
+                      onClick={() => navigate(`/coach/${coach.coach_id}`)}
                     />
                   </div>
                   <span className="mt-3 text-gray-700 text-xs sm:text-sm md:text-base font-medium text-center">
@@ -146,46 +132,8 @@ function Homepage() {
       {/* Meditation Audio List */}
       <MusicList />
 
-      {/* ❓ FAQ SECTION */}
-      {FAQs && FAQs.length > 0 && (
-        <section className="py-16 sm:py-20 px-4 sm:px-6 bg-gradient-to-b from-pink-50 to-purple-50">
-          <div className="container mx-auto text-center mb-10 sm:mb-12">
-            <h2 className="text-2xl sm:text-4xl md:text-5xl font-bold mb-4 sm:mb-6 bg-clip-text text-transparent bg-gradient-to-r from-pink-500 to-purple-500">
-              Frequently Asked Questions
-            </h2>
-            <p className="text-base sm:text-lg md:text-xl max-w-3xl mx-auto text-gray-600 font-light">
-              Find answers to common questions about our courses and coaches.
-            </p>
-          </div>
-
-          <div className="max-w-4xl mx-auto space-y-4">
-            {FAQs.map((faq, index) => (
-              <div
-                key={faq.id}
-                className="bg-white/80 backdrop-blur-lg rounded-2xl shadow-md border border-gray-200"
-              >
-                <button
-                  onClick={() => setOpenFAQ(openFAQ === index ? null : index)}
-                  className="w-full flex justify-between items-center p-4 sm:p-6 text-left"
-                >
-                  <span className="text-base sm:text-lg font-semibold text-gray-800">
-                    {faq.question}
-                  </span>
-                  <ChevronDown
-                    className={`w-5 h-5 sm:w-6 sm:h-6 text-gray-500 transform transition-transform ${openFAQ === index ? "rotate-180" : ""
-                      }`}
-                  />
-                </button>
-                {openFAQ === index && (
-                  <div className="px-4 sm:px-6 pb-4 sm:pb-6 text-gray-600 text-sm sm:text-base">
-                    {faq.answer}
-                  </div>
-                )}
-              </div>
-            ))}
-          </div>
-        </section>
-      )}
+      {/* FAQ SECTION */}
+      <FAQPage />
 
       {/* 🚀 CTA SECTION */}
       <section className="py-16 sm:py-20 px-4 sm:px-6 bg-gradient-to-r from-pink-500 to-purple-500 text-white text-center mb-15 lg:mb-0">

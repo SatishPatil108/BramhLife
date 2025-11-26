@@ -2,17 +2,19 @@ import React, { useState } from "react";
 import useGetAllCoaches from "./useGetAllCoaches";
 import { ArrowRight } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-
+import { ChevronRightIcon, ChevronLeftIcon } from 'lucide-react'
+import Pagination from "@/components/Pagination/Pagination";
 
 const GetAllCoaches = () => {
   const [pageNo, setPageNo] = useState(1);
-  const pageSize = 5;
-  const BASE_URL = import.meta.env.VITE_BASE_URL_IMG;
-  const { coaches, isLoading, error } = useGetAllCoaches(pageNo, pageSize);
-  const navigate = useNavigate();
+  const pageSize = 1;
 
-  const handleNext = () => setPageNo((prev) => prev + 1);
-  const handlePrev = () => setPageNo((prev) => Math.max(prev - 1, 1));
+  const BASE_URL = import.meta.env.VITE_BASE_URL_IMG;
+  const { coachesDetails, isLoading, error } = useGetAllCoaches(pageNo, pageSize);
+  const coaches = coachesDetails.coaches;
+
+  const navigate = useNavigate();
+   
 
   if (isLoading)
     return <p className="text-center py-10 text-lg">Loading coaches...</p>;
@@ -76,7 +78,7 @@ const GetAllCoaches = () => {
                   </div>
 
                   <div className={`flex ${isEven ? "justify-center sm:justify-start" : "justify-center sm:justify-end"}`}>
-                    <button onClick={() => navigate(`/coach-profile/${coach.coach_id}`)} className="mt-2 text-sm sm:text-base text-purple-600 font-semibold cursor-pointer hover:text-purple-400 flex items-center gap-1 transition-all">
+                    <button onClick={() => navigate(`/coach/${coach.coach_id}`)} className="mt-2 text-sm sm:text-base text-purple-600 font-semibold cursor-pointer hover:text-purple-400 flex items-center gap-1 transition-all">
                       View Profile
                       <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5" />
                     </button>
@@ -90,33 +92,12 @@ const GetAllCoaches = () => {
 
 
       {/* Pagination */}
-      <div className="flex justify-center items-center mt-12 gap-4 flex-wrap">
-        <button
-          onClick={handlePrev}
-          disabled={pageNo === 1}
-          className={`px-5 py-2 rounded-full border text-sm sm:text-base font-medium ${pageNo === 1
-            ? "text-gray-400 border-gray-200 cursor-not-allowed"
-            : "text-purple-600 border-purple-400 hover:bg-purple-100"
-            }`}
-        >
-          Previous
-        </button>
+      <Pagination
+        currentPage={coachesDetails.current_page}
+        totalPages={coachesDetails.total_pages}
+        onPageChange={(page) => setPageNo(page)}
+      />
 
-        <span className="font-medium text-gray-700 text-sm sm:text-base">
-          Page {pageNo}
-        </span>
-
-        <button
-          onClick={handleNext}
-          disabled={coaches.length < pageSize}
-          className={`px-5 py-2 rounded-full border text-sm sm:text-base font-medium ${coaches.length < pageSize
-            ? "text-gray-400 border-gray-200 cursor-not-allowed"
-            : "text-purple-600 border-purple-400 hover:bg-purple-100"
-            }`}
-        >
-          Next
-        </button>
-      </div>
     </div>
   );
 };

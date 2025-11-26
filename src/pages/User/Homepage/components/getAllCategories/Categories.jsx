@@ -14,7 +14,7 @@ const Categories = () => {
     }, [domains, selectedCategory, setSelectedCategory]);
 
     return (
-        <div className="py-6 sm:py-2 px-2 sm:px-6 bg-gradient-to-b from-pink-50 to-purple-50">
+        <div className="py-6 sm:py-2 px-2 sm:px-6 bg-purple-50">
             <p className="m-2 pt-4 text-2xl md:text-3xl font-extrabold">
                 Categories
             </p>

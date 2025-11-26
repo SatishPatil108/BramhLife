@@ -2,43 +2,59 @@ import React, { useEffect, useState } from 'react';
 import { assets } from '@/assets/assets';
 
 const BannerImage = () => {
-  const images = [assets.bannerimage1, assets.bannerimage3,assets.yogabannerimage1,
-  assets.anxityimage, assets.meditation, assets.emotionimage, assets.bethechangeimg, assets.hopeimg, assets.mindimage];
-
-  const [currentIndex, setCurrentIndex] = useState(0);
-
-  // Auto-slide every 4 seconds
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentIndex((prevIndex) => (prevIndex + 1) % images.length);
-    }, 2000);
-    return () => clearInterval(interval);
-  }, [images.length]);
+  const [stopScroll, setStopScroll] = React.useState(false);
+  const cardData = [
+    {
+      title: "Calm the Mind, Elevate the Soul",
+      image : assets.mindimage
+    },
+    {
+      title: "Charge Your Spirit, Clear Your Path",
+      image: assets.bannerimage1
+    },
+    {
+      title: "Calm with Purpose, Move with Power",
+      image: assets.meditation
+    },
+    {
+      title: "Find Your Focus, Ignite Your Calm",
+      image: assets.bethechangeimg
+    },
+  ];
 
   return (
-    <div className="relative w-[80%] sm:w-[500px] md:w-[700px] lg:w-[800px] h-[200px] sm:h-[350px] md:h-[450px] mb-6 mt-8 mx-auto overflow-hidden rounded-2xl shadow-lg bg-white transition-all duration-500 hover:shadow-2xl">
-      {/* Image */}
-      <img
-        src={images[currentIndex]}
-        alt="banner"
-        className="w-full h-full object-cover transition-opacity duration-700 ease-in-out"
-      />
+    <>
+      <style>{`
+                .marquee-inner {
+                    animation: marqueeScroll linear infinite;
+                }
 
-      {/* Dots Navigation */}
-      <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex gap-2">
-        {images.map((_, index) => (
-          <div
-            key={index}
-            className={`w-3 h-3 rounded-full cursor-pointer transition-all duration-300 ${
-              index === currentIndex
-                ? 'bg-white scale-125 shadow-md'
-                : 'bg-gray-400 hover:bg-gray-300'
-            }`}
-            onClick={() => setCurrentIndex(index)}
-          />
-        ))}
+                @keyframes marqueeScroll {
+                    0% {
+                        transform: translateX(0%);
+                    }
+
+                    100% {
+                        transform: translateX(-50%);
+                    }
+                }
+            `}</style>
+
+      <div className="py-12 w-full relative max-w-6xl mx-auto" onMouseEnter={() => setStopScroll(true)} onMouseLeave={() => setStopScroll(false)}>
+        <div className="marquee-inner flex w-fit" style={{ animationPlayState: stopScroll ? "paused" : "running", animationDuration: cardData.length * 2500 + "ms" }}>
+          <div className="flex">
+            {[...cardData, ...cardData].map((card, index) => (
+              <div key={index} className="w-56 mx-4 h-[20rem] relative group hover:scale-90 transition-all duration-300">
+                <img src={card.image} alt="card" className="w-full h-full object-cover" />
+                <div className="flex items-center justify-center px-4 opacity-0 group-hover:opacity-100 transition-all duration-300 absolute bottom-0 backdrop-blur-md left-0 w-full h-full bg-black/20">
+                  <p className="text-white text-lg font-semibold text-center">{card.title}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 

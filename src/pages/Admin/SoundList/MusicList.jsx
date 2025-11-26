@@ -22,7 +22,8 @@ const MusicList = () => {
         songName: '',
         songInfo: '',
         songThumbnail: null,
-        songFile: null
+        songFile: null,
+        duration: ''
     });
 
     const [isDrawerOpen, setIsDrawerOpen] = useState(false);
@@ -75,7 +76,8 @@ const MusicList = () => {
             songName: '',
             songInfo: '',
             songThumbnail: null,
-            songFile: null
+            songFile: null,
+            duration: ''
         });
     };
 
@@ -86,7 +88,8 @@ const MusicList = () => {
             songName: music.music_title,
             songInfo: music.music_description,
             songThumbnail: music.music_thumbnail,
-            songFile: null
+            songFile: music.music_file,
+            duration: music.music_duration ?? ''
         });
         setIsDrawerOpen(true);
         setErrors({});
@@ -139,6 +142,7 @@ const MusicList = () => {
             const formData = new FormData();
             formData.append("music_title", musicDetails.songName);
             formData.append("music_description", musicDetails.songInfo);
+            formData.append("music_duration", musicDetails.duration);
 
             if (musicDetails.songFile && typeof musicDetails.songFile === "object") {
                 formData.append("music_file", musicDetails.songFile);
@@ -328,6 +332,9 @@ const MusicList = () => {
                                 <label className="block font-medium">Audio File</label>
                                 <AudioUploaderWithPreview
                                     audioFile={musicDetails.songFile}
+                                    setDuration={(duration) => {
+                                        setMusicDetails((prev) => ({ ...prev, duration: duration }))
+                                    }}
                                     setAudioFile={(file) =>
                                         setMusicDetails((prev) => ({ ...prev, songFile: file }))
                                     }

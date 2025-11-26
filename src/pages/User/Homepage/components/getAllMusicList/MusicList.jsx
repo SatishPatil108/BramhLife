@@ -1,81 +1,63 @@
 import React, { useRef, useState } from "react";
-import { Play, Pause, SquarePen, Trash2 } from "lucide-react";
+import { Play, Pause, SquarePen, Trash2, LucideArrowUpRightFromSquare } from "lucide-react";
 import { motion } from "framer-motion";
 import useHomepage from "../../useHomepage";
+import { useNavigate } from "react-router-dom";
 const BASE_URL = import.meta.env.VITE_BASE_URL_IMG;
 
 const MusicList = () => {
     const { loading, error, musicsDetails } = useHomepage();
     const musics = musicsDetails.musics;
+    console.log(musicsDetails);
 
-
-    const getAudioDuration = (url) => {
-        return new Promise((resolve, reject) => {
-            const audio = new Audio();
-
-            audio.src = url;
-
-            audio.addEventListener("loadedmetadata", () => {
-                resolve(audio.duration); // duration in seconds
-            });
-
-            audio.addEventListener("error", (e) => {
-                reject("Unable to load audio");
-            });
-        });
-    };
-
-    // Usage:
-    getAudioDuration("https://your-url/music.mp3")
-        .then(duration => {
-            console.log("Duration (seconds):", duration);
-            console.log("Minutes:", (duration / 60).toFixed(2));
-        })
-        .catch(err => console.error(err));
-
+    
+    const navigate = useNavigate();
 
     return (
-        <div className="bg-gradient-to-b from-pink-50 to-purple-50 overflow-x-auto scrollbar-thin scrollbar-thumb-purple-300 scrollbar-track-transparent">
-            <h2 className="text-2xl font-bold mb-5 text-gray-800 mt-4 px-4">
+        <div className="bg-purple-50 pb-8 overflow-x-auto scrollbar-thin scrollbar-thumb-purple-300 scrollbar-track-transparent">
+            <h2 className="text-2xl font-bold mb-5 text-gray-800 mt-4 px-8">
                 Sounds and Musics
             </h2>
-
             {/* Loading / Error */}
             {loading ? (
                 <p className="text-center text-gray-500">Loading music...</p>
             ) : error ? (
-                <p className="text-center text-red-500">{error}</p>
+                <p className="text-center text-red-500">{error.message}</p>
             ) : musics.length === 0 ? (
                 <p className="text-center text-gray-500">No music found!</p>
             ) : (
                 <div
-                    className="flex gap-5 py-2 overflow-x-auto scroll-smooth
-                   snap-x snap-mandatory mb-8 px-6 scrollbar-hide"
+                    className="flex overflow-x-auto space-x-4 mt-8 pb-12 px-8 
+             snap-x snap-mandatory scrollbar-hide"
                 >
                     {musics.map((music) => (
-                        <div
+                        <motion.div
                             key={music.id}
-                            className="min-w-[250px] max-w-[260px] bg-white dark:bg-gray-800
-                           rounded-xl shadow overflow-hidden relative flex-shrink-0
-                           snap-center"
+                            className="relative group rounded-lg overflow-hidden 
+                            snap-center flex-shrink-0 w-60 h-60"
+                            onClick={() => navigate(`/music/${music.id}`)}
                         >
-                            {/* Thumbnail */}
-                            <div className="relative w-full h-40 sm:h-44 bg-black">
-                                <img
-                                    src={`${BASE_URL}${music.music_thumbnail}`}
-                                    className="w-full h-full object-cover"
-                                    alt={music.music_title}
-                                />
-                                <p>{}</p>
-                            </div>
+                            <img
+                                src={`${BASE_URL}${music.music_thumbnail}`}
+                                className="w-full h-full object-cover"
+                            />
 
-                            {/* Title */}
-                            <div className="p-4 pb-6">
-                                <h3 className="text-lg font-bold text-gray-900 dark:text-white">
-                                    {music.music_title}
-                                </h3>
+                            <div className="absolute inset-0 flex flex-col justify-end p-4 
+                          text-white bg-black/50 opacity-100 group-hover:opacity-60 
+                            transition-all duration-300">
+
+                                <p className="absolute top-2 left-2 text-white text-sm font-bold px-2 py-1">
+                                    {music.music_duration}
+                                </p>
+
+                                <h1 className="text-xl font-medium">{music.music_title}</h1>
+
+                                <a href="#" className="flex items-center gap-1 text-sm text-white/70">
+                                    Show More
+                                    <LucideArrowUpRightFromSquare className="mx-2 w-4 h-4" />
+                                </a>
                             </div>
-                        </div>
+                        </motion.div>
                     ))}
                 </div>
             )}

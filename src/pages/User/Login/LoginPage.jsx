@@ -1,10 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
 import useLogin from "./useLogin";
 import { Link } from "react-router-dom";
-import { LucideMail, LucideLock } from 'lucide-react';
+import { LucideMail, LucideLock, Eye, EyeOff } from "lucide-react";
+import { motion } from "framer-motion";
 import { assets } from "@/assets/assets";
-const BASE_URL = import.meta.env.VITE_BASE_URL_IMG;
-
 
 const LoginPage = () => {
   const {
@@ -18,73 +17,156 @@ const LoginPage = () => {
     userLoginSuccess,
   } = useLogin();
 
+  const [showPassword, setShowPassword] = useState(false);
+  const [validationError, setValidationError] = useState({
+    email: "",
+    password: "",
+  });
+
+  const validateInputs = () => {
+    let valid = true;
+    const newErrors = { email: "", password: "" };
+
+    if (!email.includes("@")) {
+      newErrors.email = "Enter a valid email address";
+      valid = false;
+    }
+
+    if (password.length < 6) {
+      newErrors.password = "Password must be at least 6 characters";
+      valid = false;
+    }
+
+    setValidationError(newErrors);
+    return valid;
+  };
 
   return (
-    <div className="flex h-[700px] w-full  p-10  mb-8">
-      <div className="w-full px-30 hidden md:inline-block">
-        <img className="h-full" src={assets.loginbanner} />
+    <div className="flex flex-col md:flex-row w-full min-h-screen bg-gray-50 px-6">
+
+      {/* --- Mobile logo / header --- */}
+      <div className="md:hidden text-center mt-8 mb-4">
+        <img src={assets.mindimage} alt="Logo" className="w-20 mx-auto" />
       </div>
 
-      <div className="w-full flex flex-col items-center justify-center">
-        <form onSubmit={handleLogin} className="md:w-96  w-85 flex flex-col items-center justify-center p-4 lg:p-0 border border-gray-300 lg:border-0  sm:mx-4 md:p-6 sm:p-4 py-8 text-left text-sm rounded-lg 
-        shadow-[0px_0px_10px_0px] shadow-black/10 lg:shadow-none">
-          <h2 className="text-4xl text-gray-900 font-medium">Sign in</h2>
-          <p className="sm:text-sm lg:text-base  text-gray-500/90 mt-3 ">Welcome back! Please sign in to continue</p>
+      {/* --- Left Side Image --- */}
+      <motion.div
+        initial={{ opacity: 0, x: -40 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ duration: 0.7 }}
+        className="hidden md:flex w-1/2 justify-center items-center"
+      >
+        <img
+          src={assets.loginbanner}
+          alt="Login Banner"
+          className="w-full max-h-[550px] object-contain"
+        />
+      </motion.div>
 
-          {/* <button type="button" className="w-full mt-8 bg-gray-500/10 flex items-center justify-center h-12 rounded-full">
-            <img src="https://raw.githubusercontent.com/prebuiltui/prebuiltui/main/assets/login/googleLogo.svg" alt="googleLogo" />
+      {/* --- Login Form --- */}
+      <motion.div
+        initial={{ opacity: 0, y: 40 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8 }}
+        className="w-full md:w-1/2 flex justify-center items-center px-6"
+      >
+        <form
+          onSubmit={handleLogin}
+          className="w-full max-w-sm p-6 rounded-xl text-center"
+        >
+          <h2 className="text-3xl md:text-4xl text-gray-900 font-bold mb-2">
+            Sign In
+          </h2>
+          <p className="text-gray-500 mb-5">
+            Welcome back! Please sign in to continue
+          </p>
+
+          {/* --- Google Login Button --- */}
+          <button
+            type="button"
+            className="w-full bg-gray-100 flex items-center justify-center gap-2 py-3 rounded-full text-gray-700"
+          >
+            Sign in with
+            <img
+              src="https://raw.githubusercontent.com/prebuiltui/prebuiltui/main/assets/login/googleLogo.svg"
+              alt="Google Logo"
+              className="w-auto h-auto"
+            />
           </button>
 
-          <div className="flex items-center gap-4 w-full my-5">
-            <div className="w-full h-px bg-gray-300/90"></div>
-            <p className="w-full text-nowrap text-sm text-gray-500/90">or sign in with email</p>
-            <div className="w-full h-px bg-gray-300/90"></div>
-          </div> */}
+          {/* Divider */}
+          <div className="flex items-center gap-3 w-full my-6 text-gray-400 text-sm">
+            <hr className="flex-1 border-gray-300" /> OR <hr className="flex-1 border-gray-300" />
+          </div>
 
-          <div className="flex gap-4 mt-4 items-center w-full bg-transparent border border-gray-300/60 h-12 rounded-full overflow-hidden pl-6">
+          {/* --- Email Field --- */}
+          <div className="flex gap-3 items-center w-full border border-gray-300 rounded-full h-12 px-4 mb-6">
             <LucideMail className="text-gray-400" />
-            <input type="email" placeholder="Email id"
-              value={email} onChange={(e) => setEmail(e.target.value)} className="bg-transparent text-gray-500/80 placeholder-gray-500/80 outline-none text-sm w-full h-full" required />
+            <input
+              type="email"
+              placeholder="Email id"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className="flex-1 bg-transparent outline-none text-gray-700"
+              required
+            />
           </div>
+          {validationError.email && (
+            <p className="text-xs text-red-500 text-left mb-2">{validationError.email}</p>
+          )}
 
-          <div className="flex gap-4 items-center mt-6 w-full bg-transparent border border-gray-300/60 h-12 rounded-full overflow-hidden pl-6">
+          {/* --- Password Field --- */}
+          <div className="flex gap-3 items-center w-full border border-gray-300 rounded-full h-12 px-4  mb-6">
             <LucideLock className="text-gray-400" />
-            <input type="password" placeholder="Password"
-              value={password} onChange={(e) => setPassword(e.target.value)}
-              className="bg-transparent text-gray-500/80 placeholder-gray-500/80 outline-none text-sm w-full h-full" required />
+            <input
+              type={showPassword ? "text" : "password"}
+              placeholder="Password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className="flex-1 bg-transparent outline-none text-gray-700"
+              required
+            />
+            <button
+              type="button"
+              onClick={() => setShowPassword(!showPassword)}
+              className="focus:outline-none"
+            >
+              {showPassword ? <EyeOff className="text-gray-500" /> : <Eye className="text-gray-500" />}
+            </button>
           </div>
-
-          <div className="w-full flex items-center justify-between mt-8 text-gray-500/80">
-            <div className="flex items-center gap-2">
-              <input className="h-5" type="checkbox" id="checkbox" />
-              <label className="text-sm" htmlFor="checkbox">Remember me</label>
-            </div>
-            <a className="text-sm text-blue-500 underline" href="#">Forgot password?</a>
-          </div>
-
-          {/* Inline feedback messages */}
-          {error && (
-            <p className="text-red-600 font-medium text-center">{error.message}</p>
-          )}
-          {userLoginSuccess && !error && (
-            <p className="text-green-500 font-medium text-center">
-              ✅ Login successful!
-            </p>
+          {validationError.password && (
+            <p className="text-xs text-red-500 text-left mb-2">{validationError.password}</p>
           )}
 
-          <button type="submit" disabled={loading} className="mt-8 w-full h-11 rounded-full text-white font-bold cursor-pointer bg-purple-600 hover:opacity-80 transition-opacity">
+          {/* Remember + Forgot */}
+          <div className="flex items-center justify-between mt-3 mb-5 text-gray-500 text-sm">
+            <label className="flex items-center gap-2">
+              <input type="checkbox" className="h-4 w-4" />
+              Remember me
+            </label>
+            <Link className="text-blue-500 hover:underline" to={"/forgot-password"}>Forgot Password?</Link>
+          </div>
+
+          {/* Overall Auth Message */}
+          {error && <p className="text-red-500 text-sm mb-2">{error.message}</p>}
+          {/* Submit Button */}
+          <button
+            type="submit"
+            disabled={loading}
+            className="w-full bg-purple-600 text-white font-semibold py-3 rounded-full hover:bg-purple-700 transition"
+          >
             {loading ? "Logging in..." : "Login"}
           </button>
-          <p className="text-gray-500/90 text-sm mt-4">Don’t have an account?
-            <Link
-              to="/register"
-              className="text-blue-500 px-3 hover:underline"
-            >
+
+          <p className="text-gray-500 text-sm mt-5">
+            Don’t have an account?
+            <Link to="/register" className="text-blue-500 hover:underline ml-1">
               Sign Up
             </Link>
           </p>
+
         </form>
-      </div>
+      </motion.div>
     </div>
   );
 };

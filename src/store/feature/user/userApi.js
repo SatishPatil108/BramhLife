@@ -154,10 +154,20 @@ export const postCourseFeedback = async (feedbackData) => {
 };
 
 //search courses by keyword 
-export const search  = async (searchStr) => {
+export const search = async (searchStr) => {
   return await makeRequest({
     service: `user/search/${searchStr}`,
     method: API_METHODS.GET,
+    authRequired: true,
+  });
+};
+
+//search courses by keyword 
+export const postcontact = async ( contactmsg ) => {  
+  return await makeRequest({
+    service: `user/contact`,
+    method: API_METHODS.POST,
+    data: contactmsg,
     authRequired: true,
   });
 };

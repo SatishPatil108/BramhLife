@@ -8,18 +8,9 @@ import DomainsList from "@/pages/Admin/Domains";
 import FrequentlyAskQue from "@/pages/Admin/FrequentlyAskQue";
 import MusicList from "@/pages/Admin/SoundList/MusicList";
 import SubDomainsList from "@/pages/Admin/SubDomains";
-import { isAdminLoggedIn } from "@/store/feature/auth/authSlice";
-import { useEffect } from "react";
-import { useDispatch } from "react-redux";
 import { Navigate, Route, Routes } from "react-router-dom";
 
-const AdminRoutes = () => {
-
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    dispatch(isAdminLoggedIn())
-  }, [dispatch])
+const AdminRoutes = () => {  
 
   return (
     <>

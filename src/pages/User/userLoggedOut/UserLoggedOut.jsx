@@ -3,30 +3,27 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { logoutUser } from "@/store/feature/auth/authSlice";
+import { clearUserError } from "@/store/feature/user/userSlice";
 
 const UserLoggedOut = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [confirmed, setConfirmed] = useState(false);
-//   const { user } = useSelector((state) => state.auth)
-//   console.log(user)
+  const { user } = useSelector((state) => state.auth)
 
   const handleLogout = () => {
-    // const confirmLogout = window.confirm("Are you sure you want to logout?");
-    // if (confirmLogout) {
-      dispatch(logoutUser());
-      setConfirmed(true);
-
-      toast.info("Thanks for visiting! 👋", {
-        position: "top-center",
-        autoClose: 2000,
-      }
+    dispatch(logoutUser());
+    setConfirmed(true);
+    toast.info("Thanks for visiting! 👋", {
+      position: "top-center",
+      autoClose: 2000,
+    }
     );
 
-      setTimeout(() => {
-        navigate("/login");
-      }, 2000);
-    // }
+    setTimeout(() => {
+      dispatch(clearUserError());
+      navigate("/login");
+    }, 2000);
   };
 
   return (
@@ -39,7 +36,10 @@ const UserLoggedOut = () => {
           </p> */}
           <div className="flex gap-5">
             <button
-              onClick={() => { }}
+              onClick={() => {
+                dispatch(clearUserError());
+                navigate(-1)
+              }}
               className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded-lg transition-colors duration-300"
             >
               Cancel

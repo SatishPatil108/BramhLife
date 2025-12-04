@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 
 const SearchBarWithDatalist = () => {
     const dispatch = useDispatch();
-    const { loading, searchDetails, error } = useHomepage();
+    const { isSpin, searchDetails, error } = useHomepage();
     const [searchTerm, setSearchTerm] = useState("");
     const [isDropdownVisible, setIsDropdownVisible] = useState(false);
 
@@ -17,6 +17,7 @@ const SearchBarWithDatalist = () => {
 
     const handleSearch = () => {
         if (!searchTerm.trim()) return;
+         setIsDropdownVisible(false);
         dispatch(searchAPI(searchTerm));
         setIsDropdownVisible(true);
     };
@@ -45,21 +46,20 @@ const SearchBarWithDatalist = () => {
     return (
         <div
             ref={dropdownRef}
-            className="relative w-full max-w-sm sm:max-w-md lg:max-w-xs mx-auto"
+            className="relative  max-w-sm sm:max-w-md  mx-auto"
         >
             {/* Search Bar */}
-            <div className="flex items-center bg-white border border-gray-200 rounded-lg shadow-md px-3 py-2 h-10 md:h-8 transition-all duration-200 focus-within:ring-2 focus-within:ring-purple-500">
+            <div className="flex items-center bg-white border border-gray-200 rounded-lg px-3 py-2 h-10 md:h-8 transition-all duration-200 focus-within:ring-1 focus-within:ring-purple-400">
                 <input
                     value={searchTerm}
                     onChange={(e) => {
                         setSearchTerm(e.target.value);
-                        setIsDropdownVisible(!!e.target.value.trim());
                     }}
                     placeholder="Search course or video"
                     className="flex-1 bg-transparent outline-none text-gray-700 text-sm md:text-base"
                 />
 
-                {loading ? (
+                {isSpin ? (
                     <Loader2 className="w-5 h-5 animate-spin text-purple-600" />
                 ) : (
                     <Search
@@ -70,13 +70,14 @@ const SearchBarWithDatalist = () => {
             </div>
 
             {/* Dropdown */}
-            {isDropdownVisible && hasResults && (
+            {isDropdownVisible && (
                 <ul
                     className="absolute w-full z-50 mt-2 bg-white/40 backdrop-blur-lg 
                      rounded-xl shadow-lg border border-white/30
                      max-h-60 overflow-y-auto custom-scrollbar animate-fadeIn
                      text-sm md:text-base"
                 >
+                    {(!hasResults) && <li className="px-4 text-red-500">No result Found!</li>}
                     {searchDetails?.courses?.map((course) => (
                         <li
                             key={course.id}

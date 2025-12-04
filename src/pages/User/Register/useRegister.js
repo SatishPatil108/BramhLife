@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { registerUserAPI } from "@/store/feature/auth";
 import { clearError } from "@/store/feature/auth/authSlice";
+import { clearUserError } from "@/store/feature/user/userSlice";
 
 const useRegister = () => {
   const dispatch = useDispatch();
@@ -63,6 +64,7 @@ const useRegister = () => {
 
       // Redirect after 2 seconds
       const timer = setTimeout(() => {
+        dispatch(clearUserError());
         navigate("/login");
       }, 1000);
 

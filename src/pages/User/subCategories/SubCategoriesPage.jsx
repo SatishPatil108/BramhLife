@@ -1,12 +1,16 @@
 import React from "react";
 import { useLocation, useParams, useNavigate } from "react-router-dom";
 import useSubCategoriesPage from "./useSubCategoriesPage";
+import { clearUserError } from "@/store/feature/user/userSlice";
+import { useDispatch } from "react-redux";
 const BASE_URL = import.meta.env.VITE_BASE_URL_IMG;
 
 const SubCategoriesPage = () => {
   const { domain_id } = useParams();
   const location = useLocation();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+
   const { subdomainsDetails, loading, error } = useSubCategoriesPage(domain_id);
 
   const domainName = subdomainsDetails?.subdomains?.[0]?.domain_name || "Subdomains";
@@ -33,6 +37,7 @@ const SubCategoriesPage = () => {
   ) : [];
 
   const handleSubcategoryClick = (sub) => {
+    dispatch(clearUserError());
     navigate(`/coaches/${sub.subdomain_id}`, {
       state: { subdomain_name: sub.subdomain_name },
     });
@@ -105,7 +110,10 @@ const SubCategoriesPage = () => {
               <div className="text-center text-gray-600  mt-4 py-30">
                 <p className="mb-2 text-xl">No subcategories available currently.</p>
                 <button
-                  onClick={() => navigate(-1)}
+                  onClick={() => {
+                    dispatch(clearUserError());
+                    navigate(-1)
+                  }}
                   className="text-blue-600 underline hover:text-blue-800 text-xl cursor-pointer"
                 >
                   ← Go Back

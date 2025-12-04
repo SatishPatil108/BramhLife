@@ -1,8 +1,21 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { LucideMail, UserCircle2, MessageCircle } from 'lucide-react'
+import { toast } from "react-toastify";
+import { useDispatch, useSelector } from "react-redux";
+import { contactAPI } from "@/store/feature/user";
+import { motion } from "framer-motion";
 
 function Contact() {
   const [form, setForm] = useState({ name: "", email: "", message: "" });
+  const { user } = useSelector((state) => state.auth);
+
+  useEffect(() => {
+    if (user) {
+      setForm({ name: user.name, email: user.email, message: "" });
+    }
+  }, [user]);
+
+  const dispatch = useDispatch();
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -10,39 +23,71 @@ function Contact() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    alert("Thanks for contacting us!");
-    setForm({ name: "", email: "", message: "" });
-    console.log(form);
+    const toastId = toast.loading("Submitting message...");
+
+    dispatch(contactAPI(form))
+      .then(() => {
+        toast.update(toastId, {
+          render: "Message sent successfully 🎉",
+          type: "success",
+          isLoading: false,
+          autoClose: 3000,
+        });
+      })
+      .catch(() => {
+        toast.update(toastId, {
+          render: "Failed to submit the message!",
+          type: "error",
+          isLoading: false,
+          autoClose: 3000,
+        });
+      });
+
+    setForm({ name: user?.name || "", email: user?.email || "", message: "" });
   };
 
   return (
-    <div className="min-h-screen bg-purple-50 p-8 py-10 flex items-center justify-center">
-      <section className="px-4 md:px-16 lg:px-24 xl:px-32 w-full">
-
-        <h1 className="text-4xl font-semibold bg-clip-text text-transparent bg-gradient-to-r from-pink-600 via-purple-600 to-pink-600 text-center mx-auto mt-4">
+    <div className="min-h-screen bg-white p-6 md:p-10 flex items-center justify-center">
+      <motion.section
+        initial={{ opacity: 0, y: 25 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.7 }}
+        className="px-4 md:px-12 lg:px-24 xl:px-32 w-full"
+      >
+        <motion.h1
+          initial={{ opacity: 0, y: -25 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.15, duration: 0.6 }}
+          className="text-3xl mb-8 sm:text-4xl lg:text-5xl font-bold text-center bg-clip-text text-transparent bg-gradient-to-r from-pink-600 via-purple-600 to-pink-600"
+        >
           Reach out to us
-        </h1>
+        </motion.h1>
 
-        <p className="text-gray-700 text-center mt-2 max-w-md mx-auto">
-          We'd love to hear from you. Whether you're a coach or a student, drop  us a message below.
+        <p className="text-gray-600 text-center mt-3 max-w-md mx-auto text-sm sm:text-base">
+          We'd love to hear from you! Whether you're a coach or a student, drop us a message below.
         </p>
 
-        <form onSubmit={handleSubmit} className="grid sm:grid-cols-2 gap-3 sm:gap-5 max-w-2xl mx-auto text-gray-700 mt-16 w-full mb-10">
-
+        <motion.form
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.3, duration: 0.7 }}
+          onSubmit={handleSubmit}
+          className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 max-w-2xl mx-auto text-gray-700 mt-14 mb-12"
+        >
           {/* Name */}
           <div>
             <p className="mb-2 font-medium">Your name</p>
-            <div className="flex items-center pl-3 rounded-lg overflow-hidden border border-gray-300 focus-within:border-pink-500 bg-white">
+            <div className="flex items-center border border-gray-300 rounded-lg overflow-hidden pl-3 bg-white focus-within:border-purple-600 transition">
               <UserCircle2 className="text-gray-400" />
               <input
                 placeholder="Enter your name"
-                className="w-full p-3 bg-transparent outline-none"
+                className={`w-full p-3 bg-transparent outline-none ${user?.name ? "cursor-not-allowed bg-gray-100" : "cursor-text"}`}
                 type="text"
                 name="name"
                 value={form.name}
-                onChange={handleChange}
+                onChange={!user?.name ? handleChange : undefined}
+                disabled={!!user?.name}
                 required
-                tabIndex={1}
               />
             </div>
           </div>
@@ -50,17 +95,17 @@ function Contact() {
           {/* Email */}
           <div>
             <p className="mb-2 font-medium">Email id</p>
-            <div className="flex items-center pl-3 rounded-lg overflow-hidden border border-gray-300 focus-within:border-pink-500 bg-white gap-2">
+            <div className="flex items-center border border-gray-300 rounded-lg overflow-hidden pl-3 bg-white focus-within:border-purple-600 transition gap-2">
               <LucideMail className="text-gray-400" />
               <input
                 placeholder="Enter your email"
-                className="w-full p-3 bg-transparent outline-none"
+                className={`w-full p-3 bg-transparent outline-none ${user?.email ? "cursor-not-allowed bg-gray-100" : "cursor-text"}`}
                 type="email"
                 name="email"
                 value={form.email}
-                onChange={handleChange}
+                onChange={!user?.email ? handleChange : undefined}
+                disabled={!!user?.email}
                 required
-                tabIndex={2}
               />
             </div>
           </div>
@@ -68,32 +113,29 @@ function Contact() {
           {/* Message */}
           <div className="sm:col-span-2 relative">
             <p className="mb-2 font-medium">Message</p>
-            <MessageCircle className="text-gray-400 absolute m-3" />
+            <MessageCircle className="text-gray-400 absolute left-3 top-4 mt-7" />
             <textarea
               name="message"
-              rows="8"
+              rows="6"
               placeholder="Enter your message"
-              className="focus:border-pink-500 resize-none w-full px-12 p-3 bg-white outline-none rounded-lg overflow-hidden border border-gray-300"
+              className="w-full pl-10 p-3 bg-white outline-none rounded-lg border border-gray-300 focus:border-purple-600 transition resize-none"
               value={form.message}
               onChange={handleChange}
               required
-              tabIndex={3}
             ></textarea>
           </div>
 
-          {/* Submit Button */}
-          <div className="w-full flex justify-center items-center mb-8">
-            <button
-              type="submit"
-              className="text-lg gap-2 w-full mt-4 cursor-pointer font-bold bg-purple-600 hover:opacity-80 text-white px-10 py-3 rounded-full"
-              tabIndex={4}
+          {/* Submit */}
+          <div className="sm:col-span-2 flex justify-center">
+            <motion.button
+              whileTap={{ scale: 0.95 }}
+              className="text-lg w-full md:w-1/2 mt-4 font-bold bg-purple-600 hover:bg-purple-700 text-white px-10 py-3 rounded-full transition-all shadow-md"
             >
               Submit
-            </button>
+            </motion.button>
           </div>
-
-        </form>
-      </section>
+        </motion.form>
+      </motion.section>
     </div>
   );
 }

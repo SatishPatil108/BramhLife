@@ -61,7 +61,7 @@ export const fetchCoachProfileAPI = createAsyncThunk(
   async (coachId, thunkAPI) => {
     try {
       const response = await userAPI.fetchCoachProfile(coachId);
-      return response;
+      return response.data;
     } catch (error) {
       return thunkAPI.rejectWithValue(error.response?.data || error.message);
     }
@@ -197,11 +197,11 @@ export const postCourseFeedbackAPI = createAsyncThunk(
   }
 );
 
- // fetch all musics
+// fetch all musics
 export const fetchMusicListAPI = createAsyncThunk('user/fetchMusicList',
   async ({ pageNo = 1, pageSize = 10 }, thunkAPI) => {
     try {
-      const response = await userAPI.fetchMusicList( pageNo, pageSize );
+      const response = await userAPI.fetchMusicList(pageNo, pageSize);
       return response?.data;
     } catch (error) {
       return thunkAPI.rejectWithValue(error.response?.data || error.message);
@@ -211,7 +211,7 @@ export const fetchMusicListAPI = createAsyncThunk('user/fetchMusicList',
 
 // search
 export const searchAPI = createAsyncThunk('user/search',
-  async (searchStr , thunkAPI) => {
+  async (searchStr, thunkAPI) => {
     try {
       const response = await userAPI.search(searchStr);
       return response?.data;
@@ -220,4 +220,18 @@ export const searchAPI = createAsyncThunk('user/search',
     }
   }
 )
+
+// Conatct
+export const contactAPI = createAsyncThunk('user/contact',
+  async ( contactmsg , thunkAPI) => {
+    try {
+      const response = await userAPI.postcontact(contactmsg);
+      return response?.data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.response?.data || error.message);
+    }
+  }
+)
+
+
 

@@ -6,19 +6,19 @@ import { fetchAllCoursesFeedbackAPI, fetchCoursesCategoriesAPI, fetchFAQsAPI, fe
 const useHomepage = () => {
 
   const dispatch = useDispatch();
-  const { dashboardData, isLoading, error, FAQsDetails, allCoursesFeedback, musicsDetails, searchDetails } = useSelector(
+  const { dashboardData, isLoading, isSpin, error, FAQsDetails, allCoursesFeedback, musicsDetails, searchDetails } = useSelector(
     (state) => state.user
   );
 
   useEffect(() => {
     dispatch(fetchUserDashboardDataAPI());
-    dispatch(fetchFAQsAPI({ pageNo: 1, pageSize: 4 }));
+    dispatch(fetchFAQsAPI({ pageNo: 1, pageSize: 6 }));
     dispatch(fetchAllCoursesFeedbackAPI({ pageNo: 1, pageSize: 10 }));
     dispatch(fetchMusicListAPI({ pageNo: 1, pageSize: 10 }));
   }, [dispatch]);
 
-  
-  return { dashboardData, loading: isLoading, error, FAQsDetails, allCoursesFeedback, musicsDetails, searchDetails };
+
+  return { dashboardData, loading: isLoading, isSpin, error, FAQsDetails, allCoursesFeedback, musicsDetails, searchDetails };
 };
 
 export default useHomepage;

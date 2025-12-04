@@ -6,7 +6,7 @@ export const loginUser = async (credentials) => {
     service: "user/auth/login",
     method: API_METHODS.POST,
     data: credentials,
-    authRequired: false, 
+    authRequired: false,
   });
 };
 
@@ -19,10 +19,62 @@ export const registerUser = async (credentials) => {
   });
 };
 
-export const logoutUser = async () => {
+export const updateProfile = async (formData) => {
   return await makeRequest({
-    service: "authorization/logout",
+    service: `user/auth/Profile`,
+    method: API_METHODS.PUT,
+    data: formData,
+    authRequired: true,
+  });
+};
+export const sendOtp = async (email) => {
+  return await makeRequest({
+    service: `user/auth/send-otp`,
     method: API_METHODS.POST,
+    data: { email },
+    authRequired: true,
+  });
+};
+export const sendOtpForForgotPassword = async (email) => {
+  console.log(email)
+  return await makeRequest({
+    service: `auth/forgot-password/send-otp`,
+    method: API_METHODS.POST,
+    data: { email },
+    authRequired: true,
+  });
+};
+export const verifyOtp = async (otp) => {
+  return await makeRequest({
+    service: `user/auth/verify-otp`,
+    method: API_METHODS.POST,
+    data: { otp },
+    authRequired: true,
+  });
+};
+export const verifyOtpForForgotPassword = async (data) => {
+  return await makeRequest({
+    service: `auth/forgot-password/verify-otp`,
+    method: API_METHODS.POST,
+    data,
+    authRequired: true,
+  });
+};
+
+export const changePassword = async (data) => {
+  return await makeRequest({
+    service: `user/auth/reset-password`,
+    method: API_METHODS.POST,
+    data,
+    authRequired: true,
+  });
+};
+export const changePasswordForForgotPassword = async (data) => {
+  return await makeRequest({
+    service: `auth/forgot-password/reset-password`,
+    method: API_METHODS.POST,
+    data,
+    authRequired: true,
   });
 };
 
@@ -34,4 +86,4 @@ export const adminLogin = async (credentials) => {
     data: credentials,
     authRequired: false,
   });
-};  
+};

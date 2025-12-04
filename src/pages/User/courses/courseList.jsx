@@ -2,14 +2,17 @@ import React, { useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import useCoursesList from "./useCoursesList";
 import { BookOpen } from "lucide-react";
+import { clearUserError } from "@/store/feature/user/userSlice";
+import { useDispatch } from "react-redux";
 
 const BASE_URL = import.meta.env.VITE_BASE_URL_IMG;
 
 const CourseList = () => {
   const { courses, loading, error } = useCoursesList();
+  const dispatch = useDispatch();
   const navigate = useNavigate();
-
   const handleCourseClick = (domain_id, domain_name) => {
+    dispatch(clearUserError());
     navigate(`/subcategories/${domain_id}`, { state: { domain_name } });
   };
 

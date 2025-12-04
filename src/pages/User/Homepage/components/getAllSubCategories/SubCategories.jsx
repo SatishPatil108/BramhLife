@@ -2,24 +2,28 @@ import useSubCategoriesPage from '@/pages/User/subCategories/useSubCategoriesPag
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from "framer-motion";
+import { clearUserError } from '@/store/feature/user/userSlice';
+import { useDispatch } from 'react-redux';
 
 
 const SubCategories = ({ category }) => {
   const { subdomainsDetails, loading, error } = useSubCategoriesPage(category.domain_id);
   const subdomains = subdomainsDetails?.subdomains || [];
-  
+  const dispatch = useDispatch();
+
   const BASE_URL = import.meta.env.VITE_BASE_URL_IMG;
 
   const navigate = useNavigate();
 
   const handleSubcategoryClick = (subcategory) => {
+    dispatch(clearUserError());
     navigate(`/subcategories/${subcategory.domain_id}`, {
       state: { domainName: subcategory.domain_name }
     });
   };
 
   return (
-    <div className="mt-8 bg-purple-50">
+    <div className="mt-8 mb-4">
       {/* Loading */}
       {loading && (
         <p className="text-center text-gray-500 animate-pulse">
@@ -43,17 +47,16 @@ const SubCategories = ({ category }) => {
 
       {/* Subcategory Cards */}
       {subdomains && subdomains.length > 0 && (
-        <div className="px-4 mt-4">
+        <div className="mt-4">
           <div
-            className="flex overflow-x-auto scroll-smooth scrollbar-hide snap-x snap-mandatory gap-6 pb-4"
+            className="flex lg:mx-4 mx-2 overflow-x-auto scroll-smooth scrollbar-hide snap-x snap-mandatory gap-6 pb-4"
           >
             {subdomains.map((subcategory) => (
               <motion.div
                 key={subcategory.subdomain_id}
                 whileHover={{ scale: 1.03 }}
                 onClick={() => handleSubcategoryClick(subcategory)}
-                className="w-[250px] sm:w-[300px] md:w-[320px] 
-                flex-shrink-0 cursor-pointer bg-white snap-start group relative shadow-sm border border-gray-200 rounded-2xl overflow-hidden hover:shadow-sm transition-all duration-300"
+                className="w-[320px] flex-shrink-0 cursor-pointer bg-white snap-start group relative shadow-sm border border-gray-200 rounded-2xl overflow-hidden hover:shadow-sm transition-all duration-300"
               >
                 {/* Image */}
                 <div className="overflow-hidden flex justify-center items-center h-[160px] bg-gray-50">
@@ -66,10 +69,10 @@ const SubCategories = ({ category }) => {
 
                 {/* Content */}
                 <div className="p-4">
-                  <h3 className="text-sm font-semibold text-gray-800 mb-1 group-hover:text-indigo-600 transition">
+                  <h3 className="text-base font-semibold text-gray-800 mb-1 group-hover:text-indigo-600 transition">
                     {subcategory.subdomain_name}
                   </h3>
-                  <p className="text-xs text-gray-500">
+                  <p className="text-sm text-gray-500">
                     {subcategory.progressive_difficulty === 1
                       ? 'Beginner Level'
                       : subcategory.progressive_difficulty === 2

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import useCoachesList from "./useCoachesList";
 import {
@@ -28,6 +28,7 @@ const CoachesList = () => {
   const [showForm, setShowForm] = useState(false);
   const [selectedCoach, setSelectedCoach] = useState(null);
   const [errors, setErrors] = useState({});
+  const [firstError, setFirstError] = useState(null);
 
   // Form states
   const [coachForm, setCoachForm] = useState({
@@ -50,6 +51,20 @@ const CoachesList = () => {
     }
     setCoachForm({ ...coachForm, [e.target.name]: e.target.value });
   }
+
+  useEffect(() => {
+    if (firstError) {
+      const el = document.querySelector(`[name="${firstError}"]`);
+      if (el) {
+        el.focus();
+        el.scrollIntoView({
+          behavior: 'smooth',
+          block: 'center'
+        })
+      }
+      setFirstError(null);
+    }
+  }, [firstError]);
 
   const resetForm = () => {
     setCoachForm({
@@ -83,7 +98,6 @@ const CoachesList = () => {
   };
 
   const handleEditCoach = (coach) => {
-  
     setEditingCoach(coach);
     setCoachForm({
       name: coach.name,
@@ -121,16 +135,20 @@ const CoachesList = () => {
 
     if (!coachForm.email.trim()) {
       errors.email = "Email is required.";
+      isValid = false;
     }
     else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(coachForm.email)) {
       errors.email = "Enter a valid email address.";
+      isValid = false;
     }
 
     if (!coachForm.contactNumber.trim()) {
       errors.contactNumber = "Contact number is required.";
+      isValid = false;
     }
     else if (!/^\d{10}$/.test(coachForm.contactNumber)) {
       errors.contactNumber = "Contact number must be exactly 10 digits (no spaces or special characters).";
+      isValid = false;
     }
 
 
@@ -171,6 +189,10 @@ const CoachesList = () => {
     e.preventDefault();
     const { errors, isValid } = validateForm();
     setErrors(errors);
+
+    const firstErrorField = Object.keys(errors)[0];
+    setFirstError(firstErrorField);
+
     if (!isValid) return;
 
     const formData = new FormData();
@@ -297,12 +319,13 @@ const CoachesList = () => {
                 <input
                   type="text"
                   name="name"
+                  autoFocus={firstError == 'name'}
                   value={coachForm.name}
                   onChange={handleChange}
                   placeholder="Enter the coach name"
                   className={`w-full p-2.5 sm:p-3 border rounded-md shadow-sm text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-800
                              placeholder-gray-400 dark:placeholder-gray-400 focus:outline-none focus:ring-2 transition-all duration-200
-                    ${errors.name
+                    ${firstError == 'name'
                       ? "border-red-500 focus:ring-red-500"
                       : "border-gray-300 dark:border-gray-600 focus:ring-purple-500 hover:border-purple-500"
                     }`}
@@ -316,12 +339,13 @@ const CoachesList = () => {
                 <input
                   type="email"
                   name="email"
+                  autoFocus={firstError == 'email'}
                   value={coachForm.email}
                   onChange={handleChange}
                   placeholder="Enter the email"
                   className={`w-full p-2.5 sm:p-3 border rounded-md shadow-sm text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-800
                              placeholder-gray-400 dark:placeholder-gray-400 focus:outline-none focus:ring-2 transition-all duration-200
-                    ${errors.name
+                    ${firstError == 'email'
                       ? "border-red-500 focus:ring-red-500"
                       : "border-gray-300 dark:border-gray-600 focus:ring-purple-500 hover:border-purple-500"
                     }`}
@@ -335,12 +359,13 @@ const CoachesList = () => {
                 <input
                   type="number"
                   name="contactNumber"
+                  autoFocus={firstError == 'contactNumber'}
                   value={coachForm.contactNumber}
                   onChange={handleChange}
                   placeholder="Enter contact number"
                   className={`w-full p-2.5 sm:p-3 border rounded-md shadow-sm text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-800
                              placeholder-gray-400 dark:placeholder-gray-400 focus:outline-none focus:ring-2 transition-all duration-200
-                    ${errors.name
+                    ${firstError == 'contactNumber'
                       ? "border-red-500 focus:ring-red-500"
                       : "border-gray-300 dark:border-gray-600 focus:ring-purple-500 hover:border-purple-500"
                     }`}
@@ -356,12 +381,14 @@ const CoachesList = () => {
                 <input
                   type="number"
                   name="experience"
+                  autoFocus={firstError == 'experience'}
+
                   value={coachForm.experience}
                   onChange={handleChange}
                   placeholder="Years of experience"
                   className={`w-full p-2.5 sm:p-3 border rounded-md shadow-sm text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-800
                              placeholder-gray-400 dark:placeholder-gray-400 focus:outline-none focus:ring-2 transition-all duration-200
-                    ${errors.name
+                    ${firstError == 'experience'
                       ? "border-red-500 focus:ring-red-500"
                       : "border-gray-300 dark:border-gray-600 focus:ring-purple-500 hover:border-purple-500"
                     }`}
@@ -377,12 +404,14 @@ const CoachesList = () => {
                 <input
                   type="text"
                   name="professionalTitle"
+                  autoFocus={firstError == 'professionalTitle'}
+
                   value={coachForm.professionalTitle}
                   onChange={handleChange}
                   placeholder="Enter professional title"
                   className={`w-full p-2.5 sm:p-3 border rounded-md shadow-sm text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-800
                              placeholder-gray-400 dark:placeholder-gray-400 focus:outline-none focus:ring-2 transition-all duration-200
-                    ${errors.name
+                    ${firstError == 'professionalTitle'
                       ? "border-red-500 focus:ring-red-500"
                       : "border-gray-300 dark:border-gray-600 focus:ring-purple-500 hover:border-purple-500"
                     }`}
@@ -397,11 +426,13 @@ const CoachesList = () => {
                 <label className="block font-medium mb-1">Domain</label>
                 <select
                   name="domainId"
+                  autoFocus={firstError == 'domainId'}
+
                   value={coachForm.domainId}
                   onChange={handleChange}
                   className={`w-full p-2.5 sm:p-3 border rounded-md shadow-sm text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-800
                              placeholder-gray-400 dark:placeholder-gray-400 focus:outline-none focus:ring-2 transition-all duration-200
-                    ${errors.name
+                    ${firstError == 'domainId'
                       ? "border-red-500 focus:ring-red-500"
                       : "border-gray-300 dark:border-gray-600 focus:ring-purple-500 hover:border-purple-500"
                     }`}
@@ -423,11 +454,13 @@ const CoachesList = () => {
                 <label className="block font-medium mb-1">Sub Domain</label>
                 <select
                   name="subdomainId"
+                  autoFocus={firstError == 'subdomainId'}
+
                   value={coachForm.subdomainId}
                   onChange={handleChange}
                   className={`w-full p-2.5 sm:p-3 border rounded-md shadow-sm text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-800
                              placeholder-gray-400 dark:placeholder-gray-400 focus:outline-none focus:ring-2 transition-all duration-200
-                    ${errors.name
+                    ${firstError == 'subdomainId'
                       ? "border-red-500 focus:ring-red-500"
                       : "border-gray-300 dark:border-gray-600 focus:ring-purple-500 hover:border-purple-500"
                     }`}
@@ -449,12 +482,14 @@ const CoachesList = () => {
                 <label className="block font-medium mb-1">Coach Bio</label>
                 <textarea
                   name="bio"
+                  autoFocus={firstError == 'bio'}
+
                   value={coachForm.bio}
                   onChange={handleChange}
                   placeholder="Enter bio"
                   className={`w-full p-2.5 sm:p-3 border rounded-md shadow-sm text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-800
                              placeholder-gray-400 dark:placeholder-gray-400 focus:outline-none focus:ring-2 transition-all duration-200
-                    ${errors.name
+                    ${firstError == 'bio'
                       ? "border-red-500 focus:ring-red-500"
                       : "border-gray-300 dark:border-gray-600 focus:ring-purple-500 hover:border-purple-500"
                     }`}

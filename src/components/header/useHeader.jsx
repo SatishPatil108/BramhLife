@@ -18,7 +18,6 @@ export function useHeader() {
     links.push({ to: "/login", label: "Login", icon: Menu });
   } else {
     links.splice(2, 0, { to: "/my-courses", label: "My Courses", icon: BookOpenText });
-    links.push({ to: "/logout", label: "Logout", icon: UserCircle2Icon });
   }
   return { links, user };
 

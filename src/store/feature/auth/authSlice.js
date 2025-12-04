@@ -1,18 +1,45 @@
-import { createSlice } from "@reduxjs/toolkit";
-import { loginUserAPI, registerUserAPI, adminLoginAPI } from "./authThunk";
 
+import { createSlice } from "@reduxjs/toolkit";
+import {
+  loginUserAPI,
+  registerUserAPI,
+  adminLoginAPI,
+  updateProfileAPI
+} from "./authThunk";
+
+//
+// ----------- Load User From LocalStorage -----------
+//
+const storedUserInfo = localStorage.getItem("user_info");
+const storedUserToken = localStorage.getItem("user_token");
+const storedUserAuthFlag = localStorage.getItem("isUserAuthenticated") === "true";
+
+const parsedUserInfo = storedUserInfo ? JSON.parse(storedUserInfo) : null;
+
+//
+// ----------- Load Admin From LocalStorage -----------
+//
+const storedAdminInfo = localStorage.getItem("admin_info");
+const storedAdminToken = localStorage.getItem("admin_token");
+const storedAdminAuthFlag = localStorage.getItem("isAdminAuthenticated") === "true";
+
+const parsedAdminInfo = storedAdminInfo ? JSON.parse(storedAdminInfo) : null;
+
+//
+// ------------ Initial State With Loaded Values -----------
+//
 const initialState = {
-  // User state
-  user: null,
-  userToken: null,
-  isUserAuthenticated: false,
+  // User
+  user: storedUserAuthFlag ? parsedUserInfo : null,
+  userToken: storedUserAuthFlag ? storedUserToken : null,
+  isUserAuthenticated: storedUserAuthFlag,
   userLoginSuccess: false,
   registerSuccess: false,
 
-  // Admin state
-  admin: null,
-  adminToken: null,
-  isAdminAuthenticated: false,
+  // Admin
+  admin: storedAdminAuthFlag ? parsedAdminInfo : null,
+  adminToken: storedAdminAuthFlag ? storedAdminToken : null,
+  isAdminAuthenticated: storedAdminAuthFlag,
   adminLoginSuccess: false,
 
   // Common
@@ -20,6 +47,9 @@ const initialState = {
   error: null,
 };
 
+//
+// ------------------ Slice -------------------
+//
 const authSlice = createSlice({
   name: "auth",
   initialState,
@@ -27,70 +57,32 @@ const authSlice = createSlice({
     clearError: (state) => {
       state.error = null;
     },
-    resetFlags: (state) => {
-    },
+
+    resetFlags: (state) => {},
+
     logoutUser: (state) => {
       state.user = null;
       state.userToken = null;
       state.isUserAuthenticated = false;
       state.userLoginSuccess = false;
-      localStorage.removeItem("isUserAuthenticated");
+
       localStorage.removeItem("user_info");
       localStorage.removeItem("user_token");
+      localStorage.removeItem("isUserAuthenticated");
     },
+
     logoutAdmin: (state) => {
       state.admin = null;
       state.adminToken = null;
       state.isAdminAuthenticated = false;
       state.adminLoginSuccess = false;
-      localStorage.removeItem("isAdminAuthenticated");
+
       localStorage.removeItem("admin_info");
       localStorage.removeItem("admin_token");
-    },
-    // 03-10-2025
-    checkUserLoggedIn: (state) => {
-      const isAuth = localStorage.getItem("isUserAuthenticated") === "true";
-      const userInfoRaw = localStorage.getItem("user_info");
-      const userToken = localStorage.getItem("user_token");
-
-      if (isAuth && userInfoRaw && userToken) {
-        try {
-          state.user = JSON.parse(userInfoRaw);
-        } catch (e) {
-          console.error("Invalid JSON in localStorage user_info", e);
-          state.user = null;
-        }
-
-        state.isUserAuthenticated = true;
-        state.userToken = userToken;
-        state.userLoginSuccess = true; // Consider setting this to true if login success matters
-      } else {
-        state.user = null;
-        state.userToken = null;
-        state.isUserAuthenticated = false;
-        state.userLoginSuccess = false;
-      }
-    },
-    isAdminLoggedIn: (state) => {
-      const isAdmin = localStorage.getItem('isAdminAuthenticated') === 'true';
-      const adminInfoRow = localStorage.getItem('admin_info') || null;
-      const admin_token = localStorage.getItem('admin_token') || null;
-
-      if (isAdmin && adminInfoRow && admin_token) {
-        state.admin = JSON.parse(adminInfoRow);
-        state.adminToken = admin_token;
-        state.isAdminAuthenticated = true;
-        state.adminLoginSuccess = true;
-      }
-      else {
-        state.admin = null;
-        state.adminToken = null;
-        state.isAdminAuthenticated = false;
-        state.adminLoginSuccess = false;
-      }
+      localStorage.removeItem("isAdminAuthenticated");
     }
-
   },
+
   extraReducers: (builder) => {
     builder
       // ----------------- User Login -----------------
@@ -99,11 +91,17 @@ const authSlice = createSlice({
       })
       .addCase(loginUserAPI.fulfilled, (state, action) => {
         const res = action.payload;
+
         if (res?.data?.token) {
           state.isUserAuthenticated = true;
           state.userLoginSuccess = true;
           state.user = res.data;
           state.userToken = res.data.token;
+
+          localStorage.setItem("user_info", JSON.stringify(res.data));
+          localStorage.setItem("user_token", res.data.token);
+          localStorage.setItem("isUserAuthenticated", "true");
+
           state.error = null;
         } else {
           state.isUserAuthenticated = false;
@@ -111,9 +109,9 @@ const authSlice = createSlice({
           state.error = res?.message || "User login failed";
         }
       })
-      .addCase(loginUserAPI.rejected, (state, action) => {
-        state.isUserAuthenticated = false;
+      .addCase(loginUserAPI.rejected, (state) => {
         state.userLoginSuccess = false;
+        state.isUserAuthenticated = false;
       })
 
       // ----------------- User Register -----------------
@@ -122,6 +120,7 @@ const authSlice = createSlice({
       })
       .addCase(registerUserAPI.fulfilled, (state, action) => {
         const res = action.payload;
+
         if (res?.response_code === 1 || res?.data?.id) {
           state.registerSuccess = true;
           state.user = res.data || null;
@@ -131,8 +130,16 @@ const authSlice = createSlice({
           state.error = res?.message || "Registration failed";
         }
       })
-      .addCase(registerUserAPI.rejected, (state, action) => {
+      .addCase(registerUserAPI.rejected, (state) => {
         state.registerSuccess = false;
+      })
+
+      // ----------------- Update Profile -----------------
+      .addCase(updateProfileAPI.fulfilled, (state, action) => {
+        state.user = { ...state.user, ...action.payload };
+
+        // persist updated user
+        localStorage.setItem("user_info", JSON.stringify(state.user));
       })
 
       // ----------------- Admin Login -----------------
@@ -141,11 +148,17 @@ const authSlice = createSlice({
       })
       .addCase(adminLoginAPI.fulfilled, (state, action) => {
         const res = action.payload;
+
         if (res?.data?.token) {
           state.isAdminAuthenticated = true;
           state.adminLoginSuccess = true;
           state.admin = res.data;
           state.adminToken = res.data.token;
+
+          localStorage.setItem("admin_info", JSON.stringify(res.data));
+          localStorage.setItem("admin_token", res.data.token);
+          localStorage.setItem("isAdminAuthenticated", "true");
+
           state.error = null;
         } else {
           state.isAdminAuthenticated = false;
@@ -153,11 +166,12 @@ const authSlice = createSlice({
           state.error = res?.message || "Admin login failed";
         }
       })
-      .addCase(adminLoginAPI.rejected, (state, action) => {
-        state.isAdminAuthenticated = false;
+      .addCase(adminLoginAPI.rejected, (state) => {
         state.adminLoginSuccess = false;
+        state.isAdminAuthenticated = false;
       })
-      // ✅ Global matchers
+
+      // -------- Global Matchers --------
       .addMatcher(
         (action) => action.type.endsWith("/pending"),
         (state) => {
@@ -175,7 +189,10 @@ const authSlice = createSlice({
         (action) => action.type.endsWith("/rejected"),
         (state, action) => {
           state.isLoading = false;
-          state.error = action.payload === "Network Error" ? "Please check internet connection" : action.payload || action.error.message;
+          state.error =
+            action.payload === "Network Error"
+              ? "Please check internet connection"
+              : action.payload || action.error.message;
         }
       );
   },
@@ -185,9 +202,7 @@ export const {
   clearError,
   resetFlags,
   logoutUser,
-  logoutAdmin,
-  checkUserLoggedIn,
-  isAdminLoggedIn
+  logoutAdmin
 } = authSlice.actions;
 
-export default authSlice.reducer;
+export default authSlice.reducer;// authThunk.js

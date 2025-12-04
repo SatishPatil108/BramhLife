@@ -3,11 +3,15 @@ import { Link, useNavigate } from "react-router-dom";
 import useEnrolledCourses from "./useEnrolledCourses";
 import { BookOpen, Clock, Calendar } from "lucide-react";
 import { FaBookOpen, FaExclamationCircle } from "react-icons/fa";
+import { clearUserError } from "@/store/feature/user/userSlice";
+import { useDispatch } from "react-redux";
 
 const EnrolledCourses = () => {
   const { myCoursesDetails, isLoading, error } = useEnrolledCourses();
   const myCourses = myCoursesDetails.courses;
+  const dispatch = useDispatch();
 
+  console.log(myCourses);
   const navigate = useNavigate();
 
   if (isLoading) {
@@ -58,7 +62,10 @@ const EnrolledCourses = () => {
         {myCourses.map((course) => (
           <div
             key={course.course_id}
-            onClick={() => navigate(`/enrolled-course/${course.course_id}`)}
+            onClick={() => {
+              dispatch(clearUserError());
+              navigate(`/enrolled-course/${course.course_id}`)
+            }}
             className="cursor-pointer bg-white border border-gray-200 hover:border-purple-600 rounded-xl hover:shadow-sm p-5 transition duration-300 group"
           >
             <h3 className="text-xl font-semibold text-gray-800 group-hover:text-blue-600 flex items-center gap-2">
@@ -69,7 +76,7 @@ const EnrolledCourses = () => {
             <div className="mt-2 text-sm text-gray-600 space-y-1">
               <p className="flex items-center gap-1">
                 <Clock className="w-4 h-4 text-gray-400" />
-                {course.duration.hours}h {course.duration.minutes}m
+                {course.duration}
               </p>
 
               <p className="flex items-center gap-1">

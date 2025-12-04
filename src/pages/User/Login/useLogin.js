@@ -6,6 +6,7 @@ import "react-toastify/dist/ReactToastify.css";
 
 import { loginUserAPI } from "@/store/feature/auth";
 import { clearError, resetFlags } from "@/store/feature/auth/authSlice";
+import { clearUserError } from "@/store/feature/user/userSlice";
 
 const useLogin = () => {
   const dispatch = useDispatch();
@@ -36,13 +37,14 @@ const useLogin = () => {
         autoClose: 1500,
       });
       setTimeout(() => {
+        dispatch(clearUserError());
         navigate("/my-courses");
         dispatch(resetFlags());
       }, 1500);
     }
   }, [userLoginSuccess, navigate, dispatch]);
 
-  
+
   useEffect(() => {
     if (error) {
       toast.error(error, {

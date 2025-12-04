@@ -9,7 +9,8 @@ const CoachProfile = () => {
   const { coachId } = useParams();
   const { coachProfile, loading, error } = useCoachProfile(coachId);
 
-  if (loading) return <p>Loading coach details...</p>;
+  if (loading || !coachProfile)
+    return <p className="text-center py-10 text-lg">Loading coaches...</p>;
 
   if (error) {
     const errorMessage =
@@ -17,16 +18,14 @@ const CoachProfile = () => {
     return <p className="text-center font-bold text-xl text-red-500 mt-3">Error: {errorMessage}</p>;
   }
 
-  if (!coachProfile) return <p>No coach details available.</p>;
 
   return (
-    <div className="p-6 max-w-5xl mx-auto bg-white shadow-lg rounded-xl text-center mb-10">
+    <div className="p-6 max-w-5xl mx-auto rounded-xl text-center mb-10">
 
       <h1 className="text-4xl font-bold mb-2">{coachProfile.name}</h1>
 
 
       <p className="text-xl text-gray-600 mb-6">{coachProfile.professional_title}</p>
-
 
       {coachProfile.profile_image_url && (
         <div className="">

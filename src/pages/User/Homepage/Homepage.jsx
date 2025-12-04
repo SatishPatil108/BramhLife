@@ -9,6 +9,8 @@ import BannerImage from "./components/bannerImages.jsx/BannerImage";
 import MusicList from "./components/getAllMusicList/MusicList";
 import FAQPage from "./components/FAQsSections/FAQPage";
 import SearchBarWithDatalist from "./components/searchbar/SearchBarWithDatalist";
+import { clearUserError } from "@/store/feature/user/userSlice";
+import { useDispatch } from "react-redux";
 
 const BASE_URL = import.meta.env.VITE_BASE_URL_IMG;
 
@@ -17,7 +19,7 @@ function Homepage() {
   const [showVideo, setShowVideo] = useState(false);
   const [openFAQ, setOpenFAQ] = useState(null);
   const [isMobile, setIsMobile] = useState(false);
-
+  const dispatch = useDispatch();
   const thumbnails = dashboardData?.coaches || [];
   const allcoaches = dashboardData?.coaches || [];
   const navigate = useNavigate();
@@ -33,9 +35,10 @@ function Homepage() {
   const shouldAnimateThumbnails = isMobile ? thumbnails.length > 1 : thumbnails.length > 3;
 
   return (
-    <div className="min-h-screen flex flex-col text-gray-900 font-sans overflow-hidden">
+    <div className="min-h-screen flex flex-col text-gray-900 font-sans overflow-hidden pb-20 lg:pb-0">
       {/* 🌅 HERO SECTION */}
-      <section className="relative flex items-center justify-center min-h-[90vh] overflow-hidden">
+      <section className="relative mb-6 flex items-center justify-center min-h-[75vh] sm:min-h-[85vh] lg:min-h-[90vh] overflow-hidden">
+
         {/* Video Background */}
         <div className="absolute inset-0 w-full h-full overflow-hidden">
           <video
@@ -60,7 +63,7 @@ function Homepage() {
           </p>
 
           {/* Mobile Search Bar inside Hero */}
-          <div className="md:hidden w-full max-w-sm mx-auto mt-4 z-50">
+          <div className="lg:hidden w-full max-w-sm mx-auto mt-4 z-50">
             <SearchBarWithDatalist />
           </div>
 
@@ -81,10 +84,13 @@ function Homepage() {
 
       {/* 👨‍🏫 COACHES SECTION */}
       {allcoaches.length > 0 && (
-        <section className="relative py-2 sm:py-8 px-2 sm:px-6 bg-purple-50 mx-2">
+        <section className="relative px-2 sm:px-6 bg-white mx-2 mt-6">
           {/* "View All" Button — fixed to top-right */}
           <button
-            onClick={() => navigate('/coaches')}
+            onClick={() => {
+              dispatch(clearUserError());
+              navigate('/coaches')
+            }}
             className="absolute  right-4 sm:top-8 sm:right-10 text-sm sm:text-base cursor-pointer text-purple-600 hover:text-purple-500 font-medium transition-all flex items-center gap-1"
           >
             <span>View All</span>
@@ -101,13 +107,13 @@ function Homepage() {
           </div>
 
           <div className="relative w-full overflow-x-auto scroll-smooth scrollbar-hide">
-            <div className="flex space-x-4 sm:space-x-6 px-4 py-4 snap-x snap-mandatory">
+            <div className="flex space-x-4 sm:space-x-6 md:space-x-8 px-3 snap-x snap-mandatory">
               {allcoaches.map((coach, index) => (
                 <div
                   key={index}
                   className="flex flex-col items-center flex-shrink-0 snap-center w-24 sm:w-36 md:w-44 hover:scale-95 transition-transform duration-300 "
                 >
-                  <div className="w-24 h-24 sm:w-36 sm:h-36 md:w-44 md:h-44 rounded-full shadow-lg border border-gray-200 overflow-hidden">
+                  <div className="w-20 h-20 sm:w-28 sm:h-28 md:w-36 md:h-36 lg:w-44 lg:h-44">
                     <img
                       src={`${BASE_URL}${coach.coach_profile_image}`}
                       alt={`Coach ${index + 1}`}
@@ -136,21 +142,27 @@ function Homepage() {
       <FAQPage />
 
       {/* 🚀 CTA SECTION */}
-      <section className="py-16 sm:py-20 px-4 sm:px-6 bg-gradient-to-r from-pink-500 to-purple-500 text-white text-center mb-15 lg:mb-0">
-        <h2 className="text-2xl sm:text-4xl md:text-5xl font-bold mb-4 sm:mb-6">
-          Ready to Begin Your Transformation?
-        </h2>
-        <p className="text-base sm:text-lg md:text-xl max-w-2xl mx-auto mb-6 sm:mb-8 font-light text-white/90">
-          Your next big breakthrough is just a few clicks away. Join our global
-          community and start shaping your future today.
-        </p>
-        <Link
-          to="/register"
-          className="px-8 sm:px-12 py-4 sm:py-5 bg-white text-gray-900 rounded-full font-bold shadow-xl transition-transform hover:scale-105 hover:shadow-2xl"
-        >
-          Begin Your Journey
-        </Link>
-      </section>
+      <div className="mt-15 lg:mt-32 md:mt-34">
+        <section className="py-10 lg:mt-10 px-4 sm:px-6 bg-gradient-to-r from-pink-500 to-purple-500 text-white text-center lg:mb-0">
+          <h2 className="text-2xl sm:text-4xl md:text-5xl font-bold mb-4 sm:mb-8 mt-2">
+            Ready to Begin Your Transformation?
+          </h2>
+          <p className="text-base sm:text-lg md:text-xl max-w-2xl mx-auto mb-12 sm:mb-16 font-light text-white/90">
+            Your next big breakthrough is just a few clicks away. Join our global
+            community and start shaping your future today.
+          </p>
+
+          <p className="mb-8">
+            <Link
+              to="/register"
+              className="px-8 sm:px-12 py-4 sm:py-5  bg-white text-gray-900 rounded-full font-bold shadow-xl transition-transform hover:scale-105 hover:shadow-2xl"
+            >
+              Begin Your Journey
+            </Link>
+          </p>
+        </section>
+      </div>
+
     </div>
   );
 }

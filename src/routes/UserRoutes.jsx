@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 
 import SubCategoriesPage from "@/pages/User/subCategories";
@@ -15,21 +15,17 @@ import EnrolledCourses from "@/pages/User/myCourses";
 import EnrolledCourseDetails from "@/pages/User/enrolledCourseDetails";
 import Footer from "@/components/footer/Footer";
 import UserLoggedOut from "@/pages/User/userLoggedOut";
-import { useDispatch } from "react-redux";
-import { checkUserLoggedIn } from "@/store/feature/auth/authSlice";
 import MusicList from "@/pages/User/Homepage/components/getAllMusicList/MusicList";
 import BannerImage from "@/pages/User/Homepage/components/bannerImages.jsx/BannerImage";
 import Categories from "@/pages/User/Homepage/components/getAllCategories/Categories";
 import SubCategories from "@/pages/User/Homepage/components/getAllSubCategories/SubCategories";
 import FAQPage from "@/pages/User/Homepage/components/FAQsSections/FAQPage";
 import MusicPlayer from "@/pages/User/Music/MusicPlayer";
+import ForgotPassword from "@/pages/User/forgotPassword/ForgotPassword";
+import ViewEditProfile from "@/pages/User/viewEditProfile/ViewEditProfile";
+import ChangePassword from "@/pages/User/changePassword/ChangePassword";
 
 const UserRoutes = () => {
-  const dispath = useDispatch();
-
-  useEffect(() => {
-    dispath(checkUserLoggedIn());
-  }, [dispath]);
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -48,6 +44,7 @@ const UserRoutes = () => {
           <Route path="/musics" element={<MusicList />} />
           <Route path="/music/:musicId" element={<MusicPlayer />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/logout" element={<UserLoggedOut />} />
           <Route path="/register" element={<Register />} />
           <Route path="/coaches/:subdomainId" element={<CoachesInfoPage />} />
@@ -56,11 +53,13 @@ const UserRoutes = () => {
           <Route path="/coaches" element={<GetAllCoaches />} />
           <Route path="/my-courses" element={<EnrolledCourses />} />
           <Route path="/enrolled-course/:courseId" element={<EnrolledCourseDetails />} />
+          <Route path="/view-profile" element={<ViewEditProfile />} />
+          <Route path="/change-password" element={<ChangePassword />} />
         </Routes>
       </main>
 
       {/* Footer — hidden on mobile */}
-      <div className="hidden md:block">
+      <div className="hidden lg:block">
         <Footer />
       </div>
     </div>

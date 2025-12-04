@@ -18,6 +18,8 @@ const CoachDetailsPage = () => {
     enrolling,
     allCoursesFeedback,
   } = useCoachDetailsPage(videoId);
+
+
   const [showCurriculum, setShowCurriculum] = useState(true);
   const [showTargetAudience, setShowTargetAudience] = useState(true);
   const [showLearningOutcomes, setShowLearningOutcomes] = useState(true);
@@ -60,16 +62,16 @@ const CoachDetailsPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-white to-gray-50 text-gray-900 flex flex-col scroll-smooth">
+    <div className="min-h-screen text-gray-900 flex flex-col scroll-smooth">
       {/* Title */}
       <section className="py-14 px-6 md:px-20 text-center bg-gradient-to-r">
-        <h1 className="text-2xl md:text-4xl lg:text-5xl font-extrabold leading-tight">{coach.title}</h1>
+        <h1 className="text-base md:text-4xl lg:text-4xl font-extrabold leading-tight">{coach.title}</h1>
       </section>
 
       {/* Video */}
       {coach.video_url && (
         <section className="px-4 md:px-10 py-10 flex justify-center">
-          <div className="aspect-video w-full max-w-5xl rounded-2xl overflow-hidden shadow-2xl border border-gray-200 bg-black">
+          <div className="aspect-video w-full max-w-5xl  overflow-hiddenbg-black rounded-lg">
             <iframe
               className="w-full h-full"
               src={getYouTubeEmbedUrl(coach.video_url)}
@@ -106,7 +108,7 @@ const CoachDetailsPage = () => {
         <button
           onClick={handleEnroll}
           disabled={enrolling}
-          className={`w-full sm:w-auto bg-gradient-to-r from-blue-600 to-indigo-600 text-white cursor-pointer font-bold px-8 py-4 rounded-xl shadow-md hover:scale-105 transition-transform duration-300 ${enrolling ? "opacity-50 cursor-not-allowed" : ""
+          className={`w-full sm:w-auto bg-gradient-to-r from-blue-600 to-indigo-600 text-white cursor-pointer font-bold px-8 py-4 rounded-xl hover:scale-105 transition-transform duration-300 ${enrolling ? "opacity-50 cursor-not-allowed" : ""
             }`}
         >
           {enrolling ? "Enrolling..." : "Join the Program"}
@@ -115,7 +117,7 @@ const CoachDetailsPage = () => {
 
       {/* Course Overview */}
       {course && (
-        <section className="bg-white py-12 px-6 md:px-20 mb-10 shadow-inner rounded-xl mx-4 md:mx-10">
+        <section className="bg-white py-12 px-6 md:px-20 mb-10  rounded-xl mx-4 md:mx-10">
           <div className="flex flex-wrap justify-center gap-4 mb-10">
             {["Who is this for", "What you’ll learn", "The curriculum", "Meet your trainer"].map(
               (item, index) => (
@@ -185,7 +187,7 @@ const CoachDetailsPage = () => {
       {/* Coach Info */}
       <section
         id="coach-info"
-        className="w-full mb-8 py-16 px-6 md:px-20 bg-gradient-to-br from-gray-50 via-white to-gray-100"
+        className="w-full mb-8 py-16 px-6 md:px-20"
       >
         <div className="text-center mb-10">
           <h3 className="text-3xl md:text-4xl font-extrabold text-gray-900">
@@ -199,7 +201,7 @@ const CoachDetailsPage = () => {
         {/* Card Container */}
         <div
           className="relative flex flex-col md:flex-row items-center gap-10 max-w-6xl mx-auto
-    bg-white/80 backdrop-blur-sm rounded-2xl shadow-xl border border-gray-200 overflow-hidden"
+    bg-white/80 backdrop-blur-sm rounded-2xl  border border-gray-200 overflow-hidden"
         >
           {/* Background image */}
           <div
@@ -235,7 +237,7 @@ const CoachDetailsPage = () => {
 
           {/* Profile Image */}
           <div className="relative z-10 flex justify-center md:justify-end p-6">
-            <div className="rounded-2xl overflow-hidden shadow-lg border-4 border-white">
+            <div className="rounded-full overflow-hidden">
               <img
                 src={`${BASE_URL}${coach.profile_image}`}
                 alt={coach.coach_name}
@@ -260,7 +262,7 @@ const CoachDetailsPage = () => {
             {allCoursesFeedback.map((feedback) => (
               <div
                 key={feedback.feedback_id}
-                className="bg-gray-50 p-6 rounded-2xl shadow hover:shadow-lg transition border border-gray-200"
+                className="bg-gray-50 p-6 rounded-2xl hover:shadow-sm transition border border-gray-200"
               >
                 <div className="flex mb-3">
                   {[...Array(5)].map((_, i) => (

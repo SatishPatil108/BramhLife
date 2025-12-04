@@ -4,17 +4,19 @@ import { ArrowRight } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { ChevronRightIcon, ChevronLeftIcon } from 'lucide-react'
 import Pagination from "@/components/Pagination/Pagination";
+import { clearUserError } from "@/store/feature/user/userSlice";
+import { useDispatch } from "react-redux";
 
 const GetAllCoaches = () => {
   const [pageNo, setPageNo] = useState(1);
   const pageSize = 1;
-
+  const dispatch = useDispatch();
   const BASE_URL = import.meta.env.VITE_BASE_URL_IMG;
   const { coachesDetails, isLoading, error } = useGetAllCoaches(pageNo, pageSize);
   const coaches = coachesDetails.coaches;
 
   const navigate = useNavigate();
-   
+
 
   if (isLoading)
     return <p className="text-center py-10 text-lg">Loading coaches...</p>;
@@ -78,7 +80,10 @@ const GetAllCoaches = () => {
                   </div>
 
                   <div className={`flex ${isEven ? "justify-center sm:justify-start" : "justify-center sm:justify-end"}`}>
-                    <button onClick={() => navigate(`/coach/${coach.coach_id}`)} className="mt-2 text-sm sm:text-base text-purple-600 font-semibold cursor-pointer hover:text-purple-400 flex items-center gap-1 transition-all">
+                    <button onClick={() => {
+                      dispatch(clearUserError());
+                      navigate(`/coach/${coach.coach_id}`)
+                    }} className="mt-2 text-sm sm:text-base text-purple-600 font-semibold cursor-pointer hover:text-purple-400 flex items-center gap-1 transition-all">
                       View Profile
                       <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5" />
                     </button>

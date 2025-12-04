@@ -1,11 +1,14 @@
 // src/pages/About.jsx
+import { clearUserError } from "@/store/feature/user/userSlice";
 import React from "react";
+import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
 function About() {
   const navigate = useNavigate();
-
+  const dispatch = useDispatch();
   const handleExploreClick = () => {
+    dispatch(clearUserError());
     navigate("/login"); // redirect to login page
   };
 

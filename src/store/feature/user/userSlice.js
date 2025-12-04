@@ -22,6 +22,8 @@ import {
 
 const initialState = {
   isLoading: false,
+  isSpin:false,
+  error: null,
   domainsDetails: { domains: [] },
   subdomainsDetails: {},
   videosDetails: { videos: [] },
@@ -37,7 +39,6 @@ const initialState = {
   searchDetails: {},
   allCoursesFeedback: [],
   courses: [],
-  error: null,
 };
 
 const userSlice = createSlice({
@@ -82,7 +83,7 @@ const userSlice = createSlice({
       })
 
       .addCase(fetchCoachProfileAPI.fulfilled, (state, action) => {
-        state.coachProfile = action.payload?.data || null;
+        state.coachProfile = action.payload ;
       })
 
       .addCase(fetchCourseDetailsById.fulfilled, (state, action) => {
@@ -130,8 +131,15 @@ const userSlice = createSlice({
         }
       })
 
+      .addCase(searchAPI.pending, (state) => {
+        state.isSpin=true;
+      })
       .addCase(searchAPI.fulfilled, (state, action) => {
         state.searchDetails = action.payload;
+        state.isSpin=false;
+      })
+      .addCase(searchAPI.rejected, (state, action) => {
+        state.isSpin=false;
       })
 
       // 🔥 Universal loaders

@@ -2,12 +2,15 @@ import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import useEnrolledCourseDetails from "./useEnrolledCourseDetails";
 import FeedbackForm from "../FeedbackForm";
+import { clearUserError } from "@/store/feature/user/userSlice";
+import { useDispatch } from "react-redux";
 
 const EnrolledCourseDetails = () => {
   const { courseId } = useParams();
   const { enrolledCourseDetails, isLoading, error } = useEnrolledCourseDetails(courseId);
   const [selectedVideo, setSelectedVideo] = useState(null);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const BASE_URL = import.meta.env.VITE_BASE_URL_IMG;
 
   useEffect(() => {
@@ -18,6 +21,7 @@ const EnrolledCourseDetails = () => {
 
   useEffect(() => {
     if (error?.message === "Authorization token is missing.") {
+       dispatch(clearUserError());
       navigate("/login");
     }
   }, [error, navigate]);
